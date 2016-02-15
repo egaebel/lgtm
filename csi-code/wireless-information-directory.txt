@@ -1,0 +1,2 @@
+# This is the directory where the csi-tool firmware settings can be changed (subject to change based on different phy and wlan assignments)
+# cat /sys/kernel/debug/ieee80211/phy1/netdev:wlan1/stations/02:1a:11:fb:78:94/

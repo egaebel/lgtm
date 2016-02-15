@@ -1,0 +1,1466 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"file",
+				"filename"
+			],
+			[
+				"new",
+				"newImageWidth"
+			],
+			[
+				"to",
+				"top_border"
+			],
+			[
+				"test",
+				"testIdx"
+			],
+			[
+				"testB",
+				"testBatch"
+			],
+			[
+				"right",
+				"rightEyeLabel"
+			],
+			[
+				"out",
+				"output1"
+			],
+			[
+				"back",
+				"backward"
+			],
+			[
+				"bac",
+				"backward"
+			],
+			[
+				"sca",
+				"scaleTechnique"
+			],
+			[
+				"sc",
+				"scaleTechnique"
+			],
+			[
+				"tra",
+				"trainData"
+			],
+			[
+				"store",
+				"storeData"
+			],
+			[
+				"limb",
+				"limbusR"
+			],
+			[
+				"fil",
+				"filePath"
+			],
+			[
+				"arcTop",
+				"arcTopLeftY"
+			],
+			[
+				"bound",
+				"boundingBoxString"
+			],
+			[
+				"inp",
+				"inputDir"
+			],
+			[
+				"readS",
+				"readSegmentParams"
+			],
+			[
+				"dir",
+				"directories"
+			],
+			[
+				"conv_5",
+				"conv5_1"
+			],
+			[
+				"weig",
+				"weights"
+			],
+			[
+				"pri",
+				"provider"
+			],
+			[
+				"print",
+				"printSegmentParams"
+			],
+			[
+				"output",
+				"outputFile"
+			],
+			[
+				"ou",
+				"outputFileTrailer"
+			],
+			[
+				"segment",
+				"segmentImage"
+			],
+			[
+				"input",
+				"inputFile"
+			],
+			[
+				"segmentD",
+				"segmentDataset"
+			],
+			[
+				"data",
+				"datasetDirectory"
+			],
+			[
+				"segmentP",
+				"segmentPath"
+			],
+			[
+				"read",
+				"readSegmentParams"
+			],
+			[
+				"dUA",
+				"dUAngleLeft"
+			],
+			[
+				"dLA",
+				"dLAngleRight"
+			],
+			[
+				"duA",
+				"dUAngleRight"
+			],
+			[
+				"dL",
+				"dLAngleRight"
+			],
+			[
+				"pup",
+				"pupilX"
+			],
+			[
+				"limbusY",
+				"adjLimbusY"
+			],
+			[
+				"tri",
+				"triTopLeftY"
+			],
+			[
+				"arcStart",
+				"arcStartDegreesRight"
+			],
+			[
+				"arcTo",
+				"arcTopLeftX"
+			],
+			[
+				"pu",
+				"pupilR"
+			],
+			[
+				"segm",
+				"segmentParams"
+			],
+			[
+				"arcS",
+				"arcEndDegreesRight"
+			],
+			[
+				"se",
+				"segmentParams"
+			],
+			[
+				"lim",
+				"limbusR"
+			],
+			[
+				"seg",
+				"segmentParams"
+			],
+			[
+				"bottom",
+				"bottomRightY"
+			],
+			[
+				"ex",
+				"execute"
+			],
+			[
+				"fi",
+				"fileName"
+			],
+			[
+				"segmen",
+				"segmentationParams"
+			],
+			[
+				"re",
+				"readString"
+			],
+			[
+				"mask_black_circle_arc",
+				"mask_black_circle_arc_triangle"
+			],
+			[
+				"fileBacked",
+				"fileBackedDataset"
+			],
+			[
+				"firs",
+				"firstArch"
+			],
+			[
+				"total",
+				"totalSize"
+			],
+			[
+				"theVa",
+				"theValidationRatio"
+			],
+			[
+				"tensorF",
+				"tensorFileName"
+			],
+			[
+				"validationS",
+				"validationSetBeginIndex"
+			],
+			[
+				"default",
+				"defaultValidationRatio"
+			],
+			[
+				"ten",
+				"tensorFilePath"
+			],
+			[
+				"tens",
+				"tensorDirectory"
+			],
+			[
+				"vali",
+				"validationRatio"
+			],
+			[
+				"tenso",
+				"tensorDirectory"
+			],
+			[
+				"num",
+				"numSamples"
+			],
+			[
+				"my",
+				"myTensorFile"
+			],
+			[
+				"conver",
+				"convertIrisImagesToTensors"
+			],
+			[
+				"trai",
+				"trainingDataset"
+			],
+			[
+				"def",
+				"defaultValidationRatio"
+			],
+			[
+				"theV",
+				"theValidationRatio"
+			],
+			[
+				"sub",
+				"subject"
+			],
+			[
+				"image",
+				"imageTensor"
+			],
+			[
+				"left",
+				"leftEyeLabel"
+			],
+			[
+				"train",
+				"trainFile"
+			],
+			[
+				"l",
+				"label"
+			],
+			[
+				"eye",
+				"eyeDesignation"
+			],
+			[
+				"im",
+				"imageTensor"
+			],
+			[
+				"dt",
+				"datasetName"
+			],
+			[
+				"Iris",
+				"IrisDataset"
+			],
+			[
+				"dc_crim",
+				"dc_crime_xy	statement"
+			],
+			[
+				"label",
+				"labeled_dc_crime_xy	statement"
+			],
+			[
+				"dc_",
+				"dc_crime_xy	statement"
+			],
+			[
+				"kme",
+				"kmeans_labels	statement"
+			],
+			[
+				"dc_c",
+				"dc_crime_xy"
+			],
+			[
+				"gps",
+				"gps_point_header_index	statement"
+			],
+			[
+				"gps_",
+				"gps_point_y_trim_indx	statement"
+			],
+			[
+				"lon",
+				"longitude	statement"
+			],
+			[
+				"sql",
+				"sqlalchemy"
+			],
+			[
+				"dec",
+				"declarative_base	import"
+			],
+			[
+				"csv",
+				"csv_row_list	statement"
+			],
+			[
+				"csv_",
+				"csv_row	statement"
+			],
+			[
+				"NU",
+				"NULL_STRING	statement"
+			],
+			[
+				"Nul",
+				"NULL_STRING	statement"
+			],
+			[
+				"csv_row",
+				"csv_row_list	statement"
+			],
+			[
+				"xml",
+				"xml_iterator	statement"
+			],
+			[
+				"insert",
+				"insert_row	function"
+			],
+			[
+				"table",
+				"table_name	param"
+			],
+			[
+				"base",
+				"base_file	param"
+			],
+			[
+				"bas",
+				"base_file	param"
+			],
+			[
+				"impo",
+				"import_data	function"
+			],
+			[
+				"import",
+				"import_file	function"
+			],
+			[
+				"imp",
+				"import_file	function"
+			],
+			[
+				"cs",
+				"csv_rows	statement"
+			],
+			[
+				"open",
+				"open_csv_file	withstmt"
+			],
+			[
+				"parse",
+				"parse_xml	function"
+			],
+			[
+				"x",
+				"x_range	statement"
+			],
+			[
+				"sp",
+				"spiralPrintMatrix"
+			],
+			[
+				"first",
+				"firstColumnIndex"
+			],
+			[
+				"last",
+				"lastColumnIndex"
+			],
+			[
+				"trainin",
+				"training_data	statement"
+			],
+			[
+				"mini",
+				"mini_batch_size"
+			],
+			[
+				"d_",
+				"d_activation_function	param"
+			],
+			[
+				"ac",
+				"activation_function	param"
+			],
+			[
+				"perm",
+				"perm_len	statement"
+			],
+			[
+				"next",
+				"next_item	statement"
+			],
+			[
+				"p",
+				"permutations	class"
+			],
+			[
+				"iter",
+				"itertools	module"
+			],
+			[
+				"runD",
+				"runDownDiff"
+			],
+			[
+				"runU",
+				"runUpDiff"
+			],
+			[
+				"su",
+				"suppressOutput"
+			],
+			[
+				"clea",
+				"clearCaches"
+			],
+			[
+				"var",
+				"variables"
+			],
+			[
+				"censusVars",
+				"censusVarsResult"
+			],
+			[
+				"censusVar",
+				"censusVarsResult"
+			],
+			[
+				"censusV",
+				"censusVarsResult"
+			],
+			[
+				"censusVa",
+				"censusVarsResult"
+			],
+			[
+				"conc",
+				"concept"
+			],
+			[
+				"concet",
+				"conceptMap"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "face-detect--image/facedetect.cpp",
+			"settings":
+			{
+				"buffer_size": 5102,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "pad-images/pad_images.cpp",
+			"settings":
+			{
+				"buffer_size": 5573,
+				"line_ending": "Unix",
+				"name": "// let border be the same in all directions"
+			}
+		},
+		{
+			"file": "pad-images/CMakeLists.txt",
+			"settings":
+			{
+				"buffer_size": 185,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "basic-video-recognition/facerec_video.cpp",
+			"settings":
+			{
+				"buffer_size": 7291,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Packages/Python/Python.sublime-build",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/LaTeXing/LaTeX (TikZ).sublime-build",
+					""
+				],
+				[
+					"Packages/LaTeXing/LaTeX (TikZ).sublime-build",
+					"Clean up Files"
+				]
+			],
+			[
+				"Packages/LaTeXing/LaTeX (TikZ).sublime-build",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/LaTeXing/LaTeX.sublime-build",
+					""
+				],
+				[
+					"Packages/LaTeXing/LaTeX.sublime-build",
+					"Clean up Files"
+				],
+				[
+					"Packages/User/Custom Build Files/LaTeX-FIX.sublime-build",
+					""
+				],
+				[
+					"Packages/User/Custom Build Files/survey-paper-draft.sublime-build",
+					""
+				],
+				[
+					"Packages/User/Custom Build Files/survey-paper-outline.sublime-build",
+					""
+				]
+			],
+			[
+				"Packages/LaTeXing/LaTeX.sublime-build",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/LaTeXing/LaTeX.sublime-build",
+					""
+				],
+				[
+					"Packages/LaTeXing/LaTeX.sublime-build",
+					"Primary Quick Build"
+				],
+				[
+					"Packages/LaTeXing/LaTeX.sublime-build",
+					"Choose Quick Build"
+				],
+				[
+					"Packages/LaTeXing/LaTeX.sublime-build",
+					"Clean up Files"
+				]
+			],
+			[
+				"Packages/LaTeXing/LaTeX.sublime-build",
+				"Primary Quick Build"
+			]
+		],
+		[
+			[
+				[
+					"Packages/Python/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					"Syntax Check"
+				]
+			],
+			[
+				"Packages/Python/Python.sublime-build",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/Python/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					"Syntax Check"
+				],
+				[
+					"Packages/User/Custom Build Files/Anaconda-Python2.7.sublime-build",
+					""
+				],
+				[
+					"Packages/User/Custom Build Files/Anaconda-Python3.4.sublime-build",
+					""
+				],
+				[
+					"Packages/User/Custom Build Files/LaTeX-FIX.sublime-build",
+					""
+				],
+				[
+					"Packages/User/Custom Build Files/Python3.4.sublime-build",
+					""
+				],
+				[
+					"Packages/User/Custom Build Files/survey-paper-draft.sublime-build",
+					""
+				],
+				[
+					"Packages/User/Custom Build Files/survey-paper-outline.sublime-build",
+					""
+				]
+			],
+			[
+				"Packages/User/Custom Build Files/Anaconda-Python3.4.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 138.0,
+		"last_filter": "SFTP:",
+		"selected_items":
+		[
+			[
+				"SFTP:",
+				"SFTP: Browse Server…"
+			],
+			[
+				"Package Control: R",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: Inst",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: Remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"Pac",
+				"Package Control: Enable Package"
+			],
+			[
+				"Package Control: Enable",
+				"Package Control: Enable Package"
+			],
+			[
+				"Package Control: Insta",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control",
+				"Preferences: Package Control Settings – User"
+			],
+			[
+				"Package Control: Install",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: Up",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"Package Control: Discover Packages",
+				"Package Control: Discover Packages"
+			],
+			[
+				"Package",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: Instal",
+				"Package Control: Install Package"
+			],
+			[
+				"Package ",
+				"Package Control: Disable Package"
+			],
+			[
+				"Package control: Remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"Packa",
+				"Package Control: Install Package"
+			],
+			[
+				"sftp:",
+				"SFTP: Browse Server…"
+			],
+			[
+				"SFTP",
+				"SFTP: Browse Server…"
+			],
+			[
+				"SFTP:Bor",
+				"SFTP: Browse Server…"
+			],
+			[
+				"SFTP:B",
+				"SFTP: Browse Server…"
+			],
+			[
+				"sftp",
+				"SFTP: Browse Server…"
+			],
+			[
+				"STFP",
+				"SFTP: Browse Server…"
+			],
+			[
+				"Package Control: Ins",
+				"Package Control: Install Package"
+			],
+			[
+				"Latex",
+				"LaTeXTools: Reconfigure and migrate settings"
+			],
+			[
+				"Package Control: In",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: Remov",
+				"Package Control: Remove Package"
+			],
+			[
+				"Pack",
+				"Package Control: Remove Package"
+			]
+		],
+		"width": 593.0
+	},
+	"console":
+	{
+		"height": 139.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/egaebel/grad-docs/research/thesis/common-resources/vectors/attributions",
+		"/home/egaebel/grad-docs/research/thesis/thesis-proposal/Looks Good To Me (LGTM) Security for Augmented Reality.txt",
+		"/home/egaebel/grad-docs/research/thesis/thesis-document/templates/ETD/etd-format-template.tex",
+		"/home/egaebel/grad-docs/research/thesis/thesis-document/templates/README.main",
+		"/home/egaebel/grad-docs/research/thesis/thesis-document/templates/README.text",
+		"/home/egaebel/Documents/job-documents/resumes/egaebel-resume/egaebel-resume.tex",
+		"/home/egaebel/grad-docs/research/survey-paper--2014/template/GENRIC/Chapter1.tex",
+		"/home/egaebel/grad-docs/research/survey-paper--2014/template.zip",
+		"/home/egaebel/grad-docs/research/thesis/csi-code/tests/music-example/music.m",
+		"/home/egaebel/grad-docs/research/thesis/facial-recognition/openCV/face-detect--image/163.png",
+		"/home/egaebel/Dropbox/ppdl/todos.txt",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/code/Link to codes/provider.lua",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/code/Link to codes/models/vgg.lua",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/code/Link to codes/test-code/checkpoint-three-debug.lua",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/code/Link to codes/train_recognition.lua",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/code/sftp-config.json",
+		"/home/egaebel/grad-docs/fall-2015/cs-5824/project/code/models.lua",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/code/Link to codes/run.lua",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/code/Link to codes/train_spoof_detection.lua",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/code/Link to codes/segmentation.lua",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/graphic-magick-playground/cropping.lua",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/code/Link to codes/graphic-magick-playground/cropping.lua",
+		"/home/egaebel/Dropbox/ppdl/codes/graphic-magick-playground/cropping.lua",
+		"/home/egaebel/grad-docs/fall-2015/cs-5824/project/code/main.lua",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/proof-of-concepts/weight-sharing.lua",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/code/Link to codes/models/util.lua",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/code/Link to codes/models/inception.lua",
+		"/home/egaebel/Dropbox/ppdl/codes/provider.lua",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/in-progress (pre-testing)/provider.lua",
+		"/home/egaebel/grad-docs/fall-2015/cs-5824/project/code/cifar10-data-loader.lua",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/in-progress (pre-testing)/run.lua",
+		"/home/egaebel/Dropbox/ppdl/codes/test-code/nn-parallel-test.lua",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/in-progress (pre-testing)/provider-test.lua",
+		"/home/egaebel/Dropbox/ppdl/codes/run.lua",
+		"/home/egaebel/Dropbox/ppdl/codes/train_recognition.lua",
+		"/home/egaebel/Dropbox/ppdl/codes/train_spoof_detection.lua",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/graphic-magick-playground/segmentation.lua",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/code/Link to codes/train.lua",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/graphic-magick-playground/debug_output.txt",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/code/Link to codes/nn-parallel-test.lua",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/graphic-magick-playground/Warsaw/TXT/Training/0041_REAL_L_3.txt",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/code/Link to codes/iris-data-loader.lua",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/graphic-magick-playground/0039_PRNT_R_1.txt",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/graphic-magick-playground/Warsaw/TXT/Training/0062_REAL_L_1.txt",
+		"/home/egaebel/grad-docs/research/privacy-preserving-neural-networks/graphic-magick-playground/test.txt",
+		"/home/egaebel/grad-docs/fall-2015/cs-5824/project/code/sftp-config.json",
+		"/home/egaebel/cifar10-data-loader.lua",
+		"/home/egaebel/first-cnn-arch.lua",
+		"/tmp/sublime-sftp-browse-1446869963/aws-free-torch-instance/home/ubuntu/iris-data-loader.lua",
+		"/tmp/sublime-sftp-browse-1446848521/aws-free-torch-instance/home/ubuntu/iris-data-loader.lua",
+		"/tmp/sublime-sftp-browse-1446842558/aws-free-torch-instance/home/ubuntu/iris-data-loader--all-in-mem.lua",
+		"/tmp/sublime-sftp-browse-1446842558/aws-free-torch-instance/home/ubuntu/iris-data-loader.lua",
+		"/home/egaebel/.config/sublime-text-3/Packages/User/sftp_servers/aws-free-torch-instance",
+		"/home/egaebel/Programs/lua-test/serialization/serialization-tests.lua",
+		"/home/egaebel/Programs/lua-test/hdf5/hdf5-tests.lua",
+		"/home/egaebel/Dropbox/ppdl/codes/iris-data-loader.lua",
+		"/tmp/sublime-sftp-browse-1446837248/aws-free-torch-instance/home/ubuntu/iris-data-loader.lua",
+		"/home/egaebel/Dropbox/ppdl/sftp-config-alt.json",
+		"/tmp/sublime-sftp-browse-1446782939/aws-free-torch-instance/home/ubuntu/iris-data-loader.lua",
+		"/home/egaebel/iris-data-loader.lua",
+		"/home/egaebel/.config/sublime-text-3/Packages/User/sftp_servers/aws-privacy-preserving-deep-learning.json",
+		"/home/egaebel/grad-docs/fall-2015/cs-6604/project/data-import/dc_crime_table.sql",
+		"/home/egaebel/grad-docs/fall-2015/cs-6604/project/data-import/dc-data-01-01-2009-09-20-2015/ASAP__from2009_01_01__to2015_09_20-1/ASAP__from2009_01_01__to2015_09_20.CSV",
+		"/home/egaebel/grad-docs/fall-2015/cs-6604/project/data-import/postgres_test_code.py",
+		"/home/egaebel/Dropbox/ppdl/README.md",
+		"/tmp/sublime-sftp-browse-1446691329/aws-spatial-database-project/home/ubuntu/flask-app/app.py",
+		"/home/egaebel/Programs/flask-web-service/app.py",
+		"/tmp/sublime-sftp-browse-1445625988/aws-spatial-database-project/home/ubuntu/flask-app/app.py",
+		"/home/egaebel/.config/sublime-text-3/Packages/User/sftp_servers/aws-spatial-database-project",
+		"/tmp/sublime-sftp-browse-1445619414/aws-spatial-database-project/home/ubuntu/sqlalchemy-test.py",
+		"/tmp/sublime-sftp-browse-1445620405/aws-spatial-database-project/home/ubuntu/flask-app/app.py",
+		"/home/egaebel/.config/sublime-text-3/Packages/User/sftp_servers/pi--192_168_1_244",
+		"/home/egaebel/grad-docs/fall-2015/cs-6604/project/data-import/dc-data-01-01-2009-09-20-2015/ASAP__from2009_01_01__to2015_09_20-7/nova-and-xml-data-format.txt",
+		"/home/egaebel/grad-docs/fall-2015/cs-6604/project/data-import/dc-data-01-01-2009-09-20-2015/ASAP__from2009_01_01__to2015_09_20-7/ASAP__from2009_01_01__to2015_09_20.CSV",
+		"/home/egaebel/grad-docs/fall-2015/cs-6604/project/data-import/dc-data-format.txt",
+		"/home/egaebel/grad-docs/fall-2015/cs-6604/project/data-import/xml-dbdata-Mark Everline-2010/WashingtonDCParserReports2006.xml",
+		"/home/egaebel/grad-docs/fall-2015/cs-6604/project/data-import/xml-dbdata-Mark Everline-2010/Arlington2009ParserReports.xml",
+		"/home/egaebel/grad-docs/fall-2015/cs-6604/project/data-import/xml-dbdata-Mark Everline-2010/FairfaxCityParserReports.xml",
+		"/home/egaebel/grad-docs/fall-2015/cs-6604/project/data-import/xml-dbdata-Mark Everline-2010/Fairfax2009ParserReports.xml",
+		"/home/egaebel/grad-docs/fall-2015/cs-6604/project/data-import/xml-dbdata-Mark Everline-2010/ViennaTownParserReports.xml",
+		"/home/egaebel/grad-docs/fall-2015/cs-5824/project/proposal/proposal.tex",
+		"/home/egaebel/clutter/dropout-training-as-adaptive-regularization.bib",
+		"/home/egaebel/grad-docs/research/survey-paper--2014/paper/DRAFT--Part-IV--Attacks-in-Spectrum-Sensing.tex",
+		"/home/egaebel/grad-docs/research/survey-paper--2014/paper/Chapter18-DRAFT.tex",
+		"/home/egaebel/.config/sublime-text-3/Packages/User/Custom Build Files/LaTeXwithbib.sublime-build",
+		"/home/egaebel/.config/sublime-text-3/Packages/User/Custom Build Files/survey-paper-draft.sublime-build",
+		"/home/egaebel/.config/sublime-text-3/Packages/User/Custom Build Files/LaTeX-FIX.sublime-build",
+		"/home/egaebel/.config/sublime-text-3/Packages/User/Custom Build Files/survey-paper-outline.sublime-build",
+		"/home/egaebel/grad-docs/research/survey-paper--2014/paper/Chapter18.tex",
+		"/home/egaebel/.config/sublime-text-3/Packages/User/LaTeX.sublime-settings",
+		"/home/egaebel/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
+		"/home/egaebel/grad-docs/fall-2015/cs-5824/project/data/trump-debate.txt",
+		"/home/egaebel/grad-docs/fall-2015/cs-5824/project/data/cnn-republican-debate--reagan.txt",
+		"/home/egaebel/grad-docs/fall-2015/cs-5824/project/data/trump-speech-corpus.txt",
+		"/home/egaebel/grad-docs/fall-2015/cs-5824/project/data/get-tough.txt",
+		"/home/egaebel/grad-docs/fall-2015/cs-5824/project/data/art-of-the-deal.txt",
+		"/home/egaebel/grad-docs/fall-2015/cs-5824/project/data/trump-corpus.txt",
+		"/home/egaebel/Dropbox/ppdl/paper/src/mathshortforms.tex",
+		"/home/egaebel/grad-docs/fall-2015/cs-6604/project/data-to-examine/dc-data-01-01-2009-09-20-2015/ASAP__from2009_01_01__to2015_09_20.CSV",
+		"/home/egaebel/grad-docs/research/thesis/augmented-reality-sharing-authentication.txt",
+		"/home/egaebel/grad-docs/research/thesis/Looks Good To Me (LGTM) Security for Augmented Reality.txt",
+		"/home/egaebel/grad-docs/fall-2015/cs-6604/project/data-to-examine/Crime Data Sets/Crime-Data-Mark Everline-2010/Alexiandria/crimereports_display.aspx_id=16756#1C8D.html",
+		"/home/egaebel/grad-docs/fall-2015/Goals for Fall 2015.txt",
+		"/home/egaebel/Dropbox/Jenny and I's Toothbrush/Europe Stuff.txt",
+		"/home/egaebel/grad-docs/fall-2015/cs-5824/homework/hw3/xor_net.py",
+		"/home/egaebel/grad-docs/administrative/ms-thesis-committee-reqs.txt",
+		"/home/egaebel/grad-docs/research/thesis/gnuradio-3.7.3--installation-files/README",
+		"/home/egaebel/.cache/.fr-avEYNl/Crime Data Sets/Crime-Data-Mark Everline-2010/fairfax-county-crime-reports/2008_text/012508weekly.txt",
+		"/home/egaebel/grad-docs/fall-2015/cs-6604/project/brainstorm.txt",
+		"/home/egaebel/.cache/.fr-IcPruF/Crime Data Sets/Crime-Data-Mark Everline-2010/fairfax-county-crime-reports/2008_text/022908weekly.txt",
+		"/home/egaebel/.cache/.fr-RdCIVr/Crime Data Sets/Crime-Data-Mark Everline-2010/fairfax-county-crime-reports/2008_text/activityreport111408.txt",
+		"/home/egaebel/.cache/.fr-RK1L53/Crime Data Sets/Crime-Data-Mark Everline-2010/fairfax-county-crime-reports/text/wsum010507.txt",
+		"/home/egaebel/grad-docs/fall-2015/cs-5824/homework/hw2/bonus1.py",
+		"/home/egaebel/grad-docs/fall-2015/cs-5824/homework/hw2/bonus2.py",
+		"/home/egaebel/grad-docs/Very Interesting CCS Papers:",
+		"/home/egaebel/Programs/mnist-deep-rbm-hinton/code/README.txt",
+		"/home/egaebel/grad-docs/fall-2015/deep-learning-online-textbook-stuff/chap1/work/neural-networks-and-deep-learning/src/mnist-nn.py",
+		"/home/egaebel/grad-docs/fall-2015/deep-learning-online-textbook-stuff/chap1/work/neural-networks-and-deep-learning/src/mnist_loader.py",
+		"/home/egaebel/grad-docs/fall-2015/cs-5824/homework/hw1/likelihood-ratio-graph.py",
+		"/home/egaebel/grad-docs/research/brainstorms/Security analysis in terms of randomness perceived",
+		"/home/egaebel/Documents/our-measurements.txt",
+		"/home/egaebel/Documents/job-documents/notes-on-companies/shopkick.txt",
+		"/home/egaebel/grad-docs/research/brainstorms/augmented-reality-IoT-authentication.txt",
+		"/home/egaebel/grad-docs/research/brainstorms/augmented-reality-sharing-authentication.txt",
+		"/home/egaebel/Documents/job-documents/notes-on-companies/addepar.txt",
+		"/home/egaebel/grad-docs/fall-2015/cs-5506/homework/hw1/stirlings-formula-test.py",
+		"/home/egaebel/AsanaCoding.java",
+		"/home/egaebel/Programs/pwsafe-0.94-beta/passwordsafe-git-code-64ff69906b75b552630dca13004cee8f67d52f4a/src/ui/wxWidgets/YubiMixin.h"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 108.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"file2",
+			"borderType",
+			"bottom",
+			"top",
+			"right",
+			"left",
+			"filename",
+			"heigh",
+			"right",
+			"p1Model",
+			":size",
+			"cuda",
+			"save",
+			"opt.batchSize",
+			"imgHeight",
+			"provider",
+			"print",
+			"Dropbox",
+			"arcTopLeftX",
+			"imgChannels",
+			"cuda",
+			"imgPath",
+			"opt.size",
+			"full",
+			"q",
+			"qt",
+			"41_REAL_L_3",
+			"[0m",
+			"sub",
+			"print",
+			"angle",
+			"dL",
+			"limbusY",
+			"segmentationParams",
+			"gmatch",
+			"paths.concat",
+			"\"",
+			"egaebel-LIFEBOOK-T901::~/grad-docs/research/privacy-preserving-neural-networks/graphic-magick-playground>>",
+			"torch",
+			"self.index",
+			"validationSplit",
+			"splitDataset",
+			"setn",
+			"dataSize",
+			"print",
+			"fileName",
+			"Training",
+			"trainingataset",
+			"print",
+			"GetY",
+			"Get",
+			"convert_spatial",
+			",",
+			"parse_csv",
+			",",
+			"cite",
+			"CITATION",
+			";",
+			" \n",
+			"anon",
+			"  ",
+			"--",
+			"\\.\\.\\.",
+			"... ",
+			"\\.\\.\\.",
+			"TRUMP: ",
+			"TRUMP:",
+			"TRUMP:.+?(?=[A-Z][A-Z][A-Z][A-Z])",
+			"TRUMP:.+?(?=[A-Z][A-Z])",
+			"TRUMP:.+?(?=[A-Z])",
+			"TRUMP:",
+			"TRUMP",
+			"TRUMP:.+?(?=[A-Z])",
+			"TRUMP:.+?(?=CARSON)",
+			"TRUMP:.+?(?=CHRISTIE)",
+			"TRUMP:.+?(?=WALKER)",
+			"PAUL ",
+			"CARSON ",
+			"WALKER ",
+			"WALKER",
+			"TRUMP:.+?(?=[A-Z]:)",
+			"  ",
+			"\\(CROSSTALK\\)",
+			"  ",
+			"\\n",
+			"\\(CROSSTALK\\)",
+			"TRUMP:.+?(?=[A-Z]{6,})",
+			"\\n",
+			"TRUMP:.+?(?=[A-Z]:)",
+			"TRUMP:.*[A-Z]*:",
+			"\\n",
+			"\\(LAUGHTER\\)\\n",
+			"[.*\\n]*",
+			"\\(APPLAUSE\\)\\n",
+			"^\\n",
+			"[.*\\n]*",
+			"â€“",
+			"^[0-9][0-9]\\n",
+			"Â©",
+			"^[0-9]\\n",
+			"^\\n",
+			"\\* \\* \\*",
+			"â€˜",
+			"â€¦",
+			"â€œ",
+			"â€”",
+			"â€",
+			"^\\n",
+			"â€™",
+			"([a-z]\\.)[1-9][1-9]?",
+			"([a-z]\\.)[1-9]?",
+			"([a-z]\\.)[1-9].",
+			"([a-z]\\.)[1-9]+",
+			"([a-z]\\.)[1-9]",
+			"([a-z])\\.[1-9]",
+			"[a-z]\\.[1-9]",
+			"*\\.[1-9]",
+			"â€¢ ",
+			"â€¢",
+			"^[$]*.[0-9]",
+			"â€“",
+			"^\\n",
+			"â€",
+			"â€œ",
+			"â€”",
+			"â€™",
+			"tâ€™",
+			"^\\n"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"bottom_border",
+			"top_border",
+			"right_border",
+			"left_border",
+			"",
+			"segmentParams",
+			"'",
+			"datasetSize",
+			"\\n",
+			";\\n",
+			" ",
+			"",
+			"\\nTRUMP:",
+			"WALKER: ",
+			" ",
+			"",
+			" ",
+			"",
+			"-",
+			"",
+			" ",
+			"",
+			"'",
+			"$1",
+			"",
+			"-",
+			"",
+			" ",
+			"'",
+			"",
+			",\\n",
+			"",
+			"pickle",
+			"self.d_activation_function",
+			"self.activation_function",
+			"'",
+			"\\\\item ",
+			"\\item ",
+			"[noitemsep,nosep]",
+			"[noitemsep]",
+			"% [nosep]",
+			"nosep",
+			"itemize",
+			"                ",
+			"\\nSystem.out.println(curInt + \"'s Successor? \" \n                + getSuccessor(bst.getRoot(), new BinaryNode<Integer>(curInt)));\\n",
+			";",
+			"curInt = ",
+			"",
+			"BinaryNode<Integer> ",
+			"\\tal ",
+			"\\tal",
+			"et al",
+			"",
+			"we ",
+			"",
+			",\\n\\n\\n",
+			"\\{\\n",
+			"\\},\\n",
+			"\\},\\n$",
+			"",
+			"\\n\\n",
+			"",
+			"\\n\\n",
+			"",
+			"\\n\\n",
+			"\\n",
+			"0",
+			"7",
+			"-",
+			"    ",
+			"Priorities In Order",
+			"Priorities",
+			"\\InputPointers",
+			"",
+			"encodedKey",
+			"#include \"",
+			"EphemeralDH",
+			"const static Integer secret",
+			"byte *iv",
+			"[0-f]{61}\\n",
+			"\\n",
+			"",
+			"\\#",
+			"",
+			"	//guard",
+			"	//guard(",
+			"bus_to_disk2_trans",
+			"bus_to_disk1_trans",
+			"bus_to_term_trans",
+			"cpu_done_term_trans",
+			"disk2_place",
+			"disk1_place",
+			"	moarc",
+			"	miarc",
+			"proc_fix",
+			"mem_up",
+			"proc_down",
+			"proc_up",
+			"mem_down",
+			"proc_fail",
+			"mem_fix",
+			"mem_fail",
+			"=",
+			"my_password",
+			"=",
+			"",
+			"folders",
+			"cur_line_num",
+			".find",
+			"subject",
+			"temp_text_full_file_path",
+			"b_bs",
+			"c_bs",
+			"",
+			" ",
+			"",
+			" \\frac{6}{3}",
+			" \\frac{5}{3}",
+			" \\frac{4}{3}",
+			" \\frac{3}{3}",
+			" \\frac{2}{3}",
+			"Flow 2: $",
+			"Q_2 = \\frac{1}{3}",
+			"Flow 2: $p_{2, 3}(2)",
+			"1 + 3 = 4$",
+			"... & ... & ... & ... & ...\\\\",
+			")$",
+			"$("
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "face-detect--image/facedetect.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5102,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3158,
+								3158
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1710.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "pad-images/pad_images.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5573,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3989,
+								3989
+							]
+						],
+						"settings":
+						{
+							"auto_name": "// let border be the same in all directions",
+							"incomplete_sync": null,
+							"syntax": "Packages/C++/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 2142.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "pad-images/CMakeLists.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 185,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "basic-video-recognition/facerec_video.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7291,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4334,
+								4334
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1350.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 27.0
+	},
+	"input":
+	{
+		"height": 39.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 375.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.sftp":
+	{
+		"height": 143.0
+	},
+	"pinned_build_system": "Packages/User/Custom Build Files/Python3.4.sublime-build",
+	"project": "zz__opencv-facial-recognition.sublime-project",
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"~/grad-docs/research/papers/papers-reccommended-by-Dr-Lou.txt"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 330.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

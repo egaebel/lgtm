@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 2.8)
+project( pad_images )
+find_package( OpenCV REQUIRED )
+add_executable( pad_images pad_images.cpp )
+target_link_libraries( pad_images ${OpenCV_LIBS} )

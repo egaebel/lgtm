@@ -1,0 +1,1 @@
+/lib/firmware/set-5300-wifi.sh

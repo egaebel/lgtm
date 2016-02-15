@@ -1,0 +1,8 @@
+                AoA 
+               -----
+Printer:        -9
+Book shelf:     -31
+Hamper:         -47
+Bed:            -60
+Bedside Power:  -74
+Bedside Table:  19 or -16 (Keeping in mind that this is a wrap-around case)
