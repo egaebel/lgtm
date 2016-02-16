@@ -5,10 +5,12 @@ function spotfi_test
     global NUMBER_OF_PACKETS_TO_CONSIDER
     global DEBUG_GMM
     global DEBUG_CLUSTER
+    global DEBUG_BRIDGE_CODE_CALLING
     DEBUG_PATHS = false;
     NUMBER_OF_PACKETS_TO_CONSIDER = 40; % Set to -1 to ignore this variable's value
     DEBUG_GMM = false;
     DEBUG_CLUSTER = true;
+    DEBUG_BRIDGE_CODE_CALLING = true;
     
     % Output controls
     global OUTPUT_AOAS
@@ -28,21 +30,25 @@ function spotfi_test
     OUTPUT_AOA_TOF_MUSIC_PEAK_GRAPH = false;
     OUTPUT_SELECTIVE_AOA_TOF_MUSIC_PEAK_GRAPH = false;
     OUTPUT_AOA_VS_TOF_PLOT = true;
-    OUTPUT_SUPPRESSED = false;
+    OUTPUT_SUPPRESSED = true;
     OUTPUT_PACKET_PROGRESS = false;
     OUTPUT_FIGURES_SUPPRESSED = true; % Set to true when running in deployment from command line
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-    return
     % What an ugly solution to a simple organizational problem....
     % Path to the test data files for localization in my room
-    path('/home/egaebel/grad-docs/research/thesis/csi-code/tests/localization-tests--in-room', path);
+    %path('/home/egaebel/grad-docs/research/thesis/project/csi-code/test-data/localization-tests--in-room', path);
+    path('../../csi-code/test-data/localization-tests--in-room', path);
     % Paths for the csitool functions provided
-    path('/home/egaebel/grad-docs/research/thesis/linux-80211n-csitool-supplementary/matlab', path);
-	path('/home/egaebel/grad-docs/research/thesis/linux-80211n-csitool-supplementary/matlab/sample_data', path);
-    close all
-    clc
-    close_figures();
+    path('../../../linux-80211n-csitool-supplementary/matlab', path);
+	path('../../../linux-80211n-csitool-supplementary/matlab/sample_data', path);
+    if DEBUG_BRIDGE_CODE_CALLING
+        fprintf('The path: %s\n', path)
+    end
+    if ~DEBUG_BRIDGE_CODE_CALLING
+        close all
+        clc
+        close_figures();
+    end
     % test_algorithm_1('csi-5ghz-10cm-desk-spacing-on-book-case.dat')
     %'antenna-extender-test.dat'
     data_files = {
@@ -54,6 +60,9 @@ function spotfi_test
         'csi-5ghz-10cm-desk-spacing-bed-side-table.dat'
     };
     run(data_files)
+    if DEBUG_BRIDGE_CODE_CALLING
+        fprintf('Done Running!\n')
+    end
 end
 
 %% Runs the SpotFi test over the passed in data files which each contain CSI data for many packets
@@ -112,8 +121,7 @@ function run(data_files)
             csi = squeeze(csi);
 
             % Sanitize ToFs with Algorithm 1
-            % sanitized_csi = spotfi_algorithm_1(csi, sub_freq_delta);
-            sanitized_csi = csi;
+            sanitized_csi = spotfi_algorithm_1(csi, sub_freq_delta);
             % Acquire smoothed CSI matrix
             smoothed_sanitized_csi = smooth_csi(sanitized_csi);
             % Run SpotFi's AoA-ToF MUSIC algorithm on the smoothed and sanitized CSI matrix
@@ -256,26 +264,30 @@ function run(data_files)
                 cluster_aoa(ii, 1) = cluster_aoa(ii, 1) + aoa_max * clusters{ii}(jj, 1);
             end
             cluster_aoa(ii, 1) = cluster_aoa(ii, 1) / length(clusters{ii});
-            % Output
-            fprintf('\nCluster Properties for cluster %d\n', ii)
-            fprintf('Num Cluster Points: %d, Weighted Num Cluster Points: %d\n', ...
-                    num_cluster_points, (weight_num_cluster_points * num_cluster_points))
-            fprintf('AoA Variance: %.9f, Weighted AoA Variance: %.9f\n', ...
-                    aoa_variance, (weight_aoa_variance * aoa_variance))
-            fprintf('ToF Variance: %.9f, Weighted ToF Variance: %.9f\n', ...
-                    tof_variance, (weight_tof_variance * tof_variance))
-            fprintf('AoA Mean %.9f\n', aoa_mean)
-            fprintf('ToF Mean: %.9f, Weighted ToF Mean: %.9f\n', ...
-                    tof_mean, (weight_tof_mean * tof_mean))
-            fprintf('Exponential Body: %.9f\n', exp_body)
-            fprintf('Likelihood for cluster %d is %f, has the formatting %s, and AoA %f\n', ...
-                    ii, likelihood(ii, 1), cluster_plot_style{ii}, cluster_aoa(ii, 1))
+            if ~OUTPUT_SUPPRESSED
+                % Output
+                fprintf('\nCluster Properties for cluster %d\n', ii)
+                fprintf('Num Cluster Points: %d, Weighted Num Cluster Points: %d\n', ...
+                        num_cluster_points, (weight_num_cluster_points * num_cluster_points))
+                fprintf('AoA Variance: %.9f, Weighted AoA Variance: %.9f\n', ...
+                        aoa_variance, (weight_aoa_variance * aoa_variance))
+                fprintf('ToF Variance: %.9f, Weighted ToF Variance: %.9f\n', ...
+                        tof_variance, (weight_tof_variance * tof_variance))
+                fprintf('AoA Mean %.9f\n', aoa_mean)
+                fprintf('ToF Mean: %.9f, Weighted ToF Mean: %.9f\n', ...
+                        tof_mean, (weight_tof_mean * tof_mean))
+                fprintf('Exponential Body: %.9f\n', exp_body)
+                fprintf('Likelihood for cluster %d is %f, has the formatting %s, and AoA %f\n', ...
+                        ii, likelihood(ii, 1), cluster_plot_style{ii}, cluster_aoa(ii, 1))
+            end
             % Check for maximum likelihood
             if likelihood(ii, 1) > likelihood(max_likelihood_index, 1)
                 max_likelihood_index = ii;
             end
         end
-        fprintf('\nThe cluster with the maximum likelihood is cluster %d\n', max_likelihood_index)
+        if ~OUTPUT_SUPPRESSED
+            fprintf('\nThe cluster with the maximum likelihood is cluster %d\n', max_likelihood_index)
+        end
             
         % Plot AoA & ToF
         if OUTPUT_AOA_VS_TOF_PLOT && ~OUTPUT_SUPPRESSED && ~OUTPUT_FIGURES_SUPPRESSED
@@ -303,8 +315,10 @@ function run(data_files)
         
         % Select AoA
         max_likelihood_average_aoa = cluster_aoa(max_likelihood_index, 1);
-        fprintf('The Estimated Angle of Arrival for data set %s is %f\n', ...
-                data_files{data_file_index}, max_likelihood_average_aoa)
+        if ~OUTPUT_SUPPRESSED
+            fprintf('The Estimated Angle of Arrival for data set %s is %f\n', ...
+                    data_files{data_file_index}, max_likelihood_average_aoa)
+        end
         % Profit
     end
 end
@@ -539,7 +553,7 @@ function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
         [peak_values, tof_peak_indices] = findpeaks(Pmusic(aoa_index, :));
         %% TODO: EXPERIMENT, REMOVE LATER
         tof_peak_indices = tof_peak_indices(1);
-        if OUTPUT_TOFS
+        if OUTPUT_TOFS && ~OUTPUT_SUPPRESSED
             fprintf('Time of Flight Peaks along Angle of Arrival %f\n', theta(aoa_index))
             peak_values(1)
             tau(tof_peak_indices(1))
@@ -548,8 +562,6 @@ function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
         negative_ones_for_padding = -1 * ones(1, length(tau) - length(tof_peak_indices));
         time_peak_indices(ii, :) = horzcat(tau(tof_peak_indices), negative_ones_for_padding);
     end
-    %fprintf('time_peak_indices:\n')
-    %time_peak_indices
 
     % Set return values
     % AoA is now a column vector
@@ -718,38 +730,4 @@ function close_figures
     % Close all figures.
     window_handles = findall(0);
     delete(window_handles(2:end));
-end
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Takes a number and quantity of decimal places and rounds the number to that many decimal places.
-% number         -- the number to be rounded
-% decimal_places -- the number of decimal places to preserve
-% Return:
-% rounded_number -- the number rounded to the given decimal places
-function rounded_number = round_to_decimal_place(number, decimal_places)
-    rounded_number = floor(number) + floor((number - floor(number)) * 10^decimal_places) * 10^-decimal_places;
-end
-
-%% Tests Algorithm 1 using the passed in data_file
-% data_file -- the data file to use for testing Algorithm 1
-function test_algorithm_1(data_file)
-    fprintf('Testing Algorithm 1\n')
-    % Read data file in
-    fprintf('Running on data file: %s\n', data_file)
-    csi_trace = read_bf_file(data_file);
-    % Extract CSI information for each packet
-    fprintf('Have CSI for %d packets\n', length(csi_trace))
-
-    % Get CSI for the first packet
-    csi_entry = csi_trace{1};
-    csi = get_scaled_csi(csi_entry);
-    %% TODO: Remove later, only transmit on 1 antenna
-    csi = csi(1, :, :);
-    % Remove the single element dimension
-    csi = squeeze(csi);
-    
-    % Sanitize ToFs with Algorithm 1
-    delta_f = 40 * 10^6;
-    spotfi_algorithm_1(csi, delta_f);
-    return
 end

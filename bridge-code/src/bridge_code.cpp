@@ -1,4 +1,7 @@
+#define DEBUG 1
+
 // C++ headers
+#include <cstring>
 #include <cstdlib>
 #include <chrono>
 #include <fstream>
@@ -8,22 +11,25 @@
 #include <vector>
 
 // Linux headers
-#include <sys/wait.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 // My Headers
 
 //~Constants----------------------------------------------------------------------------------------
 static const std::string matlabOutputFile = "matlab_aoa_output.out";
+/*
 static const std::string matlabCommand = (std::string) "matlab -nojvm -nodisplay -nosplash -r "
         + "\"run('/home/egaebel/grad-docs/research/thesis/csi-code/tests/spotfi_test.m'), exit\""
         + " > " 
         + matlabOutputFile;
+*/
 static const std::string csiDataFile = "csi.dat";
 static const std::string csiCollectionOutputFile = "csi-log-collection.out";
-// TODO: BE SURE TO INCLUDE DOCUMENTATION EXPLAINING DEPENDENCIES!
-static const std::string csiCollectionCommand = "unbuffer ./csi-collection.sh | tee " + csiCollectionOutputFile;
 // TODO: How long does this need to be?
 static const int MAX_NUM_CSI_OUTPUT_LINES = 70;
 
@@ -42,13 +48,16 @@ int main() {
 
     // Receive data from other user (csi-collection.sh)
     collectCsiData();
+    if (DEBUG) {
+        std::cout << std::endl << std::endl << std::endl;
+    }
     // Analyze signal from other user with MATLAB and get angle of arrival
     std::vector<double> angleOfArrivals;
     runMatlab(angleOfArrivals);
     // Extract data sent from other user and build facial recognition model
     // extractCsiDataContent();
     // Run facial recognition model on current video stream
-    // runFacialRecognition();
+    // runFacialRecognition();s
     // Compare face location with AoA
     /*
     if (compareSignalLocToFaceLoc()) {
@@ -63,23 +72,59 @@ static void checkSystemValid() {
 }
 
 static void collectCsiData() {
+    if (DEBUG) {
+        std::cout << "DEBUG: Running collectCsiData!" << std::endl;
+    }
     using namespace std::chrono;
-    // 3 minute timeout
-    const int TIMEOUT = 60 * 3;
+    // 5 minute timeout
+    const int TIMEOUT = 60 * 5;
     // Run command, parse output file to determine when to kill command
-
     pid_t forkRetVal = fork();
+    // Error
     if (forkRetVal == -1) {
-        std::cout << "ERROR FORKING IN collectCsiData!" << std::endl;
+        std::cout << "ERROR: on fork in collectCsiData: " << strerror(errno) << std::endl;
+    // Child
     } else if (forkRetVal == 0) {
-        char* const args[] = {(char*) csiCollectionCommand.c_str(), (char*) "\0"};
-        execv(csiCollectionCommand.c_str(), args);
+        if (DEBUG) {
+            std::cout << "DEBUG: Running CSI collection in child!" << std::endl;
+        }
+        int fd = open(csiCollectionOutputFile.c_str(), 
+                O_RDWR | O_TRUNC | O_CREAT, 
+                S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+        if (fd < 0) {
+            std::cout << "ERROR: on opening " << csiCollectionOutputFile << " in collectCsiData: " 
+                    << strerror(errno) << std::endl;
+        }
+        if (dup2(fd, STDOUT_FILENO) < 0) {
+            std::cout << "ERROR: on dup2 sending stdout to fd in collectCsiData: " 
+                    << strerror(errno) << std::endl;
+        }
+        close(fd);
+        char* const args[] = {(char*) "unbuffer", (char*) "./csi-collection.sh", (char*) 0};
+        int retVal = execvp(args[0], args);
+        if (retVal < 0) {
+            std::cout << "ERROR: on execvp executing: " << args[0] << " in collectCsiData: "
+                    << strerror(errno) << std::endl;
+        }
+        if (DEBUG) {
+            std::cout << "DEBUG: Finished running CSI collection in child!" << std::endl;
+        }
+    // Parent
     } else {
+        if (DEBUG) {
+            std::cout << "DEBUG: Parsing file in parent!" << std::endl;
+        }
         int linesWritten = 0;
         steady_clock::time_point beginTime = steady_clock::now();
         steady_clock::time_point endTime = steady_clock::now();
         duration<int> timeElapsed = duration_cast<duration<int>>(endTime - beginTime);
-        while (linesWritten < MAX_NUM_CSI_OUTPUT_LINES || timeElapsed.count() > TIMEOUT) {
+        if (DEBUG) {
+            std::cout << "DEBUG: timeElapsed.count() == " << timeElapsed.count() << std::endl;
+            std::cout << "DEBUG: TIMEOUT == " << TIMEOUT << std::endl;
+            std::cout << "DEBUG: linesWritten == " << linesWritten << std::endl;
+            std::cout << "DEBUG: MAX_NUM_CSI_OUTPUT_LINES == " << MAX_NUM_CSI_OUTPUT_LINES << std::endl;
+        }
+        while (linesWritten < MAX_NUM_CSI_OUTPUT_LINES && timeElapsed.count() < TIMEOUT) {
             // Parse output file
             linesWritten = 0;
             std::ifstream infile(csiCollectionOutputFile);
@@ -88,26 +133,83 @@ static void collectCsiData() {
                 linesWritten += 1;
             }
             infile.close();
-            sleep(2);
             timeElapsed = duration_cast<duration<int>>(endTime - beginTime);
+            if (DEBUG) {
+                std::cout << "DEBUG: Parsed " << linesWritten << " lines in " 
+                        << csiCollectionOutputFile << std::endl;
+            }
+        }
+        if (timeElapsed.count() >= TIMEOUT) {
+            std::cout << "ERROR: Timeout was reached when parsing " 
+                    << csiCollectionOutputFile << std::endl;
+        }
+        if (DEBUG) {
+            std::cout << "DEBUG: Killing csi collection!" << std::endl;
         }
         int killRetVal = kill(forkRetVal, SIGINT);
         if (killRetVal < 0) {
-            // Do error processing with errno
+            std::cout << "ERROR: on killing child: " << strerror(errno) << std::endl;
         }
     }
 }
 
 static bool runMatlab(std::vector<double> &angleOfArrivals) {
+    if (DEBUG) {
+        std::cout << "DEBUG: Running runMatlab" << std::endl;
+    }
     pid_t forkRetVal = fork();
     if (forkRetVal == -1) {
-        std::cout << "ERROR FORKING IN runMatlab!" << std::endl;
+        std::cout << "ERROR: on fork in runMatlab: " << strerror(errno) << std::endl;
         return false;
     } else if (forkRetVal == 0) {
-        char* const args[] = {(char*) matlabCommand.c_str(), (char*) "\0"};
-        execv(matlabCommand.c_str(), args);
+        if (DEBUG) {
+            std::cout << "DEBUG: Running matlab in child!" << std::endl;
+        }
+        /*
+        static const std::string matlabCommand = (std::string) "matlab -nojvm -nodisplay -nosplash -r "
+        + "\"run('/home/egaebel/grad-docs/research/thesis/csi-code/test-code/spotfi_test.m'), exit\""
+        + " > " 
+        + matlabOutputFile;
+        */
+        int fd = open(matlabOutputFile.c_str(), 
+                O_RDWR | O_TRUNC | O_CREAT, 
+                S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+        if (fd < 0) {
+            std::cout << "ERROR: on opening " << matlabOutputFile << " in runMatlab: " 
+                    << strerror(errno) << std::endl;
+        }
+        if (dup2(fd, STDOUT_FILENO) < 0) {
+            std::cout << "ERROR: on dup2 sending stdout to fd in runMatlab: " << strerror(errno) << std::endl;
+        }
+        close(fd);
+        // NOTE:
+        // The below is very stupid and not portable at all, however it is necessary since I must
+        // run this program as root to execute the csi-collection.sh script and MATLAB's license 
+        // only binds to a SINGLE USER on the machine...so running MATLAB as root prompts me to
+        // enter in license stuff, which is rejected anyway since MATLAB is already bound to my
+        // user, egaebel.
+        // TODO:
+        // The best solution I think is to have a config file where the user has to enter in their
+        // username, then that config file is parsed and the username is put in here in the 
+        // matlabUsername field. This solution is REALLY, REALLY STUPID, 
+        // and it's all MathWorks' fault
+        char* matlabUsername = (char*) "egaebel";
+        char* const args[] = {(char*) "sudo", (char*) "-u", matlabUsername, 
+                (char*) "matlab", (char*) "-nojvm", (char*) "-nodisplay", 
+                (char*) "-nosplash", 
+                (char*) "-r", 
+                (char*) "run('../../csi-code/test-code/spotfi_test.m'), exit", 
+                (char*) 0};
+        int retVal = execvp(args[0], args);
+        if (retVal < 0) {
+            std::cout << "ERROR: on execvp executing: " << args[0] << " in runMatlab: "
+                    << strerror(errno) << std::endl;
+        }
         return false;
     } else {
+        if (DEBUG) {
+            std::cout << "DEBUG: Waiting for matlab in parent!" << std::endl;
+        }
         int status = 0;
         int waitRetVal = waitpid(forkRetVal, &status, 0);
         if (waitRetVal < 0) {
@@ -126,7 +228,9 @@ static bool runMatlab(std::vector<double> &angleOfArrivals) {
         double parsedAngleOfArrival;
         while (std::getline(infile, line)) {
             std::istringstream iss(line);
-            std::cout << "Read " << line << " from " << matlabOutputFile << std::endl;
+            if (DEBUG) {
+                std::cout << "DEBUG: Read " << line << " from " << matlabOutputFile << std::endl;
+            }
             parsedAngleOfArrival = std::stod(line, NULL);
             angleOfArrivals.push_back(parsedAngleOfArrival);
         }
