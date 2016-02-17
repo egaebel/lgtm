@@ -165,12 +165,6 @@ static bool runMatlab(std::vector<double> &angleOfArrivals) {
         if (DEBUG) {
             std::cout << "DEBUG: Running matlab in child!" << std::endl;
         }
-        /*
-        static const std::string matlabCommand = (std::string) "matlab -nojvm -nodisplay -nosplash -r "
-        + "\"run('/home/egaebel/grad-docs/research/thesis/csi-code/test-code/spotfi_test.m'), exit\""
-        + " > " 
-        + matlabOutputFile;
-        */
         int fd = open(matlabOutputFile.c_str(), 
                 O_RDWR | O_TRUNC | O_CREAT, 
                 S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
@@ -198,7 +192,7 @@ static bool runMatlab(std::vector<double> &angleOfArrivals) {
                 (char*) "matlab", (char*) "-nojvm", (char*) "-nodisplay", 
                 (char*) "-nosplash", 
                 (char*) "-r", 
-                (char*) "run('../../csi-code/test-code/spotfi_test.m'), exit", 
+                (char*) "try, run('../csi-code/test-code/spotfi_test.m'), catch, end, exit", 
                 (char*) 0};
         int retVal = execvp(args[0], args);
         if (retVal < 0) {
