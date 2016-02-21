@@ -1,0 +1,13 @@
+*/bridge-code
+*csi.dat
+(*/)*csi.dat
+*.out
+bridge-code/src/bridge-code
+bridge-code/src/csi.dat
+facial-recognition/openCV/basic-video-recognition/CMakeCache.txt
+facial-recognition/openCV/basic-video-recognition/CMakeFiles/
+facial-recognition/openCV/basic-video-recognition/Makefile
+facial-recognition/openCV/basic-video-recognition/cmake_install.cmake
+facial-recognition/openCV/face-detect--image/Makefile
+facial-recognition/openCV/face-detect--image/facedetect
+facial-recognition/openCV/basic-video-recognition/facerec_video

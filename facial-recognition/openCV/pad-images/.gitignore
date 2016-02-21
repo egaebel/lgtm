@@ -1,0 +1,6 @@
+-r
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+pad_images
+Makefile
