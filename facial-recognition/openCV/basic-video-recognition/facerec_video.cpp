@@ -60,7 +60,7 @@ int main(int argc, const char *argv[]) {
         exit(1);
     }
     // Get the path to your CSV:
-    slstring fn_haar = string(argv[1]);
+    string fn_haar = string(argv[1]);
     string fn_csv = string(argv[2]);
     int deviceId = atoi(argv[3]);
     // These vectors hold the images and corresponding labels:
