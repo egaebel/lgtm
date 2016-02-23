@@ -41,3 +41,4 @@ facial-recognition/openCV/pad-images/pad_images
 facial-recognition/openCV/augment-data/augment_data
 bridge-code/lol-test.sh
 facial-recognition/openCV/data/yalefaces--tree-structure-backup/
+facial-recognition/training-data/yalefaces
