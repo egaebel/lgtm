@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
+add_compile_options(-std=c++11)
 project( facerec_video )
 find_package( OpenCV REQUIRED )
 add_executable( facerec_video facerec_video.cpp )
