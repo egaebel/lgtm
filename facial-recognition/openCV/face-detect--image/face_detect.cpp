@@ -9,14 +9,7 @@
  *
  * This code was adapted from OpenCV tutorials found at:
  */
-#include <opencv2/objdetect/objdetect.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-
-#include <iostream>
-#include <sstream>
-#include <fstream>
-#include <stdio.h>
+#include "facedetect.hpp"
 
 using namespace std;
 using namespace cv;
@@ -28,15 +21,20 @@ static char separator = ';';
 static CascadeClassifier faceCascade;
 static string windowName = "Capture - Face detection"; 
 
-// Function Headers
-Mat detectAndDisplay(Mat frame);
+// Private function headers
+static Mat detectAndDisplay(Mat frame);
 
 // Function main
 int main(void) {
+    cropImagesToFaces();
+    return 0;
+}
+
+void cropImagesToFaces() {
     // Load the cascade
     if (!faceCascade.load(faceCascadefileName)){
         printf("--(!)Error loading\n");
-        return (-1);
+        return;
     }
 
     // Read CSV file
@@ -66,8 +64,8 @@ int main(void) {
                     // TODO: NOTE: The keycode for space started showing up as 1048608 for some 
                     // reason, it is likely that it will change back, for another unknown reason.
                     // Be ready for this.
-                    //if (keycode == 32) {
-                    if (keycode == 1048608) {
+                    //if (keycode == 1048608) {
+                    if (keycode == 32) {
                         printf("Accepting Change!!\n");
                         imwrite(path, croppedImage);
                         break;
@@ -75,14 +73,14 @@ int main(void) {
                     // TODO: NOTE: The keycode for esc started showing up as 1048603 for some 
                     // reason, it is likely that it will change back, for another unknown reason.
                     // Be ready for this.
-					//} else if (keycode == 27) {
-                    } else if (keycode == 1048603) {
+                    //} else if (keycode == 1048603) {
+                    } else if (keycode == 27) {
                         printf("Rejecting Change!!\n");
                         break;       
                     } else {
-						printf("Oops, wrong key, %d, press Space to 
-                                accept or Escape to reject!\n", keycode);
-					}
+                        printf("Oops, wrong key, %d, press Space to accept or Escape to reject!\n", 
+                                keycode);
+                    }
                 }
             } else{
                 printf(" --(!) No captured frame -- Break!\n");
@@ -90,12 +88,10 @@ int main(void) {
             }
         }
     }
-
-    return 0;
 }
 
 // Function detectAndDisplay
-Mat detectAndDisplay(Mat frame) {
+static Mat detectAndDisplay(Mat frame) {
     std::vector<Rect> faces;
     Mat frame_gray;
     Mat crop;
@@ -169,17 +165,17 @@ Mat detectAndDisplay(Mat frame) {
         imwrite(fileName, gray);
 
         // Display detected faces on main window - live stream from camera
-        Point pt1(faces[ic].x, faces[ic].y); 
-        Point pt2((faces[ic].x + faces[ic].height), (faces[ic].y + faces[ic].width));
-        rectangle(frame, pt1, pt2, Scalar(0, 255, 0), 2, 8, 0);
+        //Point pt1(faces[ic].x, faces[ic].y); 
+        //Point pt2((faces[ic].x + faces[ic].height), (faces[ic].y + faces[ic].width));
+        //rectangle(frame, pt1, pt2, Scalar(0, 255, 0), 2, 8, 0);
     }
 
     // Show image
-    sstm << "Crop area size: " << roi_b.width << "x" << roi_b.height << " fileName: " << fileName;
-    text = sstm.str();
+    //sstm << "Crop area size: " << roi_b.width << "x" << roi_b.height << " fileName: " << fileName;
+    //text = sstm.str();
 
-    putText(frame, text, cvPoint(30, 30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 255), 
-            1, CV_AA);
+    //putText(frame, text, cvPoint(30, 30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 255), 
+    //        1, CV_AA);
     imshow("original", frame);
 
     if (!crop.empty()) {
