@@ -9,7 +9,7 @@
  *
  * This code was adapted from OpenCV tutorials found at:
  */
-#include "facedetect.hpp"
+#include "face_detect.hpp"
 
 using namespace std;
 using namespace cv;
