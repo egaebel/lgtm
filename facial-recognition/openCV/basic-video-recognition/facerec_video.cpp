@@ -68,7 +68,7 @@ static void read_csv(const string& fileName, vector<Mat>& images, vector<int>& l
 int main(int argc, const char *argv[]) {
     // Check for valid command line arguments, print usage
     // if no arguments were given.
-    if (argc != 4) {
+    if (argc < 4) {
         cout << "usage: " << argv[0] 
                 << " </path/to/haarCascade> </path/to/csv.ext> </path/to/device id>" << endl;
         cout << "\t </path/to/haarCascade> -- Path to the Haar Cascade for face detection." 
@@ -82,26 +82,38 @@ int main(int argc, const char *argv[]) {
     string haarCascadeFileName = string(argv[1]);
     string csvFileName = string(argv[2]);
     int deviceId = atoi(argv[3]);
+    string trainedClassifierPath;
+    if (argc == 5) {
+        cout << "Reading trainedClassifierPath from input...." << endl;
+        trainedClassifierPath = string(argv[4]);
+        cout << "Read trainedClassifierPath as: " << trainedClassifierPath << endl;
+    }
 
     // These vectors hold the images and corresponding labels:
     vector<Mat> images;
     vector<int> labels;
 
-    // Read in the data (fails if no valid input fileName is given, but you'll get an error message):
-    try {
-        // Loop over all files in directory
-        read_csv(csvFileName, images, labels);
-    } catch (cv::Exception& e) {
-        cerr << "Error opening file \"" << csvFileName << "\". Reason: " << e.msg << endl;
-        // nothing more we can do
-        exit(1);
+    // If we have loaded a classifier there will be no training, so no files are needed.
+    if (trainedClassifierPath.empty()) {
+        // Read in the data (fails if no valid input fileName is given, 
+        // but you'll get an error message):
+        try {
+            // Loop over all files in directory
+            read_csv(csvFileName, images, labels);
+        } catch (cv::Exception& e) {
+            cerr << "Error opening file \"" << csvFileName << "\". Reason: " << e.msg << endl;
+            // nothing more we can do
+            exit(1);
+        }
     }
 
     // Get the height from the first image. We'll need this
     // later in code to reshape the images to their original
     // size AND we need to reshape incoming faces to this size:
-    int imgWidth = images[0].cols;
-    int imgHeight = images[0].rows;
+    // TODO: differentiate between when the csv file path is passed 
+    //      and when a classifier path is passed
+    int imgWidth = 168;//images[0].cols;
+    int imgHeight = 168;//images[0].rows;
 
     // Create a FaceRecognizer and train it on the given images:
     Ptr<face::FaceRecognizer> model;
@@ -110,21 +122,36 @@ int main(int argc, const char *argv[]) {
         model = face::createEigenFaceRecognizer();
     } else {
         cout << "Using Fisherfaces" << endl;
-        model = face::createFisherFaceRecognizer();
+        double threshold = 1700.0;
+        model = face::createFisherFaceRecognizer(0, threshold);
     }
-    cout << "starting training..." << endl;
 
-    // Time training...
-    chrono::time_point<std::chrono::system_clock> start, end;
-    start = std::chrono::system_clock::now();
-    
-    model->train(images, labels);
-    model->save("facial-recognition-model");
+    if (trainedClassifierPath.empty())  {
+        cout << "Starting training..." << endl;
+        // Time training...
+        chrono::time_point<std::chrono::system_clock> start, end;
+        start = std::chrono::system_clock::now();
+        
+        model->train(images, labels);
+        model->save("new-facial-recognition-model");
 
-    end = std::chrono::system_clock::now();
-    std::chrono::duration<double> elapsed_seconds = end - start;
-    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
-    cout << "Done training! Took " << elapsed_seconds.count() << " seconds" << endl;
+        end = std::chrono::system_clock::now();
+        std::chrono::duration<double> elapsed_seconds = end - start;
+        std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+        cout << "Done training! Took " << elapsed_seconds.count() << " seconds" << endl;
+    } else {
+        cout << "Starting loading from file: " << trainedClassifierPath << endl;
+        chrono::time_point<std::chrono::system_clock> start, end;
+        start = std::chrono::system_clock::now();
+        
+        model->load(trainedClassifierPath);
+
+        end = std::chrono::system_clock::now();
+        std::chrono::duration<double> elapsed_seconds = end - start;
+        std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+        cout << "Done loading classifier from: " << trainedClassifierPath 
+                << " ! Took " << elapsed_seconds.count() << " seconds" << endl;
+    }
 
     // That's it for learning the Face Recognition model. You now
     // need to create the classifier for the task of Face Detection.
@@ -175,27 +202,38 @@ int main(int argc, const char *argv[]) {
                 Mat resizedFace;
                 cv::resize(face, resizedFace, Size(imgWidth, imgHeight), 1.0, 1.0, INTER_CUBIC);
                 // Now perform the prediction, see how easy that is:
-                int prediction = model->predict(resizedFace);
+                int prediction = -1;
+                double confidence = 0.0;
+                model->predict(resizedFace, prediction, confidence);
                 // And finally write all we've found out to the original image!
                 // First of all draw a green rectangle around the detected face:
                 rectangle(original, curFace, CV_RGB(0, 255,0), 1);
                 // Create the text we will annotate the box with:
-                string boxText = format("Prediction = %d", prediction);
+                string boxPredictionText = format("Prediction = %d", prediction);
+                string boxConfidenceText = format("With confidence: %g", confidence);
                 // Calculate the position for annotated text (make sure we don't
                 // put illegal values in there):
-                int posX = std::max(curFace.tl().x - 10, 0);
-                int posY = std::max(curFace.tl().y - 10, 0);
+                // TODO: See below, 10 was the original
+                int predictionPosX = std::max(curFace.tl().x - 25, 0);
+                int predictionPosY = std::max(curFace.tl().y - 25, 0);
+                int confidencePosX = std::max(curFace.tl().x - 10, 0);
+                int confidencePosY = std::max(curFace.tl().y - 10, 0);
                 // And now put it into the image:
-                putText(original, boxText, Point(posX, posY), FONT_HERSHEY_PLAIN, 1.0, 
-                        CV_RGB(0,255,0), 2.0);
+                putText(original, boxPredictionText, Point(predictionPosX, predictionPosY), 
+                        FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
+                putText(original, boxConfidenceText, Point(confidencePosX, confidencePosY), 
+                        FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
             }
             // Show the result:
             imshow("face_recognizer", original);
             // And display it:
-            char key = (char) waitKey(20);
-            // Exit this loop on escape:
-            if(key == 27) {
+            int key = waitKey(1000);
+            // Exit this loop on escape OR space:
+            if(key == 27 || key == 32) {
                 break;
+            } else if (key != -1) {
+                cout << "Keydown was: " << key 
+                        << " Need to press esc or space to exit loop!" << endl;
             }
         }
     } catch(Exception e) {
