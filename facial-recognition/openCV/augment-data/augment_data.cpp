@@ -1,5 +1,5 @@
 /**
- * Takes a csv file specified in the variable "csv_fileName" where each line indicates an 
+ * Takes a csv file specified in the variable "csvFileName" where each line indicates an 
  * image file and a label.
  * Runs through all the images and augments them in various ways (flips, rotations, and both)
  * and saves the altered images to the directory the image was retrieved from.
@@ -11,6 +11,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
 
 #include <climits>
 #include <cmath>
@@ -18,7 +20,9 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-
+#include <algorithm>
+#include <vector>
+ 
 #define DEBUG 0
 
 using namespace cv;
@@ -27,29 +31,96 @@ using namespace std;
 /// Global Variables
 static Mat src, dst;
 static int top_border, bottom_border, left_border, right_border;
-static string csv_fileName = "yalefaces.csv";
+static string csvFileName = "yalefaces.csv";
 static const char separator = ';';
+static const int nThreads = 4;
+static const string threadText = "__thread--";
+static pthread_mutex_t fileStringMutex;
 
 // Function headers
-void rotate(Mat& src, Mat& dst, double angle);
+static void* augmentDataInThread(void* fileName);
+static void rotateImage(const Mat &input, Mat &output, double alpha, double beta, double gamma, 
+        double dx, double dy, double dz, double f);
 
 // Run, run, run
 int main(void) {
     // Find max sizes
     int maxHeight = 0;
     int maxWidth = 0;
-    Mat imgSrc;
-    Mat imgRotation;
-    Mat imgFlip;
-    std::ifstream file(csv_fileName.c_str(), ifstream::in);
+    std::ifstream file(csvFileName.c_str(), ifstream::in);
     if (!file) {
         string error_message = "No valid input file was given, please check the given fileName.";
         CV_Error(CV_StsBadArg, error_message);
     }
-    string line, path, rotationFileName, flipFileName;
-    vector<int> compressionParams;
-    compressionParams.push_back(CV_IMWRITE_JPEG_QUALITY);
-    compressionParams.push_back(100);
+    string line;
+
+    int numLines = std::count(std::istreambuf_iterator<char>(file), 
+            std::istreambuf_iterator<char>(), '\n');
+    // Loop over successive chunks of the original file and create new files with each chunk
+    for (int i = 0, startPos = 0; i < nThreads; i++, startPos += (numLines / nThreads)) {
+        std::ofstream choppedFile(csvFileName + threadText + to_string(i));
+        // Seek to the correct starting point
+        file.seekg(0);
+        for (int j = 0; j < startPos; j++) {
+            getline(file, line);
+        }
+        // Get all chunk of lines from file, if on the last iteration go to the end of the file
+        int j = 0;
+        while (j < (numLines / nThreads) 
+                || (i == (nThreads - 1) && !file.eof())) {
+            getline(file, line);
+            choppedFile << line;
+            choppedFile << "\n";
+            j++;
+        }
+        choppedFile.close();
+    }
+    file.close();
+
+    // Generate file names prior to thread creation to avoid races
+    vector<string> threadFileNames;
+    for (int i = 0; i < nThreads; i++) {
+        string tempFileName = csvFileName + threadText + to_string(i);
+        threadFileNames.push_back(string(tempFileName));
+    }
+    if (pthread_mutex_init(&fileStringMutex, NULL) != 0) {
+        cout << "Error in pthread_mutex_init" << endl;
+    }
+
+    // Process in nThreads
+    pthread_t threads[nThreads];
+    for (int i = 0; i < nThreads; i++) {
+        // cv::namedWindow("Z-Rotation: Data Augmentation");
+        if (pthread_create(&threads[i], NULL, augmentDataInThread, (void*) threadFileNames[i].c_str()) != 0) {
+            cout << "Error in pthread_create" << endl;
+        }
+    }
+
+    for (int i = 0; i < nThreads; i++) {
+        if (pthread_join(threads[i], NULL) != 0) {
+            cout << "Error in pthread_join on thread: " << threads[i] << " at index " << i << endl;
+        }
+    }
+    if (pthread_mutex_destroy(&fileStringMutex) != 0) {
+        cout << "Error in pthread_mutex_destroy" << endl;
+    }
+    return 0;
+}
+
+static void* augmentDataInThread(void* fileName) {
+    string stringFileName((char*) fileName);
+    pthread_mutex_lock(&fileStringMutex);
+    cout << "augmentDataInThread, fileName: ||" << stringFileName.c_str() << "||" << endl;
+    pthread_mutex_unlock(&fileStringMutex);
+    std::ifstream file(stringFileName.c_str(), ifstream::in);
+    if (!file) {
+        string error_message = "No valid input file was given, please check the given fileName: "
+                + stringFileName;
+        CV_Error(CV_StsBadArg, error_message);
+    }
+    string line, path, rotationFileName;
+    Mat imgSrc;
+    Mat imgRotation;
     while (getline(file, line)) {
         stringstream liness(line);
         getline(liness, path, separator);
@@ -59,56 +130,94 @@ int main(void) {
         
         imgSrc = imread(path);
 
-        // Perform flip with no rotation
-        flip(imgSrc, imgFlip, 1);
-        flipFileName = path.substr(0, path.size() - 4) + "--flipped" 
-                + path.substr(path.size() - 4, path.size());
-        cout << "Writing: " << flipFileName << endl;
-        imwrite(flipFileName, imgFlip);
-
-        // Loop over every degree of rotation, rotate, flip, save both results
-        int rotation = 0;
-        while (rotation < 360) {
-            rotate(imgSrc, imgRotation, rotation);
-            // Flip around y-axis
-            flip(imgRotation, imgFlip, 1);
-            if (DEBUG) {
-                imshow("No Flip: Data Augmentation", imgRotation);
-                imshow("Flip: Data Augmentation", imgFlip);
-                for (;;) {
-                    char key = (char) waitKey(20);
-                    // Exit this loop on escape:
-                    if(key == 27) {
-                        break;
-                    }
+        // Loop over every degree of rotation on all three axes, save results
+        int zAxisRotation = -25;
+        while (zAxisRotation < 25) {
+            int xAxisRotation = -12.5;
+            while (xAxisRotation < 12.5) {
+                int yAxisRotation = -10;
+                while (yAxisRotation < 10) {;
+                    // x-axis rotation, empirical range: [-12.5, 12.5]
+                    double alpha = xAxisRotation;
+                    // y-axis rotation, empirical range: [-10, 10]
+                    double beta = yAxisRotation;
+                    // z-axis rotation, range: [0, 360)
+                    double gamma = zAxisRotation;
+                    double dz = 200;
+                    double focalDistance = 200;
+                    rotateImage(imgSrc, imgRotation, alpha, beta, gamma, 0, 0, dz, focalDistance);
+                    //imshow("Z-Rotation: Data Augmentation", imgRotation);
+                    //waitKey(20);
+                    //sleep(1.5);
+                    // Make file name for augmented data
+                    rotationFileName = path.substr(0, path.size() - 4) 
+                            + "--rotated--z-" + std::to_string(zAxisRotation) 
+                            + "--y-" + std::to_string(yAxisRotation) 
+                            + "--x-" + std::to_string(xAxisRotation) 
+                            + "--" + path.substr(path.size() - 4, path.size());
+                    imwrite(rotationFileName, imgRotation);
+                    yAxisRotation += 2.0;
                 }
+                xAxisRotation += 2.0;
             }
-            // Make file names for augmented data
-            rotationFileName = path.substr(0, path.size() - 4) + "--rotated-" 
-                    + std::to_string(rotation) + "--" + path.substr(path.size() - 4, path.size());
-            flipFileName = path.substr(0, path.size() - 4) + "--rotated-" 
-                    + std::to_string(rotation) + "--flipped" 
-                    + path.substr(path.size() - 4, path.size());
-            cout << "Writing: " << rotationFileName << endl;
-            imwrite(rotationFileName, imgRotation);
-            cout << "Writing: " << flipFileName << endl;
-            imwrite(flipFileName, imgFlip);
-            rotation += 20;
+            zAxisRotation += 5;
         }
     }
-
-    return 0;
+    file.close();
+    pthread_exit(NULL);
 }
 
 /**
- * Takes a src and dst Mat and an angle, rotates src by angle and places it in dst.
+ *
  */
-void rotate(Mat& src, Mat& dst, double angle) {
-    //cout << RANDCOL << "R O T A T I N G" << endlr;
-    //int len = std::max(src.cols, src.rows);
-    Point2f srcCenterPoint(src.cols*0.5, src.rows*0.5);
-    //Point2f pt(len/2., len/2.);
-    Mat rotationMatrix = getRotationMatrix2D(srcCenterPoint, angle, 1.0);
-    // Nearest is too rough, 
-    warpAffine(src, dst, rotationMatrix, src.size(), INTER_CUBIC); 
-}
+static void rotateImage(const Mat &input, Mat &output, double alpha, double beta, double gamma, 
+        double dx, double dy, double dz, double f) {
+    //alpha = (alpha - 90.) * CV_PI / 180.;
+    //beta = (beta - 90.) * CV_PI / 180.;
+    //gamma = (gamma - 90.) * CV_PI / 180.;
+    alpha = alpha * CV_PI / 180.;
+    beta = beta * CV_PI / 180.;
+    gamma = gamma * CV_PI / 180.;
+    // get width and height for ease of use in matrices
+    double w = (double) input.cols;
+    double h = (double) input.rows;
+    // Projection 2D -> 3D matrix
+    Mat A1 = (Mat_<double>(4,3) <<
+              1, 0, -w/2,
+              0, 1, -h/2,
+              0, 0,    0,
+              0, 0,    1);
+    // Rotation matrices around the X, Y, and Z axis
+    Mat RX = (Mat_<double>(4, 4) <<
+              1,          0,           0, 0,
+              0, cos(alpha), -sin(alpha), 0,
+              0, sin(alpha),  cos(alpha), 0,
+              0,          0,           0, 1);
+    Mat RY = (Mat_<double>(4, 4) <<
+              cos(beta), 0, -sin(beta), 0,
+              0, 1,          0, 0,
+              sin(beta), 0,  cos(beta), 0,
+              0, 0,          0, 1);
+    Mat RZ = (Mat_<double>(4, 4) <<
+              cos(gamma), -sin(gamma), 0, 0,
+              sin(gamma),  cos(gamma), 0, 0,
+              0,          0,           1, 0,
+              0,          0,           0, 1);
+    // Composed rotation matrix with (RX, RY, RZ)
+    Mat R = RX * RY * RZ;
+    // Translation matrix
+    Mat T = (Mat_<double>(4, 4) <<
+             1, 0, 0, dx,
+             0, 1, 0, dy,
+             0, 0, 1, dz,
+             0, 0, 0, 1);
+    // 3D -> 2D matrix
+    Mat A2 = (Mat_<double>(3,4) <<
+              f, 0, w / 2, 0,
+              0, f, h / 2, 0,
+              0, 0,   1,   0);
+    // Final transformation matrix
+    Mat trans = A2 * (T * (R * A1));
+    // Apply matrix transformation
+    warpPerspective(input, output, trans, input.size(), INTER_LANCZOS4);
+  }
