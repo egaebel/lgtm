@@ -41,7 +41,7 @@ using namespace std;
  * Read images and labels from the csv file specified by fileName.
  */
 static void read_csv(const string& fileName, vector<Mat>& images, vector<int>& labels, 
-        char separator=';') {
+        string filePrefix="", char separator=';') {
     std::ifstream file(fileName.c_str(), ifstream::in);
     if (!file) {
         string error_message = "No valid input file was given, please check the given fileName.";
@@ -53,7 +53,13 @@ static void read_csv(const string& fileName, vector<Mat>& images, vector<int>& l
         stringstream liness(line);
         getline(liness, path, separator);
         getline(liness, classlabel);
+        // If we have a prefix specified and it wasn't found then ignore this sample
+        size_t foundPrefix = path.find(filePrefix);
+        if (!filePrefix.empty() && foundPrefix == std::string::npos) {
+            continue;
+        }
         if(!path.empty() && !classlabel.empty()) {
+            cout << "Reading image: " << path << endl;
             readImage = imread(path, 0);
             if (readImage.empty()) {
                 cerr << "Error opening image file at path: \"" << path << endl;
