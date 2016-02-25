@@ -54,3 +54,8 @@ facial-recognition/openCV/pad-images/libpad_image_lib.a
 facial-recognition/openCV/pad-images/libpad_images_lib.a
 facial-recognition/openCV/train-classifier/facial-recognition-model
 facial-recognition/openCV/face-detect/libface_detect_lib.a
+facial-recognition/openCV/full-preprocessing/CMakeFiles/
+facial-recognition/openCV/full-preprocessing/CMakeCache.txt
+facial-recognition/openCV/full-preprocessing/cmake_install.cmake
+facial-recognition/openCV/full-preprocessing/Makefile
+facial-recognition/openCV/full-preprocessing/full_preprocessing
