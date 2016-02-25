@@ -42,3 +42,15 @@ facial-recognition/openCV/augment-data/augment_data
 bridge-code/lol-test.sh
 facial-recognition/openCV/data/yalefaces--tree-structure-backup/
 facial-recognition/training-data/yalefaces
+facial-recognition/openCV/face-detect/Makefile
+facial-recognition/openCV/face-detect/facedetect
+facial-recognition/openCV/face-detect/face_detect
+facial-recognition/openCV/augment-data/yalefaces.csv__thread--0
+facial-recognition/openCV/augment-data/yalefaces.csv__thread--1
+facial-recognition/openCV/augment-data/yalefaces.csv__thread--2
+facial-recognition/openCV/augment-data/yalefaces.csv__thread--3
+facial-recognition/openCV/data/yalefaces--augmented-backup/
+facial-recognition/openCV/pad-images/libpad_image_lib.a
+facial-recognition/openCV/pad-images/libpad_images_lib.a
+facial-recognition/openCV/train-classifier/facial-recognition-model
+facial-recognition/openCV/face-detect/libface_detect_lib.a
