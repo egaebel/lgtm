@@ -15,20 +15,14 @@ using namespace std;
 using namespace cv;
 
 // Global variables
-static string faceCascadefileName = "haarcascades/haarcascade_frontalface_default.xml";
-static string csvfileName = "yalefaces.csv";
+static string faceCascadefileName = "../face-detect/haarcascades/haarcascade_frontalface_default.xml";
+static string csvfileName = "../face-detect/yalefaces.csv";
 static char separator = ';';
 static CascadeClassifier faceCascade;
 static string windowName = "Capture - Face detection"; 
 
 // Private function headers
 static Mat detectAndDisplay(Mat frame);
-
-// Function main
-int main(void) {
-    cropImagesToFaces();
-    return 0;
-}
 
 void cropImagesToFaces() {
     // Load the cascade

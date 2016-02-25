@@ -9,18 +9,7 @@
  *
  * This code was adapted from OpenCV tutorials found at:
  */
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/imgcodecs.hpp>
-#include <opencv2/highgui/highgui.hpp>
-
-#include <stdlib.h>
-#include <stdio.h>
-
-#include <climits>
-#include <cmath>
-#include <iostream>
-#include <fstream>
-#include <sstream>
+#include "pad_images.hpp"
 
 using namespace cv;
 using namespace std;
@@ -29,14 +18,21 @@ using namespace std;
 static Mat src, dst;
 static int top_border, bottom_border, left_border, right_border;
 static const char* windowName = "copyMakeBorder Demo";
-static string csv_fileName = "yalefaces.csv";
+static string csv_fileName = "../pad-images/yalefaces.csv";
 static const char separator = ';';
 
 // Function headers
-int makeBorder(string fileName, int newImageHeight, int newImageWidth);
+static int makeBorder(string fileName, int newImageHeight, int newImageWidth);
 
 // Run, run, run
+/*
 int main(void) {
+    padImages();
+    return 0;
+}
+*/
+
+void padImages() {
     // Find max sizes
     int maxHeight = 0;
     int maxWidth = 0;
@@ -54,7 +50,7 @@ int main(void) {
             sizeMat = imread(path);
             if(sizeMat.empty()) {
                 printf(" No data entered, please enter the path to an image file \n");
-                return -1;
+                return;
             }
             Size size = sizeMat.size();
             if (size.width > maxWidth) {
@@ -79,7 +75,8 @@ int main(void) {
         getline(liness, path, separator);
         if(!path.empty()) {
             if (makeBorder(path, maxHeight, maxWidth) != 0) {
-                return -1;
+                cout << "There was an error in makeBorder!!" << endl;
+                return;
             }
         }
     }
@@ -100,7 +97,7 @@ int main(void) {
             sizeMat = imread(path);
             if(sizeMat.empty()) {
                 printf(" No data entered, please enter the path to an image file \n");
-                return -1;
+                return;
             }
             Size size = sizeMat.size();
             if (size.width < minWidth) {
@@ -118,11 +115,9 @@ int main(void) {
 
     printf("\nMinHeight: %d\n", minHeight);
     printf("MinWidth: %d\n", minWidth);
-
-    return 0;
 }
 
-int makeBorder(string fileName, int newImageHeight, int newImageWidth) {
+static int makeBorder(string fileName, int newImageHeight, int newImageWidth) {
     /// Load an image
     src = imread(fileName.c_str());
 
