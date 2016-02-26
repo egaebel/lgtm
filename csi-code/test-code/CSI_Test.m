@@ -1,5 +1,13 @@
 function CSI_Test
-    csi_trace = read_bf_file('csi-5ghz-10cm-desk-spacing-on-book-case.dat');
+    % Get the full path to the currently executing file and change the
+    % pwd to the folder this file is contained in...
+    [current_directory, ~, ~] = fileparts(mfilename('fullpath'));
+    cd(current_directory);
+    % Paths for the csitool functions provided
+    path('../../../linux-80211n-csitool-supplementary/matlab/', path);
+	path('../../../linux-80211n-csitool-supplementary/matlab/sample_data/', path);
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    csi_trace = read_bf_file('../test-data/monitor-log.dat');
     csi_entry = csi_trace{1}
     fprintf('Number of Packet Traces %d\n', length(csi_trace))
     csi = get_scaled_csi(csi_entry);
@@ -23,4 +31,3 @@ function CSI_Test
     % fprintf('-----------')
     % csi_entry.csi(:, 1, 1)
 end
-

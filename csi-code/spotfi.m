@@ -34,10 +34,10 @@ function spotfi_test
     OUTPUT_PACKET_PROGRESS = false;
     OUTPUT_FIGURES_SUPPRESSED = true; % Set to true when running in deployment from command line
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % What an ugly solution to a simple organizational problem....
-    % Path to the test data files for localization in my room
-    %path('/home/egaebel/grad-docs/research/thesis/project/csi-code/test-data/localization-tests--in-room', path);
-    path('../../csi-code/test-data/localization-tests--in-room', path);
+    % Get the full path to the currently executing file and change the
+    % pwd to the folder this file is contained in...
+    [current_directory, ~, ~] = fileparts(mfilename('fullpath'));
+    cd(current_directory);
     % Paths for the csitool functions provided
     path('../../../linux-80211n-csitool-supplementary/matlab', path);
 	path('../../../linux-80211n-csitool-supplementary/matlab/sample_data', path);
