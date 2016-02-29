@@ -20,5 +20,8 @@ echo "Bringing $WLAN_INTERFACE up......."
 ifconfig $WLAN_INTERFACE up
 sleep $SLEEP_TIME
 sleep $SLEEP_TIME
+echo "Killing the notorious wpa_supplicant"
+killall wpa_supplicant
+sleep $SLEEP_TIME
 echo "Setting channel to monitor on $WLAN_INTERFACE to $1 $2" 
-iw dev $WLAN_INTERFACE set channel $1 $2
+iw $WLAN_INTERFACE set channel $1 $2
