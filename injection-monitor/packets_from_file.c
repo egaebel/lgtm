@@ -80,7 +80,7 @@ static void generate_payload_from_file(char *file_path, uint8_t **payload_buffer
 	payload_buffer_pos = 0;
 	while ((bytes_read = read(input_fd, file_buffer, file_buffer_size))) {
 		for (i = 0; i < bytes_read; i++, payload_buffer_pos++) {
-			(*payload_buffer)[i] = file_buffer[i];
+			(*payload_buffer)[payload_buffer_pos] = file_buffer[i];
 		}
 	}
 	close(input_fd);
@@ -173,6 +173,7 @@ int main(int argc, char** argv)
 		if (i == (num_packets - 1)) {
 			printf("final packet size: %d\n", (payload_size - i * packet_size));
 			memcpy(packet->payload, (payload_buffer + (i * packet_size)), (payload_size - i * packet_size));
+			tx_packet.plen = sizeof(*packet) + (payload_size - i * packet_size);
 		} else {
 			memcpy(packet->payload, (payload_buffer + (i * packet_size)), packet_size);
 		}
