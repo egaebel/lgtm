@@ -2,6 +2,7 @@
 
 // Function main
 int main(void) {
-    cropImagesToFaces();
+    std::string csvFileName = "yalefaces.csv";
+    cropImagesToFaces(csvFileName);
     return 0;
 }

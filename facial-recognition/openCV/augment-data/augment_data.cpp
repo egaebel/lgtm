@@ -131,12 +131,12 @@ static void* augmentDataInThread(void* fileName) {
         imgSrc = imread(path);
 
         // Loop over every degree of rotation on all three axes, save results
-        int zAxisRotation = -25;
-        while (zAxisRotation < 25) {
-            int xAxisRotation = -12.5;
-            while (xAxisRotation < 12.5) {
-                int yAxisRotation = -10;
-                while (yAxisRotation < 10) {;
+        int zAxisRotation = -5;
+        while (zAxisRotation <= 5) {
+            int xAxisRotation = -5;
+            while (xAxisRotation <= 5) {
+                int yAxisRotation = -5;
+                while (yAxisRotation <= 5) {;
                     // x-axis rotation, empirical range: [-12.5, 12.5]
                     double alpha = xAxisRotation;
                     // y-axis rotation, empirical range: [-10, 10]
@@ -156,9 +156,9 @@ static void* augmentDataInThread(void* fileName) {
                             + "--x-" + std::to_string(xAxisRotation) 
                             + "--" + path.substr(path.size() - 4, path.size());
                     imwrite(rotationFileName, imgRotation);
-                    yAxisRotation += 2.0;
+                    yAxisRotation += 5;
                 }
-                xAxisRotation += 2.0;
+                xAxisRotation += 5;
             }
             zAxisRotation += 5;
         }

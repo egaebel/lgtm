@@ -14,6 +14,6 @@
 #include <fstream>
 #include <sstream>
 
-void padImages();
+void padImages(std::string csvFileName);
 
 #endif

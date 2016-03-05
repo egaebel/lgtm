@@ -18,8 +18,8 @@
  *   See <http://www.opensource.org/licenses/bsd-license>
  */
 
-// Switch between Eigenfaces (1) and Fisherfaces (0)
-#define EIGENFACES 0
+// Switch between Local Binary Patterns Histograms(2), Eigenfaces (1), and Fisherfaces (0)
+#define FACIAL_RECOGNITION_MODEL 2
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/face.hpp>
@@ -74,7 +74,13 @@ static void read_csv(const string& fileName, vector<Mat>& images, vector<int>& l
 int main(int argc, const char *argv[]) {
 
     // Get the path to your CSV:
-    string csvFileName = "yalefaces.csv";
+    if (argc != 2) {
+        cout << "Wrong number of args! Usage is train_classifier <csv filename>" << endl;
+        exit(1);
+    }
+    // string csvFileName = "yalefaces.csv";
+    string csvFileName(argv[1]);
+    cout << "Using filename: " << csvFileName << endl;
 
     // These vectors hold the images and corresponding labels:
     vector<Mat> images;
@@ -98,12 +104,19 @@ int main(int argc, const char *argv[]) {
 
     // Create a FaceRecognizer and train it on the given images:
     Ptr<face::FaceRecognizer> model;
-    if (EIGENFACES) {
-        cout << "Using Eigenfaces" << endl;
-        model = face::createEigenFaceRecognizer();
-    } else {
-        cout << "Using Fisherfaces" << endl;
-        model = face::createFisherFaceRecognizer();
+    switch (FACIAL_RECOGNITION_MODEL) {
+        case 0:
+            cout << "Using Fisherfaces" << endl;
+            model = face::createFisherFaceRecognizer();
+            break;
+        case 1:
+            cout << "Using Eigenfaces" << endl;
+            model = face::createEigenFaceRecognizer();
+            break;
+        case 2:
+            cout << "Using Local Binary Pattern Histograms" << endl;
+            model = face::createLBPHFaceRecognizer();
+            break;
     }
     cout << "starting training..." << endl;
 

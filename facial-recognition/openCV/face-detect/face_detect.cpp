@@ -1,5 +1,5 @@
 /**
- * Takes a csv file specified in the variable "csvfileName" where each line indicates an 
+ * Takes a csv file specified in the variable "csvFileName" where each line indicates an 
  * image file and a label.
  * Runs through each image specified in csvFileName and run face detection on each one and running
  * a cropping operation to reduce the image to just the face. 
@@ -16,7 +16,7 @@ using namespace cv;
 
 // Global variables
 static string faceCascadefileName = "../face-detect/haarcascades/haarcascade_frontalface_default.xml";
-static string csvfileName = "../face-detect/yalefaces.csv";
+// static string csvFileName = "../face-detect/yalefaces.csv";
 static char separator = ';';
 static CascadeClassifier faceCascade;
 static string windowName = "Capture - Face detection"; 
@@ -24,7 +24,7 @@ static string windowName = "Capture - Face detection";
 // Private function headers
 static Mat detectAndDisplay(Mat frame);
 
-void cropImagesToFaces() {
+void cropImagesToFaces(string csvFileName) {
     // Load the cascade
     if (!faceCascade.load(faceCascadefileName)){
         printf("--(!)Error loading\n");
@@ -32,13 +32,13 @@ void cropImagesToFaces() {
     }
 
     // Read CSV file
-    std::ifstream file(csvfileName.c_str(), ifstream::in);
+    std::ifstream file(csvFileName.c_str(), ifstream::in);
     if (!file) {
         string error_message = "No valid input file was given, please check the given fileName.";
         CV_Error(CV_StsBadArg, error_message);
     }
     
-    // Loop over files specified by the csv file in csvfileName.
+    // Loop over files specified by the csv file in csvFileName.
     string line, path;
     while (getline(file, line)) {
         stringstream liness(line);

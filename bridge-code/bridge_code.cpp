@@ -33,7 +33,6 @@ static const std::string csiCollectionOutputFile = "csi-log-collection.out";
 // TODO: How long does this need to be?
 static const int MAX_NUM_CSI_OUTPUT_LINES = 70;
 
-static void checkSystemValid();
 static void collectCsiData();
 static bool runMatlab(std::vector<double>&);
 static void extractCsiDataContent();
@@ -42,10 +41,22 @@ static bool compareSignalLocToFaceLoc();
 
 
 int main() {
-    
-    // Check system
-    // checkSystemValid();
 
+    // Send request to communicate with public key
+
+    // Wait for response (wait 30 seconds)
+    // (Simultaneously) Listen for requests to communicate with public key
+    // ----On request received, send facial recognition parameters
+
+    // Read response from file (which should be facial recognition params encrypted with public key)
+    // (Simultaneously) Parse CSI from file and run SpotFi
+
+    // Run facial recognition in video using received facial recognition params
+    // Overlay wireless transmitter location on video in box
+
+
+    
+    
     // Receive data from other user (csi-collection.sh)
     collectCsiData();
     if (DEBUG) {
@@ -65,10 +76,6 @@ int main() {
     }
     */
     return 1;
-}
-
-static void checkSystemValid() {
-    // Run checks, I.E. ensuring shell is available
 }
 
 static void collectCsiData() {
