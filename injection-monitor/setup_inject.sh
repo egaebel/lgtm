@@ -5,7 +5,7 @@ echo "Bringing down $WLAN_INTERFACE"
 ifconfig $WLAN_INTERFACE down
 sleep $SLEEP_TIME
 echo "Deleting mon0.........."
-iw mon0 del
+iw dev mon0 del 2>/dev/null 1>/dev/null
 sleep $SLEEP_TIME
 echo "Bringing up firmware...."
 modprobe -r iwlwifi mac80211 cfg80211
@@ -30,4 +30,4 @@ killall wpa_supplicant
 sleep $SLEEP_TIME
 ifconfig wlan0 down
 echo "Setting channel on mon0 to $1 $2 ........."
-iw mon0 set channel $1 $2
+iw dev mon0 set channel $1 $2
