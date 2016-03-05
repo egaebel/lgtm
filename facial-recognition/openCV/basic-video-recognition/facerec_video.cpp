@@ -18,8 +18,8 @@
  *   See <http://www.opensource.org/licenses/bsd-license>
  */
 
-// Switch between Eigenfaces (1) and Fisherfaces (0)
-#define EIGENFACES 0
+// Switch between Local Binary Patterns Histograms(2), Eigenfaces (1), and Fisherfaces (0)
+#define FACIAL_RECOGNITION_MODEL 2
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/face.hpp>
@@ -117,15 +117,31 @@ int main(int argc, const char *argv[]) {
 
     // Create a FaceRecognizer and train it on the given images:
     Ptr<face::FaceRecognizer> model;
-    if (EIGENFACES) {
-        cout << "Using Eigenfaces" << endl;
-        model = face::createEigenFaceRecognizer();
-    } else {
-        cout << "Using Fisherfaces" << endl;
-        double threshold = 1700.0;
-        model = face::createFisherFaceRecognizer(0, threshold);
+
+    switch (FACIAL_RECOGNITION_MODEL) {
+        case 0:
+            {
+                cout << "Using Fisherfaces" << endl;
+                double threshold = 2200.0;
+                model = face::createFisherFaceRecognizer(/*0, threshold*/);
+            }
+            break;
+        case 1:
+            {
+                cout << "Using Eigenfaces" << endl;
+                double threshold = 7250.0;
+                model = face::createEigenFaceRecognizer(/*0, threshold*/);
+            }
+            break;
+        case 2:
+            {
+                cout << "Using Local Binary Pattern Histograms" << endl;
+                model = face::createLBPHFaceRecognizer();
+            }
+            break;
     }
 
+    // Load model if a path to a pretrained model was passed
     if (trainedClassifierPath.empty())  {
         cout << "Starting training..." << endl;
         // Time training...
@@ -227,7 +243,7 @@ int main(int argc, const char *argv[]) {
             // Show the result:
             imshow("face_recognizer", original);
             // And display it:
-            int key = waitKey(1000);
+            int key = waitKey(20);
             // Exit this loop on escape OR space:
             if(key == 27 || key == 32) {
                 break;

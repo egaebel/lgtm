@@ -6,7 +6,8 @@ using namespace std;
 
 int main(void) {
     cout << "Running Full Preprocessing..." << endl;
-    cropImagesToFaces();
-    padImages();
+    string csvFileName = "yalefaces.csv";
+    cropImagesToFaces(csvFileName);
+    padImages(csvFileName);
     return 0;
 }

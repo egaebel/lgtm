@@ -1,5 +1,5 @@
 /**
- * Takes a csv file specified in the variable "csv_fileName" where each line indicates an 
+ * Takes a csv file specified in the variable "csvFileName" where each line indicates an 
  * image file and a label.
  * Runs through all the images to find the maximum width of an image and
  * the maximum height of an image.
@@ -18,26 +18,18 @@ using namespace std;
 static Mat src, dst;
 static int top_border, bottom_border, left_border, right_border;
 static const char* windowName = "copyMakeBorder Demo";
-static string csv_fileName = "../pad-images/yalefaces.csv";
+static string csvFileName = "../pad-images/yalefaces.csv";
 static const char separator = ';';
 
 // Function headers
 static int makeBorder(string fileName, int newImageHeight, int newImageWidth);
 
-// Run, run, run
-/*
-int main(void) {
-    padImages();
-    return 0;
-}
-*/
-
-void padImages() {
+void padImages(string csvFileName) {
     // Find max sizes
     int maxHeight = 0;
     int maxWidth = 0;
     Mat sizeMat;
-    std::ifstream file(csv_fileName.c_str(), ifstream::in);
+    std::ifstream file(csvFileName.c_str(), ifstream::in);
     if (!file) {
         string error_message = "No valid input file was given, please check the given fileName.";
         CV_Error(CV_StsBadArg, error_message);
@@ -65,7 +57,7 @@ void padImages() {
     printf("MaxWidth: %d\n", maxWidth);
 
     // Draw borders
-    std::ifstream file2(csv_fileName.c_str(), ifstream::in);
+    std::ifstream file2(csvFileName.c_str(), ifstream::in);
     if (!file2) {
         string error_message = "No valid input file was given, please check the given fileName.";
         CV_Error(CV_StsBadArg, error_message);
@@ -85,7 +77,7 @@ void padImages() {
     // This is a sanity check to ensure that there were no rounding errors in padding, etc.
     int minHeight = INT_MAX;
     int minWidth = INT_MAX;
-    std::ifstream file3(csv_fileName.c_str(), ifstream::in);
+    std::ifstream file3(csvFileName.c_str(), ifstream::in);
     if (!file3) {
         string error_message = "No valid input file was given, please check the given fileName.";
         CV_Error(CV_StsBadArg, error_message);

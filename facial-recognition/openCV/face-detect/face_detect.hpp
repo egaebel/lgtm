@@ -11,6 +11,6 @@
 #include <stdio.h>
 
 // Function Headers
-void cropImagesToFaces();
+void cropImagesToFaces(std::string csvFileName);
 
 #endif
