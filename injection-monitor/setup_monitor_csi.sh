@@ -27,4 +27,4 @@ echo "Bringing wlan0 (default interface) down...."
 ifconfig wlan0 down
 sleep $SLEEP_TIME
 echo "Setting channel to monitor on $WLAN_INTERFACE to $1 $2" 
-iw $WLAN_INTERFACE set channel $1 $2
+iw dev $WLAN_INTERFACE set channel $1 $2
