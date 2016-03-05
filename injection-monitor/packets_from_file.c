@@ -111,7 +111,6 @@ int main(int argc, char** argv)
 	}
 	if (argc < 3 || (1 != sscanf(argv[2], "%u", &mode))) {
 		mode = 0;
-		printf("Usage: random_packets <file_name> <mode: 0=my MAC, 1=injection MAC> <delay in us>\n");
 	} else if (mode > 1) {
 		printf("Usage: random_packets <file_name> <mode: 0=my MAC, 1=injection MAC> <delay in us>\n");
 		return 1;
