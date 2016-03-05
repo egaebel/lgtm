@@ -26,17 +26,16 @@ injection_mode () {
 monitor_mode () {
     echo "Bringing down $WLAN_INTERFACE ..................................."
     ifconfig $WLAN_INTERFACE down
-    while [[ $! -ne 0 ]]
-    do
-        ifconfig $WLAN_INTERFACE down
-    done
+    sleep $SLEEP_TIME
     echo "Setting $WLAN_INTERFACE into monitor mode........................"
     # Setup monitor mode, loop until it works
     iwconfig $WLAN_INTERFACE mode monitor
-    while [[ $! -ne 0 ]]
-    do
-        iwconfig $WLAN_INTERFACE mode monitor
-    done
+    #while [[ $! -ne 0 ]]
+    #do
+    #    iwconfig $WLAN_INTERFACE mode monitor
+    #    echo $!
+    #done
+    sleep $SLEEP_TIME
     echo "Bringing $WLAN_INTERFACE up......................................"
     ifconfig $WLAN_INTERFACE up
     sleep $SLEEP_TIME
@@ -63,12 +62,13 @@ echo "Waiting for LGTM initiation......................................"
 ./log_to_file.sh lgtm-monitor.dat &
 
 # Wait for key press or special token to appear in lgtm-monitor.dat
-echo "Press space to initiate LGTM from this computer.................."
+echo "Press 'L' to initiate LGTM from this computer.................."
 begin_lgtm=0
 input='a'
-while [[ $input != ' ' ]] && [[ $lgtm_data < 1 ]]
+while [[ $input != 'l' ]] && [[ $lgtm_data < 1 ]]
 do
-    read -n 1 -s -t 10 input
+    read -n 1 -s -t 10 -r input
+    echo "Input received ||$input||"
     # TODO: lgtm-monitor.dat and lgtm-monitor-check are statically set in matlab files and here...make this better?
     # TODO: Later this token, "begin-lgtm-protocol", will also include a public key
     lgtm_data=$(cat lgtm-monitor.dat | wc -l)
@@ -86,7 +86,7 @@ then
     injection_mode
     # Send "begin-lgtm-protocol", TODO: later this will include a public key
     echo begin-lgtm-protocol > .begin-lgtm-protocol
-    ./packets_from_file .begin-lgtm-protocol
+    ./packets_from_file .begin-lgtm-protocol 1
     rm .begin-lgtm-protocol
     # Switch to monitor mode
     monitor_mode
@@ -105,7 +105,7 @@ then
     injection_mode
     # Send facial recognition params
     echo second-level-lgtm-protocol > .lgtm-protocol-continued
-    ./packets_from_file .lgtm-protocol-continued
+    ./packets_from_file .lgtm-protocol-continued 1
     # Done!
 fi
 
@@ -125,7 +125,7 @@ then
     monitor_mode
     # Await facial recognition params
     rm lgtm-monitor.dat
-    ./log-to-file lgtm-monitor.dat &
+    ./log_to_file lgtm-monitor.dat &
     lgtm_ack=0
     while [[ $lgtm_ack < 1 ]]
     do
