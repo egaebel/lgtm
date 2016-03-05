@@ -1,5 +1,7 @@
 #!/usr/bin/sudo /bin/bash
 
+channel_number=$1
+channel_type=$2
 WLAN_INTERFACE=$3
 SLEEP_TIME=2
 SWITCH_WAIT_TIME=5
@@ -16,39 +18,49 @@ injection_mode () {
     sleep $SLEEP_TIME
     echo "Killing default wireless interface, wlan0........................"
     ifconfig wlan0 down
-    echo "Setting channel on mon0 to $1 $2 ................................"
-    iw mon0 set channel $1 $2
+    echo "Setting channel on mon0 to $channel_number $channel_type ................................"
+    iw dev mon0 set channel $channel_number $channel_type
     echo "Injection mode active!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 }
 
 monitor_mode () {
+    echo "Bringing down $WLAN_INTERFACE ..................................."
+    ifconfig $WLAN_INTERFACE down
+    while [[ $! -ne 0 ]]
+    do
+        ifconfig $WLAN_INTERFACE down
+    done
     echo "Setting $WLAN_INTERFACE into monitor mode........................"
     # Setup monitor mode, loop until it works
-    iwconfig $WLAN_INTERFACE mode monitor 2>/dev/null 1>/dev/null
+    iwconfig $WLAN_INTERFACE mode monitor
+    while [[ $! -ne 0 ]]
+    do
+        iwconfig $WLAN_INTERFACE mode monitor
+    done
     echo "Bringing $WLAN_INTERFACE up......................................"
     ifconfig $WLAN_INTERFACE up
+    sleep $SLEEP_TIME
+    sleep $SLEEP_TIME
     echo "Killing the notorious wpa_supplicant............................."
     killall wpa_supplicant
-    sleep $SLEEP_TIME
+    #sleep $SLEEP_TIME
+    echo "Setting channel to monitor on $WLAN_INTERFACE to $channel_number $channel_type .........." 
+    iw dev $WLAN_INTERFACE set channel $channel_number $channel_type
     echo "Killing default wireless interface, wlan0........................"
     ifconfig wlan0 down
-    echo "Setting channel to monitor on $WLAN_INTERFACE to $1 $2" 
-    iw $WLAN_INTERFACE set channel $1 $2
     echo "Monitor mode active!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 }
 
 
-echo "Bringing down $WLAN_INTERFACE ..................................."
-ifconfig $WLAN_INTERFACE down 2>/dev/null 1>/dev/null
-
 echo "Bringing up firmware............................................."
 modprobe -r iwlwifi mac80211 cfg80211
 modprobe iwlwifi debug=0x40000
+sleep $SLEEP_TIME
 
 monitor_mode
 
 echo "Waiting for LGTM initiation......................................"
-./log-to-file lgtm-monitor.dat &
+./log_to_file.sh lgtm-monitor.dat &
 
 # Wait for key press or special token to appear in lgtm-monitor.dat
 echo "Press space to initiate LGTM from this computer.................."
@@ -66,7 +78,7 @@ done
 if [[ $input == ' ' ]]
 then
     echo "Initiating LGTM protocol....................................."
-    pkill log-to-file
+    pkill log_to_file.sh
     # Sleep for 5 seconds to ensure other party has switched into monitor mode
     sleep $SWITCH_WAIT_TIME
     # undo monitor mode settings....(which are what exactly?)
@@ -80,7 +92,7 @@ then
     monitor_mode
     # Wait for acknowledgement + facial recognition params, TODO: later it will be ack + recog params + public key
     rm lgtm-monitor.dat
-    ./log-to-file lgtm-monitor.dat &
+    ./log_to_file.sh lgtm-monitor.dat &
     lgtm_ack=0
     while [[ $lgtm_ack < 1 ]]
     do
