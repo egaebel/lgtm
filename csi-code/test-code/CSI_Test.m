@@ -7,7 +7,7 @@ function CSI_Test
     path('../../../linux-80211n-csitool-supplementary/matlab/', path);
 	path('../../../linux-80211n-csitool-supplementary/matlab/sample_data/', path);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    csi_trace = read_bf_file('../test-data/monitor-log-deadbeef-file-long.dat');
+    csi_trace = read_bf_file_modified('../test-data/monitor-log-deadbeef-file-long.dat');
     csi_entry = csi_trace{1}
     fprintf('Number of Packet Traces %d\n', length(csi_trace))
     csi = get_scaled_csi(csi_entry);
