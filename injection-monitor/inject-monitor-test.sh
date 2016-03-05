@@ -20,6 +20,8 @@ injection_mode () {
     ifconfig wlan0 down
     echo "Setting channel on mon0 to $channel_number $channel_type ................................"
     iw dev mon0 set channel $channel_number $channel_type
+    echo "Setting monitor_tx_rate.........................................."
+    echo 0x4101 | sudo tee `sudo /sys -name monitor_tx_rate`
     echo "Injection mode active!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 }
 
@@ -42,11 +44,11 @@ monitor_mode () {
     sleep $SLEEP_TIME
     echo "Killing the notorious wpa_supplicant............................."
     killall wpa_supplicant
-    #sleep $SLEEP_TIME
-    echo "Setting channel to monitor on $WLAN_INTERFACE to $channel_number $channel_type .........." 
-    iw dev $WLAN_INTERFACE set channel $channel_number $channel_type
+    sleep $SLEEP_TIME
     echo "Killing default wireless interface, wlan0........................"
     ifconfig wlan0 down
+    echo "Setting channel to monitor on $WLAN_INTERFACE to $channel_number $channel_type .........." 
+    iw dev $WLAN_INTERFACE set channel $channel_number $channel_type
     echo "Monitor mode active!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 }
 
