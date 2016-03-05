@@ -48,7 +48,6 @@ modprobe iwlwifi debug=0x40000
 monitor_mode
 
 echo "Waiting for LGTM initiation......................................"
-# TODO: Run a script to call MATLAB to only parse out the text, no CSI or analysis needed
 ./log-to-file lgtm-monitor.dat &
 
 # Wait for key press or special token to appear in lgtm-monitor.dat
@@ -58,13 +57,14 @@ input='a'
 while [[ $input != ' ' ]] && [[ $begin_lgtm < 1 ]]
 do
     read -n 1 -s -t 10 input
+    # TODO: lgtm-monitor.dat and lgtm-monitor-check are statically set in matlab files and here...make this better?
     # TODO: Later this token, "begin-lgtm-protocol", will also include a public key
     lgtm_data=$(cat lgtm-monitor.dat | wc -l)
     if [[ $lgtm_data > 0 ]]
     then
         # Run MATLAB script to parse data into lgtm-monitor-check.dat
-        
-        begin_lgtm=$(cat lgtm-monitor-check.dat | grep "begin-lgtm-protocol" | wc -l)
+        sudo -u wifi-test-laptop-2 matlab -nojvm -nodisplay -nosplash -r "run('read_mpdu_file.m'), exit"
+        begin_lgtm=$(cat lgtm-monitor-check | grep "begin-lgtm-protocol" | wc -l)
     fi
 done
 
@@ -73,17 +73,42 @@ if [[ $input == ' ' ]]
 then
     echo "Initiating LGTM protocol....................................."
     pkill log-to-file
+    # Sleep for 5 seconds to ensure other party has switched into monitor mode
+    sleep $SWITCH_WAIT_TIME
     # undo monitor mode settings....(which are what exactly?)
     # Setup Injection mode
+    injection_mode
     # Send "begin-lgtm-protocol", TODO: later this will include a public key
+    echo begin-lgtm-protocol > .begin-lgtm-protocol
+    ./packets_from_file
+    rm .begin-lgtm-protocol
     # Switch to monitor mode
+    monitor_mode
     # Wait for acknowledgement + facial recognition params, TODO: later it will be ack + recog params + public key
-    # Receive ack + params
+    rm lgtm-monitor.dat
+    ./log-to-file lgtm-monitor.dat &
+    ack=0
+    while [[ $lgtm_ack < 1 ]]
+    do
+        # Receive ack + params
+        lgtm_data=$(cat lgtm-monitor.dat | wc -l)
+        if [[ $lgtm_data > 0 ]]
+        then
+            # TODO: make the user-name be an argument...silly matlab
+            sudo -u wifi-test-laptop-2 matlab -nojvm -nodisplay -nosplash -r "run('read_mpdu_file.m'), exit"
+            lgtm_ack=$(cat lgtm-monitor-check | grep "begin-lgtm-protocol" | wc -l)
+        fi
+    done
     # Sleep for 5 seconds to ensure other party has switched into monitor mode....
+    sleep $SWITCH_WAIT_TIME
     # Switch to injection mode
+    injection_mode
     # Send facial recognition params
+    ./packets_from_file facial_recognition_params
     # Run MATLAB to localize signal that sent facial recognition params
+    
     # Run OpenCV using loaded facial recognition params
+    
     # Display, in OpenCV, a box around where the signal originated from, corresponding to the face received
     # Prompt user to accept
     # Done!

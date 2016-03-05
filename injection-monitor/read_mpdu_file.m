@@ -1,18 +1,24 @@
-%READ_BF_FILE Reads in a file of beamforming feedback logs.
+%READ_MPDU_FILE Reads in file of Media Access Control Protocol Data Unit 
+%       (MPDU) logs and outputs the parsed data bytes to a file.
 %   This version uses the *C* version of read_bfee, compiled with
 %   MATLAB's MEX utility.
 %
 % (c) 2008-2011 Daniel Halperin <dhalperi@cs.washington.edu>
 %
-function read_mpdu_file(filename)
-    fprintf('read_bf_file called: checking nargchk....\n')
+function read_mpdu_file(input_filename, output_filename)
+    fprintf('read_mpdu_file called: checking nargchk....\n')
     %% Input check
-    narginchk(1, 1);
+    if nargin == 0
+        input_filename = 'lgtm-monitor.dat';
+        output_filename = 'lgtm-monitor-check';
+    else
+        narginchk(2, 2);
+    end
     
     %% Open file
-    f = fopen(filename, 'rb');
+    f = fopen(input_filename, 'rb');
     if (f < 0)
-        error('Couldn''t open file %s', filename);
+        error('Couldn''t open file %s', input_filename);
     end
 
     status = fseek(f, 0, 'eof');
@@ -34,12 +40,13 @@ function read_mpdu_file(filename)
     cur = 0;                        % Current offset into file
     payload_count = 0;              % Number of packet payloads outpu
 
-    payload_file = fopen('payload_file', 'wb');
+    payload_file = fopen(output_filename, 'wb');
     if (payload_file < 0)
         error('Couldn''t open file %s', 'payload_file');
     end
     num_bytes_written = 0;
     
+    fprintf('Processing file entries....\n')
     %% Process all entries in file
     % Need 3 bytes -- 2 byte size field and 1 byte code
     while cur < (len - 3)
@@ -65,6 +72,7 @@ function read_mpdu_file(filename)
         end
     end
 
+    fprintf('Closing files....\n')
     %% Close files
     fclose(f);
     fclose(payload_file);
