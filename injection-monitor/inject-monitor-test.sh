@@ -54,18 +54,12 @@ echo "Waiting for LGTM initiation......................................"
 echo "Press space to initiate LGTM from this computer.................."
 begin_lgtm=0
 input='a'
-while [[ $input != ' ' ]] && [[ $begin_lgtm < 1 ]]
+while [[ $input != ' ' ]] && [[ $lgtm_data < 1 ]]
 do
     read -n 1 -s -t 10 input
     # TODO: lgtm-monitor.dat and lgtm-monitor-check are statically set in matlab files and here...make this better?
     # TODO: Later this token, "begin-lgtm-protocol", will also include a public key
     lgtm_data=$(cat lgtm-monitor.dat | wc -l)
-    if [[ $lgtm_data > 0 ]]
-    then
-        # Run MATLAB script to parse data into lgtm-monitor-check.dat
-        sudo -u wifi-test-laptop-2 matlab -nojvm -nodisplay -nosplash -r "run('read_mpdu_file.m'), exit"
-        begin_lgtm=$(cat lgtm-monitor-check | grep "begin-lgtm-protocol" | wc -l)
-    fi
 done
 
 # Key pressed to initiate LGTM
@@ -91,26 +85,15 @@ then
     while [[ $lgtm_ack < 1 ]]
     do
         # Receive ack + params
-        lgtm_data=$(cat lgtm-monitor.dat | wc -l)
-        if [[ $lgtm_data > 0 ]]
-        then
-            # TODO: make the user-name be an argument...silly matlab
-            sudo -u wifi-test-laptop-2 matlab -nojvm -nodisplay -nosplash -r "run('read_mpdu_file.m'), exit"
-            lgtm_ack=$(cat lgtm-monitor-check | grep "begin-lgtm-protocol" | wc -l)
-        fi
+        lgtm_ack=$(cat lgtm-monitor.dat | wc -l)
     done
     # Sleep for 5 seconds to ensure other party has switched into monitor mode....
     sleep $SWITCH_WAIT_TIME
     # Switch to injection mode
     injection_mode
     # Send facial recognition params
-    ./packets_from_file facial_recognition_params
-    # Run MATLAB to localize signal that sent facial recognition params
-    
-    # Run OpenCV using loaded facial recognition params
-    
-    # Display, in OpenCV, a box around where the signal originated from, corresponding to the face received
-    # Prompt user to accept
+    echo second-level-lgtm-protocol > .lgtm-protocol-continued
+    ./packets_from_file .lgtm-protocol-continued
     # Done!
 fi
 
@@ -119,14 +102,23 @@ if [[ begin_lgtm > 0 ]]
 then
     echo "Other party initiated LGTM protocol........................."
     # Setup Injection mode
+    injection_mode
     # Sleep for 5 seconds to ensure other party has switched into monitor mode....
+    sleep $SWITCH_WAIT_TIME
     # Send acknowledgement + facial recognition params, TODO: later this will inlcude a public key
+    echo begin-lgtm-protocol > .begin-lgtm-protocol
+    ./packets_from_file .begin-lgtm-protocol
+    rm .begin-lgtm-protocol
     # Setup Monitor mode
+    monitor_mode
     # Await facial recognition params
-    # Receive facial recognition params
-    # Run MATLAB to localize signal that sent facial recognition params
-    # Run OpenCV using loaded facial recognition params
-    # Display, in OpenCV, a box around where the signal originated from, corresponding to the face received
-    # Prompt user to accept
+    rm lgtm-monitor.dat
+    ./log-to-file lgtm-monitor.dat &
+    lgtm_ack=0
+    while [[ $lgtm_ack < 1 ]]
+    do
+        # Receive ack + params
+        lgtm_ack=$(cat lgtm-monitor.dat | wc -l)
+    done
     # Done!
 fi
