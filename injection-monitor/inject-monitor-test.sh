@@ -88,6 +88,7 @@ monitor_mode () {
     echo "Monitor mode active!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 }
 
+pkill log_to_file
 monitor_mode
 
 echo "Waiting for LGTM initiation......................................"
@@ -98,12 +99,12 @@ rm lgtm-monitor.dat
 echo "Press 'L' to initiate LGTM from this computer...................."
 begin_lgtm=0
 input='a'
-while [[ $input != 'l' ]] && [[ $lgtm_data < 1 ]]; do
+while [[ $input != 'l' ]] && [[ $begin_lgtm -lt 1 ]]; do
     read -n 1 -s -t 10 -r input
     #echo "Input received ||$input||"
     # TODO: lgtm-monitor.dat and lgtm-monitor-check are statically set in matlab files and here...make this better?
     # TODO: Later this token, "begin-lgtm-protocol", will also include a public key
-    lgtm_data=$(cat lgtm-monitor.dat | wc -l)
+    begin_lgtm=$(cat lgtm-monitor.dat | grep "begin-lgtm-protocol" | wc -l)
 done
 
 # Key pressed to initiate LGTM
@@ -116,53 +117,60 @@ if [[ $input == 'l' ]]; then
     # Setup Injection mode
     injection_mode
     # Send "begin-lgtm-protocol", TODO: later this will include a public key
-    echo begin-lgtm-protocol > .begin-lgtm-protocol
-    ./packets-from-file/packets_from_file .begin-lgtm-protocol
-    rm .begin-lgtm-protocol
+    rm .lgtm-begin-protocol
+    echo lgtm-begin-protocol > .lgtm-begin-protocol
+    ./packets-from-file/packets_from_file .lgtm-begin-protocol
     # Switch to monitor mode
     monitor_mode
     # Wait for acknowledgement + facial recognition params, TODO: later it will be ack + recog params + public key
-    echo "Awaiting response from other device.............................."
-    rm lgtm-monitor.dat
-    ./log-to-file/log_to_file lgtm-monitor.dat &
+    echo "Awaiting 'facial recognition params'!"
+    rm .lgtm-monitor.dat
+    ./log-to-file/log_to_file .lgtm-monitor.dat &
     lgtm_ack=0
-    while [[ $lgtm_ack -lt 1 ]]; do
+    while [ $lgtm_ack -lt 1 ]; do
         # Receive ack + params
-        lgtm_ack=$(cat lgtm-monitor.dat | wc -l)
+        lgtm_ack=$(cat lgtm-monitor.dat | grep "facial-recognition-params" | wc -l)
     done
+    echo "Received 'facial recognition params'!"
     pkill log_to_file
     # Sleep for 5 seconds to ensure other party has switched into monitor mode....
     sleep $SWITCH_WAIT_TIME
     # Switch to injection mode
     injection_mode
     # Send facial recognition params
-    echo second-level-lgtm-protocol > .lgtm-protocol-continued
-    ./packets-from-file/packets_from_file .lgtm-protocol-continued
+    rm .lgtm-facial-recognition-params
+    echo second-level-lgtm-protocol > .lgtm-facial-recognition-params
+    ./packets-from-file/packets_from_file .lgtm-facial-recognition-params
     # Done!
     echo "LGTM COMPLETE!"
+    exit
 fi
 
 # Token received from other party to initiate LGTM
-if [[ $begin_lgtm > 0 ]]; then
-    echo "Other party initiated LGTM protocol........................."
+if [ $begin_lgtm -gt 0 ]; then
+    echo "Other party initiated LGTM protocol.............................."
     # Setup Injection mode
     injection_mode
     # Sleep for 5 seconds to ensure other party has switched into monitor mode....
     sleep $SWITCH_WAIT_TIME
     # Send acknowledgement + facial recognition params, TODO: later this will inlcude a public key
-    echo begin-lgtm-protocol > .begin-lgtm-protocol
-    ./packets-from-file/packets_from_file .begin-lgtm-protocol
-    rm .begin-lgtm-protocol
+    echo "Sending 'facial recognition params'!"
+    rm .lgtm-facial-recognition-params
+    echo facial-recognition-params > .lgtm-facial-recognition-params
+    ./packets-from-file/packets_from_file .lgtm-facial-recognition-params
     # Setup Monitor mode
     monitor_mode
     # Await facial recognition params
-    rm lgtm-monitor.dat
-    ./log-to-file/log_to_file lgtm-monitor.dat &
+    echo "Awaiting 'facial recognition params'!"
+    rm .lgtm-monitor.dat
+    ./log-to-file/log_to_file .lgtm-monitor.dat &
     lgtm_ack=0
     while [[ $lgtm_ack -lt 1 ]]; do
         # Receive ack + params
-        lgtm_ack=$(cat lgtm-monitor.dat | wc -l)
+        lgtm_ack=$(cat lgtm-monitor.dat | grep "facial-recognition-params" | wc -l)
     done
+    echo "Received 'facial recognition params'!"
     # Done!
     echo "LGTM COMPLETE!"
+    exit
 fi
