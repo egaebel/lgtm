@@ -75,13 +75,10 @@ monitor_mode () {
     iw dev $WLAN_INTERFACE set channel $channel_number $channel_type
     channel_set=$?
     while [ $channel_set -ne 0 ]; do
-        #iwconfig
         ip link set $WLAN_INTERFACE down 2>/dev/null 1>/dev/null
-        #ifconfig
         iw dev $WLAN_INTERFACE set type monitor 2>/dev/null 1>/dev/null
-        #iwconfig
         ip link set $WLAN_INTERFACE up 2>/dev/null 1>/dev/null
-        #ifconfig
+        ip link set wlan0 down 2>/dev/null 1>/dev/null
         iw dev $WLAN_INTERFACE set channel $channel_number $channel_type 2>/dev/null 1>/dev/null
         channel_set=$?
         if [ $channel_set -eq 0 ]; then
