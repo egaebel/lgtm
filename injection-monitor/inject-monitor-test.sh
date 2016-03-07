@@ -146,7 +146,7 @@ if [[ $input == 'l' ]]; then
     injection_mode
     # Send facial recognition params
     rm .lgtm-facial-recognition-params
-    echo second-level-lgtm-protocol > .lgtm-facial-recognition-params
+    echo facial-recognition-params > .lgtm-facial-recognition-params
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params
     # Done!
     echo "LGTM COMPLETE!"
