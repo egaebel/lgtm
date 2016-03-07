@@ -97,8 +97,8 @@ pkill log_to_file
 monitor_mode
 
 echo "Waiting for LGTM initiation......................................"
-rm lgtm-monitor.dat
-./log-to-file/log_to_file lgtm-monitor.dat &
+rm .lgtm-monitor.dat
+./log-to-file/log_to_file .lgtm-monitor.dat &
 
 # Wait for key press or special token to appear in lgtm-monitor.dat
 echo "Press 'L' to initiate LGTM from this computer...................."
@@ -109,8 +109,8 @@ while [[ $input != 'l' ]] && [[ $begin_lgtm -lt 1 ]]; do
     #echo "Input received ||$input||"
     # TODO: lgtm-monitor.dat and lgtm-monitor-check are statically set in matlab files and here...make this better?
     # TODO: Later this token, "begin-lgtm-protocol", will also include a public key
-    begin_lgtm=$(cat lgtm-monitor.dat | grep "lgtm-begin-protocol" | wc -l)
-    cat lgtm-monitor.dat
+    begin_lgtm=$(cat .lgtm-monitor.dat | grep "lgtm-begin-protocol" | wc -l)
+    cat .lgtm-monitor.dat
     #cat lgtm-monitor.dat | grep begin-lgtm-protocol
 done
 
@@ -136,7 +136,7 @@ if [[ $input == 'l' ]]; then
     lgtm_ack=0
     while [ $lgtm_ack -lt 1 ]; do
         # Receive ack + params
-        lgtm_ack=$(cat lgtm-monitor.dat | grep "facial-recognition-params" | wc -l)
+        lgtm_ack=$(cat .lgtm-monitor.dat | grep "facial-recognition-params" | wc -l)
     done
     echo "Received 'facial recognition params'!"
     pkill log_to_file
@@ -174,7 +174,7 @@ if [ $begin_lgtm -gt 0 ]; then
     lgtm_ack=0
     while [[ $lgtm_ack -lt 1 ]]; do
         # Receive ack + params
-        lgtm_ack=$(cat lgtm-monitor.dat | grep "facial-recognition-params" | wc -l)
+        lgtm_ack=$(cat .lgtm-monitor.dat | grep "facial-recognition-params" | wc -l)
     done
     echo "Received 'facial recognition params'!"
     # Done!
