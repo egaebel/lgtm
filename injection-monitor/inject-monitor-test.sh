@@ -38,13 +38,16 @@ injection_mode () {
     ip link set wlan0 down
     echo "Setting channel on mon0 to $channel_number $channel_type .............................."
     iw dev mon0 set channel $channel_number $channel_type
-    while [ $? -ne 0 ]; do
-        iwconfig
+    channel_set=$?
+    while [ $channel_set -ne 0 ]; do
         ip link set $WLAN_INTERFACE down 2>/dev/null 1>/dev/null
         iw dev $WLAN_INTERFACE set type monitor 2>/dev/null 1>/dev/null
         ip link set $WLAN_INTERFACE up
         iw dev mon0 set channel $channel_number $channel_type
-        sleep $SLEEP_TIME
+        channel_set=$?
+        if [ $channel_set -eq 0 ]; then
+            echo "Fixed problem with set channel command..........................."
+        fi
     done
     echo "Setting monitor_tx_rate.........................................."
     echo 0x4101 | sudo tee `sudo find /sys -name monitor_tx_rate`
