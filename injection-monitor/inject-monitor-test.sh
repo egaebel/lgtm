@@ -40,6 +40,9 @@ injection_mode () {
     iw dev mon0 set channel $channel_number $channel_type
     while [ $? -ne 0 ]; do
         iwconfig
+        ip link set $WLAN_INTERFACE down 2>/dev/null 1>/dev/null
+        iw dev $WLAN_INTERFACE set type monitor 2>/dev/null 1>/dev/null
+        ip link set $WLAN_INTERFACE up
         iw dev mon0 set channel $channel_number $channel_type
         sleep $SLEEP_TIME
     done
