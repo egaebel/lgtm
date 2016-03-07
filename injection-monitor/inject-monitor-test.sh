@@ -100,11 +100,13 @@ echo "Press 'L' to initiate LGTM from this computer...................."
 begin_lgtm=0
 input='a'
 while [[ $input != 'l' ]] && [[ $begin_lgtm -lt 1 ]]; do
-    read -n 1 -s -t 10 -r input
+    read -n 1 -s -t 2 -r input
     #echo "Input received ||$input||"
     # TODO: lgtm-monitor.dat and lgtm-monitor-check are statically set in matlab files and here...make this better?
     # TODO: Later this token, "begin-lgtm-protocol", will also include a public key
-    begin_lgtm=$(cat lgtm-monitor.dat | grep "begin-lgtm-protocol" | wc -l)
+    begin_lgtm=$(cat lgtm-monitor.dat | grep "lgtm-begin-protocol" | wc -l)
+    cat lgtm-monitor.dat
+    #cat lgtm-monitor.dat | grep begin-lgtm-protocol
 done
 
 # Key pressed to initiate LGTM
