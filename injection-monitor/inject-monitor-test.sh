@@ -39,7 +39,9 @@ injection_mode () {
     echo "Setting channel on mon0 to $channel_number $channel_type .............................."
     iw dev mon0 set channel $channel_number $channel_type
     while [ $? -ne 0 ]; do
+        iwconfig
         iw dev mon0 set channel $channel_number $channel_type
+        sleep $SLEEP_TIME
     done
     echo "Setting monitor_tx_rate.........................................."
     echo 0x4101 | sudo tee `sudo find /sys -name monitor_tx_rate`
