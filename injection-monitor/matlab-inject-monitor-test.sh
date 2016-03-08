@@ -26,7 +26,6 @@ injection_mode () {
         ip link set $WLAN_INTERFACE down 2>/dev/null 1>/dev/null
         iw dev $WLAN_INTERFACE set type monitor 2>/dev/null 1>/dev/null
         mode_change=$?
-        echo mode change: $mode_change
     done
     echo "Bringing up $WLAN_INTERFACE ..............................................."
     ip link set $WLAN_INTERFACE up
@@ -138,10 +137,10 @@ if [[ $input == 'l' ]]; then
     lgtm_ack=0
     while [ $lgtm_ack -lt 1 ]; do
         # Receive ack + params
-        lgtm_ack=$(cat .lgtm-monitor.dat | grep "facial-recognition-params" | wc -l)
+        lgtm_ack=$(cat .lgtm-monitor.dat | grep "facial-recognition-params-finished" | wc -l)
     done
-    echo "Received 'facial recognition params'!"
     pkill log_to_file
+    echo "Received 'facial recognition params'!"
     echo "Localizing signal source!"
     chmod 644 .lgtm-monitor.dat
     sudo -u $(whoami) matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
@@ -154,8 +153,8 @@ if [[ $input == 'l' ]]; then
     echo "Sending 'facial recognition params'!"
     rm .lgtm-facial-recognition-params
     echo facial-recognition-params > .lgtm-facial-recognition-params
-    chmod 666 .lgtm-facial-recognition-params
     cat facial-recognition-model >> .lgtm-facial-recognition-params
+    echo facial-recognition-params-finished >> .lgtm-facial-recognition-params
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
     # Done!
     echo "LGTM COMPLETE!"
@@ -173,8 +172,8 @@ if [ $begin_lgtm -gt 0 ]; then
     echo "Sending 'facial recognition params'!"
     rm .lgtm-facial-recognition-params
     echo facial-recognition-params > .lgtm-facial-recognition-params
-    chmod 666 .lgtm-facial-recognition-params
     cat facial-recognition-model >> .lgtm-facial-recognition-params
+    echo facial-recognition-params-finished >> .lgtm-facial-recognition-params
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
     # Setup Monitor mode
     monitor_mode
@@ -185,10 +184,9 @@ if [ $begin_lgtm -gt 0 ]; then
     lgtm_ack=0
     while [[ $lgtm_ack -lt 1 ]]; do
         # Receive ack + params
-        lgtm_ack=$(cat .lgtm-monitor.dat | grep "facial-recognition-params" | wc -l)
+        lgtm_ack=$(cat .lgtm-monitor.dat | grep "facial-recognition-params-finished" | wc -l)
     done
     pkill log_to_file
-    sleep $SWITCH_WAIT_TIME
     echo "Received 'facial recognition params'!"
     # Done!
     echo "LGTM COMPLETE!"
