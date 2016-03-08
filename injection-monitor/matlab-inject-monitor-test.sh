@@ -128,7 +128,6 @@ if [[ $input == 'l' ]]; then
     # Send "begin-lgtm-protocol", TODO: later this will include a public key
     rm .lgtm-begin-protocol
     echo lgtm-begin-protocol > .lgtm-begin-protocol
-    cat facial-recognition-model >> .lgtm-begin-protocol
     ./packets-from-file/packets_from_file .lgtm-begin-protocol 1
     # Switch to monitor mode
     monitor_mode
@@ -154,6 +153,7 @@ if [[ $input == 'l' ]]; then
     # Send facial recognition params
     rm .lgtm-facial-recognition-params
     echo facial-recognition-params > .lgtm-facial-recognition-params
+    cat facial-recognition-model >> .lgtm-facial-recognition-params
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
     # Done!
     echo "LGTM COMPLETE!"
