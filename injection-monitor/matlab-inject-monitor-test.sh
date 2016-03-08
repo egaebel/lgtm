@@ -182,6 +182,7 @@ if [ $begin_lgtm -gt 0 ]; then
         # Receive ack + params
         lgtm_ack=$(cat .lgtm-monitor.dat | grep "facial-recognition-params" | wc -l)
     done
+    pkill log_to_file
     echo "Received 'facial recognition params'!"
     # Done!
     echo "LGTM COMPLETE!"
