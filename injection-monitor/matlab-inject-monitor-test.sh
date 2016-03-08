@@ -174,7 +174,7 @@ if [ $begin_lgtm -gt 0 ]; then
     echo facial-recognition-params > .lgtm-facial-recognition-params
     cat facial-recognition-model >> .lgtm-facial-recognition-params
     echo facial-recognition-params-finished >> .lgtm-facial-recognition-params
-    ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
+    ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1 100
     # Setup Monitor mode
     monitor_mode
     # Await facial recognition params
