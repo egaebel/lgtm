@@ -5,6 +5,7 @@ channel_type=$2
 WLAN_INTERFACE=$3
 SLEEP_TIME=2
 SWITCH_WAIT_TIME=5
+PACKET_DELAY=100
 
 injection_mode () {
     echo "Switching $WLAN_INTERFACE to inject........................................"
@@ -108,11 +109,8 @@ begin_lgtm=0
 input='a'
 while [[ $input != 'l' ]] && [[ $begin_lgtm -lt 1 ]]; do
     read -n 1 -s -t 2 -r input
-    #echo "Input received ||$input||"
     # TODO: Later this token, "begin-lgtm-protocol", will also include a public key
     begin_lgtm=$(cat .lgtm-monitor.dat | grep "lgtm-begin-protocol" | wc -l)
-    cat .lgtm-monitor.dat
-    #cat lgtm-monitor.dat | grep begin-lgtm-protocol
 done
 
 # Key pressed to initiate LGTM
@@ -127,7 +125,7 @@ if [[ $input == 'l' ]]; then
     # Send "begin-lgtm-protocol", TODO: later this will include a public key
     rm .lgtm-begin-protocol
     echo lgtm-begin-protocol > .lgtm-begin-protocol
-    ./packets-from-file/packets_from_file .lgtm-begin-protocol 1
+    ./packets-from-file/packets_from_file .lgtm-begin-protocol 1 $PACKET_DELAY
     # Switch to monitor mode
     monitor_mode
     # Wait for acknowledgement + facial recognition params, TODO: later it will be ack + recog params + public key
@@ -174,7 +172,7 @@ if [ $begin_lgtm -gt 0 ]; then
     echo facial-recognition-params > .lgtm-facial-recognition-params
     cat facial-recognition-model >> .lgtm-facial-recognition-params
     echo facial-recognition-params-finished >> .lgtm-facial-recognition-params
-    ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1 100
+    ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1 $PACKET_DELAY
     # Setup Monitor mode
     monitor_mode
     # Await facial recognition params
