@@ -32,7 +32,7 @@ int main(int argc, char** argv)
 	/* Local variables */
 	struct sockaddr_nl proc_addr, kern_addr;	// addrs for recv, send, bind
 	struct cn_msg *cmsg;
-	char buf[4096];
+	char buf[16384];
 	int ret;
 	unsigned short l, l2;
 	int count = 0;
