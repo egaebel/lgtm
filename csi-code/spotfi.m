@@ -7,7 +7,7 @@ function spotfi
     global DEBUG_CLUSTER
     global DEBUG_BRIDGE_CODE_CALLING
     DEBUG_PATHS = false;
-    NUMBER_OF_PACKETS_TO_CONSIDER = -1; % Set to -1 to ignore this variable's value
+    NUMBER_OF_PACKETS_TO_CONSIDER = 80; % Set to -1 to ignore this variable's value
     DEBUG_GMM = false;
     DEBUG_CLUSTER = true;
     DEBUG_BRIDGE_CODE_CALLING = true;
