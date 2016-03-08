@@ -151,8 +151,10 @@ if [[ $input == 'l' ]]; then
     # Switch to injection mode
     injection_mode
     # Send facial recognition params
+    echo "Sending 'facial recognition params'!"
     rm .lgtm-facial-recognition-params
     echo facial-recognition-params > .lgtm-facial-recognition-params
+    chmod 666 .lgtm-facial-recognition-params
     cat facial-recognition-model >> .lgtm-facial-recognition-params
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
     # Done!
@@ -171,6 +173,7 @@ if [ $begin_lgtm -gt 0 ]; then
     echo "Sending 'facial recognition params'!"
     rm .lgtm-facial-recognition-params
     echo facial-recognition-params > .lgtm-facial-recognition-params
+    chmod 666 .lgtm-facial-recognition-params
     cat facial-recognition-model >> .lgtm-facial-recognition-params
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
     # Setup Monitor mode
@@ -185,6 +188,7 @@ if [ $begin_lgtm -gt 0 ]; then
         lgtm_ack=$(cat .lgtm-monitor.dat | grep "facial-recognition-params" | wc -l)
     done
     pkill log_to_file
+    sleep $SWITCH_WAIT_TIME
     echo "Received 'facial recognition params'!"
     # Done!
     echo "LGTM COMPLETE!"
