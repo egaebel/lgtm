@@ -5,6 +5,7 @@ channel_type=$2
 WLAN_INTERFACE=$3
 SLEEP_TIME=2
 SWITCH_WAIT_TIME=5
+PACKET_DELAY=100
 
 injection_mode () {
     echo "Switching $WLAN_INTERFACE to inject........................................"
@@ -26,7 +27,6 @@ injection_mode () {
         ip link set $WLAN_INTERFACE down 2>/dev/null 1>/dev/null
         iw dev $WLAN_INTERFACE set type monitor 2>/dev/null 1>/dev/null
         mode_change=$?
-        echo mode change: $mode_change
     done
     echo "Bringing up $WLAN_INTERFACE ..............................................."
     ip link set $WLAN_INTERFACE up
@@ -109,12 +109,8 @@ begin_lgtm=0
 input='a'
 while [[ $input != 'l' ]] && [[ $begin_lgtm -lt 1 ]]; do
     read -n 1 -s -t 2 -r input
-    #echo "Input received ||$input||"
-    # TODO: lgtm-monitor.dat and lgtm-monitor-check are statically set in matlab files and here...make this better?
     # TODO: Later this token, "begin-lgtm-protocol", will also include a public key
     begin_lgtm=$(cat .lgtm-monitor.dat | grep "lgtm-begin-protocol" | wc -l)
-    cat .lgtm-monitor.dat
-    #cat lgtm-monitor.dat | grep begin-lgtm-protocol
 done
 
 # Key pressed to initiate LGTM
@@ -129,7 +125,7 @@ if [[ $input == 'l' ]]; then
     # Send "begin-lgtm-protocol", TODO: later this will include a public key
     rm .lgtm-begin-protocol
     echo lgtm-begin-protocol > .lgtm-begin-protocol
-    ./packets-from-file/packets_from_file .lgtm-begin-protocol
+    ./packets-from-file/packets_from_file .lgtm-begin-protocol 1 $PACKET_DELAY
     # Switch to monitor mode
     monitor_mode
     # Wait for acknowledgement + facial recognition params, TODO: later it will be ack + recog params + public key
@@ -139,18 +135,25 @@ if [[ $input == 'l' ]]; then
     lgtm_ack=0
     while [ $lgtm_ack -lt 1 ]; do
         # Receive ack + params
-        lgtm_ack=$(cat .lgtm-monitor.dat | grep "facial-recognition-params" | wc -l)
+        lgtm_ack=$(cat .lgtm-monitor.dat | grep "facial-recognition-params-finished" | wc -l)
     done
-    echo "Received 'facial recognition params'!"
     pkill log_to_file
-    # Sleep for 5 seconds to ensure other party has switched into monitor mode....
+    echo "Received 'facial recognition params'!"
+    echo "Localizing signal source!"
+    chmod 644 .lgtm-monitor.dat
+    sudo -u $(whoami) matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
+    echo "Successfully localized signal source!"
+    # Sleep for 5 seconds to ensure other party has switched into monitor mode.... TODO: Shorten or remove this....
     sleep $SWITCH_WAIT_TIME
     # Switch to injection mode
     injection_mode
     # Send facial recognition params
+    echo "Sending 'facial recognition params'!"
     rm .lgtm-facial-recognition-params
     echo facial-recognition-params > .lgtm-facial-recognition-params
-    ./packets-from-file/packets_from_file .lgtm-facial-recognition-params
+    cat facial-recognition-model >> .lgtm-facial-recognition-params
+    echo facial-recognition-params-finished >> .lgtm-facial-recognition-params
+    ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
     # Done!
     echo "LGTM COMPLETE!"
     exit
@@ -167,7 +170,9 @@ if [ $begin_lgtm -gt 0 ]; then
     echo "Sending 'facial recognition params'!"
     rm .lgtm-facial-recognition-params
     echo facial-recognition-params > .lgtm-facial-recognition-params
-    ./packets-from-file/packets_from_file .lgtm-facial-recognition-params
+    cat facial-recognition-model >> .lgtm-facial-recognition-params
+    echo facial-recognition-params-finished >> .lgtm-facial-recognition-params
+    ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1 $PACKET_DELAY
     # Setup Monitor mode
     monitor_mode
     # Await facial recognition params
@@ -177,9 +182,14 @@ if [ $begin_lgtm -gt 0 ]; then
     lgtm_ack=0
     while [[ $lgtm_ack -lt 1 ]]; do
         # Receive ack + params
-        lgtm_ack=$(cat .lgtm-monitor.dat | grep "facial-recognition-params" | wc -l)
+        lgtm_ack=$(cat .lgtm-monitor.dat | grep "facial-recognition-params-finished" | wc -l)
     done
+    pkill log_to_file
     echo "Received 'facial recognition params'!"
+    echo "Localizing signal source!"
+    chmod 644 .lgtm-monitor.dat
+    sudo -u $(whoami) matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
+    echo "Successfully localized signal source!"
     # Done!
     echo "LGTM COMPLETE!"
     exit

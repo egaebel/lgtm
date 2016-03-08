@@ -1,4 +1,4 @@
-function spotfi_test
+function spotfi
     %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%
     % Debug Controls
     global DEBUG_PATHS
@@ -7,7 +7,7 @@ function spotfi_test
     global DEBUG_CLUSTER
     global DEBUG_BRIDGE_CODE_CALLING
     DEBUG_PATHS = false;
-    NUMBER_OF_PACKETS_TO_CONSIDER = 40; % Set to -1 to ignore this variable's value
+    NUMBER_OF_PACKETS_TO_CONSIDER = 80; % Set to -1 to ignore this variable's value
     DEBUG_GMM = false;
     DEBUG_CLUSTER = true;
     DEBUG_BRIDGE_CODE_CALLING = true;
@@ -30,7 +30,7 @@ function spotfi_test
     OUTPUT_AOA_TOF_MUSIC_PEAK_GRAPH = false;
     OUTPUT_SELECTIVE_AOA_TOF_MUSIC_PEAK_GRAPH = false;
     OUTPUT_AOA_VS_TOF_PLOT = true;
-    OUTPUT_SUPPRESSED = true;
+    OUTPUT_SUPPRESSED = false;
     OUTPUT_PACKET_PROGRESS = false;
     OUTPUT_FIGURES_SUPPRESSED = true; % Set to true when running in deployment from command line
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -39,26 +39,18 @@ function spotfi_test
     [current_directory, ~, ~] = fileparts(mfilename('fullpath'));
     cd(current_directory);
     % Paths for the csitool functions provided
-    path('../../../linux-80211n-csitool-supplementary/matlab', path);
-	path('../../../linux-80211n-csitool-supplementary/matlab/sample_data', path);
+    path('../../linux-80211n-csitool-supplementary/matlab', path);
+	%path('../../../linux-80211n-csitool-supplementary/matlab/sample_data', path);
     if DEBUG_BRIDGE_CODE_CALLING
         fprintf('The path: %s\n', path)
+        fprintf('The pwd: %s\n', pwd)
     end
     if ~DEBUG_BRIDGE_CODE_CALLING
         close all
         clc
         close_figures();
     end
-    % test_algorithm_1('csi-5ghz-10cm-desk-spacing-on-book-case.dat')
-    %'antenna-extender-test.dat'
-    data_files = {
-        'csi-5ghz-10cm-desk-spacing-printer.dat', ...
-        'csi-5ghz-10cm-desk-spacing-on-book-shelf-2.dat', ...
-        'csi-5ghz-10cm-desk-spacing-clothes-hamper.dat', ...
-        'csi-5ghz-10cm-desk-spacing-on-bed.dat', ...
-        'csi-5ghz-10cm-desk-spacing-bed-side-power-block.dat', ...
-        'csi-5ghz-10cm-desk-spacing-bed-side-table.dat'
-    };
+    data_files = {'../injection-monitor/.lgtm-monitor.dat'};
     run(data_files)
     if DEBUG_BRIDGE_CODE_CALLING
         fprintf('Done Running!\n')
@@ -71,8 +63,6 @@ function run(data_files)
     %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%
     % Debug Controls
     global NUMBER_OF_PACKETS_TO_CONSIDER
-    global DEBUG_GMM
-    global DEBUG_CLUSTER
     
     % Output controls
     global OUTPUT_SUPPRESSED
