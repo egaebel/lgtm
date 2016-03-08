@@ -188,6 +188,10 @@ if [ $begin_lgtm -gt 0 ]; then
     done
     pkill log_to_file
     echo "Received 'facial recognition params'!"
+    echo "Localizing signal source!"
+    chmod 644 .lgtm-monitor.dat
+    sudo -u $(whoami) matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
+    echo "Successfully localized signal source!"
     # Done!
     echo "LGTM COMPLETE!"
     exit
