@@ -4,8 +4,8 @@ channel_number=$1
 channel_type=$2
 WLAN_INTERFACE=$3
 SLEEP_TIME=2
-SWITCH_WAIT_TIME=5
-PACKET_DELAY=100
+SWITCH_WAIT_TIME=20
+PACKET_DELAY=5000
 
 injection_mode () {
     echo "Switching $WLAN_INTERFACE to inject........................................"
@@ -151,7 +151,8 @@ if [[ $input == 'l' ]]; then
     echo "Sending 'facial recognition params'!"
     rm .lgtm-facial-recognition-params
     echo facial-recognition-params > .lgtm-facial-recognition-params
-    cat facial-recognition-model >> .lgtm-facial-recognition-params
+    #cat facial-recognition-model >> .lgtm-facial-recognition-params
+    cat subject01.tar.gz >> .lgtm-facial-recognition-params
     echo facial-recognition-params-finished >> .lgtm-facial-recognition-params
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
     # Done!
@@ -170,7 +171,8 @@ if [ $begin_lgtm -gt 0 ]; then
     echo "Sending 'facial recognition params'!"
     rm .lgtm-facial-recognition-params
     echo facial-recognition-params > .lgtm-facial-recognition-params
-    cat facial-recognition-model >> .lgtm-facial-recognition-params
+    #cat facial-recognition-model >> .lgtm-facial-recognition-params
+    cat subject01.tar.gz >> .lgtm-facial-recognition-params
     echo facial-recognition-params-finished >> .lgtm-facial-recognition-params
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1 $PACKET_DELAY
     # Setup Monitor mode
