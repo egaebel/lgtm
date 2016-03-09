@@ -141,7 +141,8 @@ if [[ $input == 'l' ]]; then
     echo "Received 'facial recognition params'!"
     echo "Localizing signal source!"
     chmod 644 .lgtm-monitor.dat
-    sudo -u $(whoami) matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
+    logged_on_user=$(who | head -n1 | awk '{print $1;}')
+    sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
     echo "Successfully localized signal source!"
     # Sleep for 5 seconds to ensure other party has switched into monitor mode.... TODO: Shorten or remove this....
     sleep $SWITCH_WAIT_TIME
@@ -190,7 +191,8 @@ if [ $begin_lgtm -gt 0 ]; then
     echo "Received 'facial recognition params'!"
     echo "Localizing signal source!"
     chmod 644 .lgtm-monitor.dat
-    sudo -u $(whoami) matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
+    logged_on_user=$(who | head -n1 | awk '{print $1;}')
+    sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
     echo "Successfully localized signal source!"
     # Done!
     echo "LGTM COMPLETE!"
