@@ -5,7 +5,7 @@ channel_type=$2
 WLAN_INTERFACE=$3
 SLEEP_TIME=2
 SWITCH_WAIT_TIME=5
-PACKET_DELAY=100
+PACKET_DELAY=0
 
 injection_mode () {
     echo "Switching $WLAN_INTERFACE to inject........................................"
