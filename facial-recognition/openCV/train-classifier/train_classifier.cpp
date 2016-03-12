@@ -115,7 +115,13 @@ int main(int argc, const char *argv[]) {
             break;
         case 2:
             cout << "Using Local Binary Pattern Histograms" << endl;
-            model = face::createLBPHFaceRecognizer();
+            int radius = 10;
+            int neighbors = 8;
+            int gridX = 4;
+            int gridY = 4;
+            double threshold = 20.0;
+            cout << "Threshold is: " << threshold << endl;
+            model = face::createLBPHFaceRecognizer(radius, neighbors, gridX, gridY, threshold);
             break;
     }
     cout << "starting training..." << endl;

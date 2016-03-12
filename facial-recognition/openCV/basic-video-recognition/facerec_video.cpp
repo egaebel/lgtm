@@ -136,7 +136,13 @@ int main(int argc, const char *argv[]) {
         case 2:
             {
                 cout << "Using Local Binary Pattern Histograms" << endl;
-                model = face::createLBPHFaceRecognizer();
+                int radius = 10;
+                int neighbors = 8;
+                int gridX = 4;
+                int gridY = 4;
+                double threshold = 25.0;
+                cout << "Threshold is: " << threshold << endl;
+                model = face::createLBPHFaceRecognizer(radius, neighbors, gridX, gridY, threshold);
             }
             break;
     }
@@ -221,24 +227,27 @@ int main(int argc, const char *argv[]) {
                 int prediction = -1;
                 double confidence = 0.0;
                 model->predict(resizedFace, prediction, confidence);
-                // And finally write all we've found out to the original image!
-                // First of all draw a green rectangle around the detected face:
-                rectangle(original, curFace, CV_RGB(0, 255,0), 1);
-                // Create the text we will annotate the box with:
-                string boxPredictionText = format("Prediction = %d", prediction);
-                string boxConfidenceText = format("With confidence: %g", confidence);
-                // Calculate the position for annotated text (make sure we don't
-                // put illegal values in there):
-                // TODO: See below, 10 was the original
-                int predictionPosX = std::max(curFace.tl().x - 25, 0);
-                int predictionPosY = std::max(curFace.tl().y - 25, 0);
-                int confidencePosX = std::max(curFace.tl().x - 10, 0);
-                int confidencePosY = std::max(curFace.tl().y - 10, 0);
-                // And now put it into the image:
-                putText(original, boxPredictionText, Point(predictionPosX, predictionPosY), 
-                        FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
-                putText(original, boxConfidenceText, Point(confidencePosX, confidencePosY), 
-                        FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
+                // If the prediction is one of the faces we can recognize
+                if (prediction > 0) {
+                    // And finally write all we've found out to the original image!
+                    // First of all draw a green rectangle around the detected face:
+                    rectangle(original, curFace, CV_RGB(0, 255,0), 1);
+                    // Create the text we will annotate the box with:
+                    string boxPredictionText = format("Prediction = %d", prediction);
+                    string boxConfidenceText = format("With confidence: %g", confidence);
+                    // Calculate the position for annotated text (make sure we don't
+                    // put illegal values in there):
+                    // TODO: See below, 10 was the original
+                    int predictionPosX = std::max(curFace.tl().x - 25, 0);
+                    int predictionPosY = std::max(curFace.tl().y - 25, 0);
+                    int confidencePosX = std::max(curFace.tl().x - 10, 0);
+                    int confidencePosY = std::max(curFace.tl().y - 10, 0);
+                    // And now put it into the image:
+                    putText(original, boxPredictionText, Point(predictionPosX, predictionPosY), 
+                            FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
+                    putText(original, boxConfidenceText, Point(confidencePosX, confidencePosY), 
+                            FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
+                }
             }
             // Show the result:
             imshow("face_recognizer", original);
