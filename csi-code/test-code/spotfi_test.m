@@ -1,39 +1,9 @@
 function spotfi_test
     %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%
     % Debug Controls
-    global DEBUG_PATHS
-    global NUMBER_OF_PACKETS_TO_CONSIDER
-    global DEBUG_GMM
-    global DEBUG_CLUSTER
     global DEBUG_BRIDGE_CODE_CALLING
-    DEBUG_PATHS = false;
-    NUMBER_OF_PACKETS_TO_CONSIDER = 200; % Set to -1 to ignore this variable's value
-    DEBUG_GMM = false;
-    DEBUG_CLUSTER = true;
-    DEBUG_BRIDGE_CODE_CALLING = true;
-    
-    % Output controls
-    global OUTPUT_AOAS
-    global OUTPUT_TOFS
-    global OUTPUT_AOA_MUSIC_PEAK_GRAPH
-    global OUTPUT_TOF_MUSIC_PEAK_GRAPH
-    global OUTPUT_AOA_TOF_MUSIC_PEAK_GRAPH
-    global OUTPUT_SELECTIVE_AOA_TOF_MUSIC_PEAK_GRAPH
-    global OUTPUT_AOA_VS_TOF_PLOT
-    global OUTPUT_SUPPRESSED
-    global OUTPUT_PACKET_PROGRESS
-    global OUTPUT_FIGURES_SUPPRESSED
-    OUTPUT_AOAS = false;
-    OUTPUT_TOFS = false;
-    OUTPUT_AOA_MUSIC_PEAK_GRAPH = false;
-    OUTPUT_TOF_MUSIC_PEAK_GRAPH = false;
-    OUTPUT_AOA_TOF_MUSIC_PEAK_GRAPH = false;
-    OUTPUT_SELECTIVE_AOA_TOF_MUSIC_PEAK_GRAPH = false;
-    OUTPUT_AOA_VS_TOF_PLOT = true;
-    OUTPUT_SUPPRESSED = false;
-    OUTPUT_PACKET_PROGRESS = false;
-    OUTPUT_FIGURES_SUPPRESSED = false; % Set to true when running in deployment from command line
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    globals_init();
     % Get the full path to the currently executing file and change the
     % pwd to the folder this file is contained in...
     [current_directory, ~, ~] = fileparts(mfilename('fullpath'));
@@ -45,23 +15,13 @@ function spotfi_test
     % Paths for the csitool functions provided
     path('../../../linux-80211n-csitool-supplementary/matlab', path);
 	path('../../../linux-80211n-csitool-supplementary/matlab/sample_data', path);
-    
-    
-    
-    
-    %test_algorithm_1('los-test-heater.dat')
-    %return
-    
-    
-    
-    
+
     if DEBUG_BRIDGE_CODE_CALLING
         fprintf('The path: %s\n', path)
     end
     if ~DEBUG_BRIDGE_CODE_CALLING
         close all
         clc
-        close_figures();
     end
     %% First localization tests, without strict line of sight
     %data_files = {
@@ -87,6 +47,44 @@ function spotfi_test
     end
 end
 
+function globals_init
+    %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%
+    % Debug Controls
+    global DEBUG_PATHS
+    global NUMBER_OF_PACKETS_TO_CONSIDER
+    global DEBUG_GMM
+    global DEBUG_CLUSTER
+    global DEBUG_BRIDGE_CODE_CALLING
+    DEBUG_PATHS = false;
+    NUMBER_OF_PACKETS_TO_CONSIDER = 100; % Set to -1 to ignore this variable's value
+    DEBUG_GMM = false;
+    DEBUG_CLUSTER = true;
+    DEBUG_BRIDGE_CODE_CALLING = false;
+    
+    % Output controls
+    global OUTPUT_AOAS
+    global OUTPUT_TOFS
+    global OUTPUT_AOA_MUSIC_PEAK_GRAPH
+    global OUTPUT_TOF_MUSIC_PEAK_GRAPH
+    global OUTPUT_AOA_TOF_MUSIC_PEAK_GRAPH
+    global OUTPUT_SELECTIVE_AOA_TOF_MUSIC_PEAK_GRAPH
+    global OUTPUT_AOA_VS_TOF_PLOT
+    global OUTPUT_SUPPRESSED
+    global OUTPUT_PACKET_PROGRESS
+    global OUTPUT_FIGURES_SUPPRESSED
+    OUTPUT_AOAS = false;
+    OUTPUT_TOFS = false;
+    OUTPUT_AOA_MUSIC_PEAK_GRAPH = false;
+    OUTPUT_TOF_MUSIC_PEAK_GRAPH = false;
+    OUTPUT_AOA_TOF_MUSIC_PEAK_GRAPH = false;
+    OUTPUT_SELECTIVE_AOA_TOF_MUSIC_PEAK_GRAPH = false;
+    OUTPUT_AOA_VS_TOF_PLOT = true;
+    OUTPUT_SUPPRESSED = false;
+    OUTPUT_PACKET_PROGRESS = false;
+    OUTPUT_FIGURES_SUPPRESSED = false; % Set to true when running in deployment from command line
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+end
+
 %% Runs the SpotFi test over the passed in data files which each contain CSI data for many packets
 % data_files -- a cell array of file paths to data files
 function run(data_files)
@@ -104,13 +102,9 @@ function run(data_files)
 
     % Set physical layer parameters (frequency, subfrequency spacing, and antenna spacing
     antenna_distance = 0.1;
-    %frequency = 5 * 10^9;
+    % frequency = 5 * 10^9;
     frequency = 5.785 * 10^9;
-    %sub_freq_delta = 40 * 10^6;
-    sub_freq_delta = (40 * 10^6) / 30;%114;
-    % TODO: Verify this test...
-    % Multiply by 4 because the CSI tool aggregates the subcarrier CSI into groups of 4 subcarriers
-    %sub_freq_delta = 4 * sub_freq_delta;
+    sub_freq_delta = (40 * 10^6) / 30;
     
     % Loop over passed in data files
     for data_file_index = 1:length(data_files)
@@ -173,9 +167,9 @@ function run(data_files)
             tof_matrix = tof_packet_data{packet_index};
             aoa_matrix = aoa_packet_data{packet_index};
             % AoA Loop
-            for j = 1:length(aoa_matrix)
+            for j = 1:size(aoa_matrix, 1)
                 % ToF Loop
-                for k = 1:length(tof_matrix(j, :))
+                for k = 1:size(tof_matrix(j, :), 2)
                     % Break once padding is hit
                     if tof_matrix(j, k) < 0
                         break
@@ -195,16 +189,16 @@ function run(data_files)
         % Packet Loop
         for packet_index = 1:num_packets
             tof_matrix = tof_packet_data{packet_index};
-            aoa_vector = aoa_packet_data{packet_index};
+            aoa_matrix = aoa_packet_data{packet_index};
             % AoA Loop
-            for j = 1:length(aoa_packet_data{packet_index})
+            for j = 1:size(aoa_matrix, 1)
                 % ToF Loop
-                for k = 1:length(tof_matrix(j, :))
+                for k = 1:size(tof_matrix(j, :), 2)
                     % Break once padding is hit
                     if tof_matrix(j, k) < 0
                         break
                     end
-                    full_measurement_matrix(full_measurement_matrix_index, 1) = aoa_vector(j, 1);
+                    full_measurement_matrix(full_measurement_matrix_index, 1) = aoa_matrix(j, 1);
                     full_measurement_matrix(full_measurement_matrix_index, 2) = tof_matrix(j, k);
                     full_measurement_matrix_index = full_measurement_matrix_index + 1;
                 end
@@ -221,13 +215,12 @@ function run(data_files)
         % Worked Pretty Well
         linkage_tree = linkage(full_measurement_matrix, 'ward');
         % TODO: validate, CutOff WAS 0.8...I'm playing with it...
-        cluster_indices_vector = cluster(linkage_tree, 'CutOff', 0.4, 'criterion', 'distance');
+        cluster_indices_vector = cluster(linkage_tree, 'CutOff', 0.45, 'criterion', 'distance');
         cluster_count_vector = zeros(0, 1);
         num_clusters = 0;
-        for ii = 1:length(cluster_indices_vector)
+        for ii = 1:size(cluster_indices_vector, 1)
             if ~ismember(cluster_indices_vector(ii), cluster_count_vector)
-                cluster_count_vector(length(cluster_count_vector) + 1) = cluster_indices_vector(ii);
-                num_clusters = num_clusters + 1;
+                cluster_count_vector(size(cluster_count_vector, 1) + 1, 1) = cluster_indices_vector(ii);
             end
         end
         if ~OUTPUT_FIGURES_SUPPRESSED
@@ -244,27 +237,35 @@ function run(data_files)
         % Collect data and indices into cluster-specific cell arrays
         clusters = cell(num_clusters, 1);
         cluster_indices = cell(num_clusters, 1);
-        for ii = 1:length(cluster_indices_vector)
+        for ii = 1:size(cluster_indices_vector, 1)
             % Save off the data
             tail_index = size(clusters{cluster_indices_vector(ii, 1)}, 1) + 1;
             clusters{cluster_indices_vector(ii, 1)}(tail_index, :) = full_measurement_matrix(ii, :);
             % Save off the indexes for the data
-            cluster_index_tail_index = length(cluster_indices{cluster_indices_vector(ii, 1)}) + 1;
+            cluster_index_tail_index = size(cluster_indices{cluster_indices_vector(ii, 1)}, 1) + 1;
             cluster_indices{cluster_indices_vector(ii, 1)}(cluster_index_tail_index, 1) = ii;
         end
         
         %% TODO: Validate this method
         %%{
         % Delete outliers from each cluster
-        for ii = 1:length(clusters)
+        if ~OUTPUT_SUPPRESSED
+            fprintf('Deleting outliers and clusters deemed outliers....\n')
+        end
+        for ii = 1:size(clusters, 1)
             % Delete clusters that are < 5% of the size of the number of packets
-            if length(clusters{ii}) < 0.05 * num_packets
+            if size(clusters{ii}, 1) < (0.05 * num_packets)
                 clusters{ii} = [];
                 cluster_indices{ii} = [];
+                if ~OUTPUT_SUPPRESSED
+                    fprintf('Entire outlier cluster deleted: %d\n', ii)
+                end
                 continue;
             end
             
-            fprintf('Outliers from cluster %d\n', ii)
+            if ~OUTPUT_SUPPRESSED
+                fprintf('Outliers from cluster %d\n', ii)
+            end
             alpha = 0.05;
             [~, outlier_indices, ~] = deleteoutliers(clusters{ii}(:, 1), alpha);
             cluster_indices{ii}(outlier_indices(:), :) = [];
@@ -288,14 +289,15 @@ function run(data_files)
         % Good base: 5, 10000, 75000, 0 (in order)
         % Likelihood parameters
         weight_num_cluster_points = 5;
-        weight_aoa_variance = 100000; % prev = 10000
+        weight_aoa_variance = 10000; % prev = 100000
         weight_tof_variance = 100000;
-        weight_tof_mean = 50; % prev = 50, prev = 10
+        weight_tof_mean = 50; % prev = 10
         
         % Compute likelihoods
         likelihood = zeros(length(clusters), 1);
         cluster_aoa = zeros(length(clusters), 1);
         max_likelihood_index = 1;
+        top_3_likelihood_indices = [-1; -1; -1;];
         for ii = 1:length(clusters)
             % Ignore clusters of size 1
             if size(clusters{ii}, 1) == 0
@@ -325,13 +327,14 @@ function run(data_files)
             exp_body = weight_num_cluster_points * num_cluster_points ...
                     - weight_aoa_variance * aoa_variance ...
                     - weight_tof_variance * tof_variance ...
-                    - weight_tof_mean * tof_mean;
-            likelihood(ii, 1) = exp(exp_body);
+                    - weight_tof_mean * tof_mean ...
+                    - 300;
+            likelihood(ii, 1) = exp_body;%exp(exp_body);
             % Compute Cluster Average AoA
-            for jj = 1:length(clusters{ii})
+            for jj = 1:size(clusters{ii}, 1)
                 cluster_aoa(ii, 1) = cluster_aoa(ii, 1) + aoa_max * clusters{ii}(jj, 1);
             end
-            cluster_aoa(ii, 1) = cluster_aoa(ii, 1) / length(clusters{ii});
+            cluster_aoa(ii, 1) = cluster_aoa(ii, 1) / size(clusters{ii}, 1);
             if ~OUTPUT_SUPPRESSED
                 % Output
                 fprintf('\nCluster Properties for cluster %d\n', ii)
@@ -352,9 +355,41 @@ function run(data_files)
             if likelihood(ii, 1) > likelihood(max_likelihood_index, 1)
                 max_likelihood_index = ii;
             end
+            % Record the top 3 maximum likelihoods
+            for jj = 1:size(top_3_likelihood_indices, 1)
+                % Replace
+                if top_3_likelihood_indices(jj, 1) == -1
+                    top_3_likelihood_indices(jj, 1) = ii;
+                    break;
+                % Shift indices down
+                elseif likelihood(ii, 1) > likelihood(top_3_likelihood_indices(jj, 1), 1)
+                    for kk = size(top_3_likelihood_indices, 1):-1:(jj + 1)
+                        top_3_likelihood_indices(kk, 1) = top_3_likelihood_indices(kk - 1, 1);
+                    end
+                    top_3_likelihood_indices(jj, 1) = ii;
+                    break;
+                end
+            end
         end
         if ~OUTPUT_SUPPRESSED
             fprintf('\nThe cluster with the maximum likelihood is cluster %d\n', max_likelihood_index)
+            fprintf('The top 3 clusters are: %d, %d, %d\n', ...
+                    top_3_likelihood_indices(1, 1), top_3_likelihood_indices(2, 1), ...
+                    top_3_likelihood_indices(3, 1))
+            fprintf('The clusters have plot point designations: ')
+            for jj = 1:size(top_3_likelihood_indices, 1)
+                if top_3_likelihood_indices(jj, 1) ~= -1
+                    fprintf('%s, ', ...
+                            cluster_plot_style{top_3_likelihood_indices(jj, 1)})
+                end
+            end
+            fprintf('\n')
+            %{
+            fprintf('The clusters have plot point designations: %s, %s, %s\n', ...
+                    cluster_plot_style{top_3_likelihood_indices(1, 1)}, ...
+                    cluster_plot_style{top_3_likelihood_indices(2, 1)}, ...
+                    cluster_plot_style{top_3_likelihood_indices(3, 1)})
+            %}
         end
             
         % Plot AoA & ToF
@@ -363,7 +398,7 @@ function run(data_files)
             figure('Name', figure_name_string, 'NumberTitle', 'off')
             hold on
             % Plot the data from each cluster and draw a circle around each cluster 
-            for ii = 1:length(cluster_indices)
+            for ii = 1:size(cluster_indices, 1)
                 % Some clusters may all be considered outliers...we'll see how this affects the 
                 % results, but it shouldn't result in a crash!!
                 if isempty(cluster_indices{ii})
@@ -373,8 +408,8 @@ function run(data_files)
                 plot(full_measurement_matrix(cluster_indices{ii, 1}, 1) * aoa_max, ...
                         full_measurement_matrix(cluster_indices{ii}, 2), ...
                         cluster_plot_style{ii}, ...
-                        'MarkerSize', 8, 'LineWidth', 2.5)
-                
+                        'MarkerSize', 8, ...
+                        'LineWidth', 2.5)
                 % Compute Means
                 num_cluster_points = size(cluster_indices{ii}, 1);
                 aoa_mean = 0;
@@ -388,6 +423,7 @@ function run(data_files)
                 tof_mean = tof_mean / num_cluster_points;
                 cluster_text = sprintf('Size: %d', num_cluster_points);
                 text(aoa_mean + 5, tof_mean, cluster_text)
+                drawnow
             end
             [ellipse_x, ellipse_y] = compute_ellipse(...
                     clusters{max_likelihood_index}(:, 1) * aoa_max, ...
@@ -469,8 +505,9 @@ end
 function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
         antenna_distance, frequency, sub_freq_delta, data_name)
     %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%
+    globals_init();
     % Debug Variables
-    global DEBUG_PATHS;
+    global DEBUG_PATHS
     
     % Output Variables
     global OUTPUT_AOAS
@@ -489,7 +526,7 @@ function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
     [eigenvectors, eigenvalue_matrix] = eig(R);
     % Find max eigenvalue for normalization
     max_eigenvalue = -1111;
-    for ii = 1:length(eigenvalue_matrix)
+    for ii = 1:size(eigenvalue_matrix, 1)
         if eigenvalue_matrix(ii, ii) > max_eigenvalue
             max_eigenvalue = eigenvalue_matrix(ii, ii);
         end
@@ -498,13 +535,13 @@ function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
     if DEBUG_PATHS && ~OUTPUT_SUPPRESSED
         fprintf('Normalized Eigenvalues of Covariance Matrix\n')
     end
-    for ii = 1:length(eigenvalue_matrix)
+    for ii = 1:size(eigenvalue_matrix, 1)
         eigenvalue_matrix(ii, ii) = eigenvalue_matrix(ii, ii) / max_eigenvalue;
         if DEBUG_PATHS && ~OUTPUT_SUPPRESSED
             % Suppress most print statements...
             if ii > 20
                 fprintf('Index: %d, eigenvalue: %f\n', ii, eigenvalue_matrix(ii, ii))
-                if ii + 1 <= length(eigenvalue_matrix)
+                if ii + 1 <= size(eigenvalue_matrix, 1)
                     fprintf('Decrease Factor %f:\n', ...
                             ((eigenvalue_matrix(ii + 1, ii + 1) / max_eigenvalue) ...
                                 / eigenvalue_matrix(ii, ii)))
@@ -517,7 +554,7 @@ function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
     % Find the largest decrease ratio that occurs between the last 10 elements (largest 10 elements)
     % and is not the first decrease (from the largest eigenvalue to the next largest)
     % Compute the decrease factors between each adjacent pair of elements, except the first decrease
-    start_index = length(eigenvalue_matrix) - 2;
+    start_index = size(eigenvalue_matrix, 1) - 2;
     end_index = start_index - 10;
     decrease_ratios = zeros(start_index - end_index + 1, 1);
     k = 1;
@@ -536,21 +573,21 @@ function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
         fprintf('Max Decrease Ratio Index: %d\n', max_decrease_ratio_index)
     end
 
-    index_in_eigenvalues = length(eigenvalue_matrix) - max_decrease_ratio_index;
-    num_computed_paths = length(eigenvalue_matrix) - index_in_eigenvalues + 1;
+    index_in_eigenvalues = size(eigenvalue_matrix, 1) - max_decrease_ratio_index;
+    num_computed_paths = size(eigenvalue_matrix, 1) - index_in_eigenvalues + 1;
     
     if DEBUG_PATHS && ~OUTPUT_SUPPRESSED
         fprintf('True number of computed paths: %d\n', num_computed_paths)
     end
     
     % Estimate noise subspace
-    column_indices = 1:(length(eigenvalue_matrix) - num_computed_paths);
+    column_indices = 1:(size(eigenvalue_matrix, 1) - num_computed_paths);
     eigenvectors = eigenvectors(:, column_indices); 
     % Peak search
     % Angle in degrees (converts to radians in phase calculations)
     theta = -90:1:90; 
     % time in milliseconds
-    tau = 0:(1.0 * 10^-9):(50 * 10^-9);%(1.5 * 10^-6);
+    tau = 0:(1.0 * 10^-9):(50 * 10^-9);
     Pmusic = zeros(length(theta), length(tau));
     % Angle of Arrival Loop (AoA)
     for ii = 1:length(theta)
