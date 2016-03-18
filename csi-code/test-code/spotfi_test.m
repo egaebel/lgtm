@@ -7,7 +7,7 @@ function spotfi_test
     global DEBUG_CLUSTER
     global DEBUG_BRIDGE_CODE_CALLING
     DEBUG_PATHS = false;
-    NUMBER_OF_PACKETS_TO_CONSIDER = 40; % Set to -1 to ignore this variable's value
+    NUMBER_OF_PACKETS_TO_CONSIDER = 200; % Set to -1 to ignore this variable's value
     DEBUG_GMM = false;
     DEBUG_CLUSTER = true;
     DEBUG_BRIDGE_CODE_CALLING = true;
@@ -30,19 +30,31 @@ function spotfi_test
     OUTPUT_AOA_TOF_MUSIC_PEAK_GRAPH = false;
     OUTPUT_SELECTIVE_AOA_TOF_MUSIC_PEAK_GRAPH = false;
     OUTPUT_AOA_VS_TOF_PLOT = true;
-    OUTPUT_SUPPRESSED = true;
+    OUTPUT_SUPPRESSED = false;
     OUTPUT_PACKET_PROGRESS = false;
-    OUTPUT_FIGURES_SUPPRESSED = true; % Set to true when running in deployment from command line
+    OUTPUT_FIGURES_SUPPRESSED = false; % Set to true when running in deployment from command line
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Get the full path to the currently executing file and change the
     % pwd to the folder this file is contained in...
     [current_directory, ~, ~] = fileparts(mfilename('fullpath'));
     cd(current_directory);
+    pwd
     % Path to data used in this test
     path('../../csi-code/test-data/localization-tests--in-room', path);
+    path('../../csi-code/test-data/line-of-sight-localization-tests--in-room', path);
     % Paths for the csitool functions provided
     path('../../../linux-80211n-csitool-supplementary/matlab', path);
 	path('../../../linux-80211n-csitool-supplementary/matlab/sample_data', path);
+    
+    
+    
+    
+    %test_algorithm_1('los-test-heater.dat')
+    %return
+    
+    
+    
+    
     if DEBUG_BRIDGE_CODE_CALLING
         fprintf('The path: %s\n', path)
     end
@@ -51,15 +63,23 @@ function spotfi_test
         clc
         close_figures();
     end
-    % test_algorithm_1('csi-5ghz-10cm-desk-spacing-on-book-case.dat')
-    %'antenna-extender-test.dat'
+    %% First localization tests, without strict line of sight
+    %data_files = {
+    %    'csi-5ghz-10cm-desk-spacing-printer.dat', ...
+    %    'csi-5ghz-10cm-desk-spacing-on-book-shelf-2.dat', ...
+    %    'csi-5ghz-10cm-desk-spacing-clothes-hamper.dat', ...
+    %    'csi-5ghz-10cm-desk-spacing-on-bed.dat', ...
+    %    'csi-5ghz-10cm-desk-spacing-bed-side-power-block.dat', ...
+    %    'csi-5ghz-10cm-desk-spacing-bed-side-table.dat'
+    %};
     data_files = {
-        'csi-5ghz-10cm-desk-spacing-printer.dat', ...
-        'csi-5ghz-10cm-desk-spacing-on-book-shelf-2.dat', ...
-        'csi-5ghz-10cm-desk-spacing-clothes-hamper.dat', ...
-        'csi-5ghz-10cm-desk-spacing-on-bed.dat', ...
-        'csi-5ghz-10cm-desk-spacing-bed-side-power-block.dat', ...
-        'csi-5ghz-10cm-desk-spacing-bed-side-table.dat'
+        'los-test-heater.dat' ...
+        'los-test-desk-left.dat' ...
+        'los-test-desk-right.dat' ...
+        'los-test-printer.dat' ...
+        'los-test-nearby-long-bookshelf.dat' ...
+        'los-test-tall-bookshelf.dat' ...
+        'los-test-jennys-table.dat' ...
     };
     run(data_files)
     if DEBUG_BRIDGE_CODE_CALLING
@@ -73,7 +93,6 @@ function run(data_files)
     %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%
     % Debug Controls
     global NUMBER_OF_PACKETS_TO_CONSIDER
-    global DEBUG_GMM
     global DEBUG_CLUSTER
     
     % Output controls
@@ -85,8 +104,13 @@ function run(data_files)
 
     % Set physical layer parameters (frequency, subfrequency spacing, and antenna spacing
     antenna_distance = 0.1;
-    frequency = 5 * 10^9;
-    sub_freq_delta = 40 * 10^6;
+    %frequency = 5 * 10^9;
+    frequency = 5.785 * 10^9;
+    %sub_freq_delta = 40 * 10^6;
+    sub_freq_delta = (40 * 10^6) / 30;%114;
+    % TODO: Verify this test...
+    % Multiply by 4 because the CSI tool aggregates the subcarrier CSI into groups of 4 subcarriers
+    %sub_freq_delta = 4 * sub_freq_delta;
     
     % Loop over passed in data files
     for data_file_index = 1:length(data_files)
@@ -106,10 +130,14 @@ function run(data_files)
         if NUMBER_OF_PACKETS_TO_CONSIDER ~= -1
             num_packets = NUMBER_OF_PACKETS_TO_CONSIDER;
         end
+        if ~OUTPUT_SUPPRESSED
+            fprintf('Considering CSI for %d packets\n', num_packets)
+        end
         
         % Loop over packets, estimate AoA and ToF from the CSI data for each packet
         aoa_packet_data = cell(num_packets, 1);
         tof_packet_data = cell(num_packets, 1);
+        packet_one_phase_matrix = 0;
         for packet_index = 1:num_packets;
             if ~OUTPUT_SUPPRESSED && OUTPUT_PACKET_PROGRESS
                 fprintf('Packet %d of %d\n', packet_index, num_packets)
@@ -117,13 +145,18 @@ function run(data_files)
             % Get CSI for current packet
             csi_entry = csi_trace{packet_index};
             csi = get_scaled_csi(csi_entry);
-            %% TODO: Remove later, only transmit on 1 antenna
+            % Only consider measurements for transmitting on one antenna
             csi = csi(1, :, :);
             % Remove the single element dimension
             csi = squeeze(csi);
 
             % Sanitize ToFs with Algorithm 1
-            sanitized_csi = spotfi_algorithm_1(csi, sub_freq_delta);
+            if packet_index == 1
+                packet_one_phase_matrix = unwrap(angle(csi), pi, 2);
+                sanitized_csi = spotfi_algorithm_1(csi, sub_freq_delta);
+            else
+                sanitized_csi = spotfi_algorithm_1(csi, sub_freq_delta, packet_one_phase_matrix);
+            end
             % Acquire smoothed CSI matrix
             smoothed_sanitized_csi = smooth_csi(sanitized_csi);
             % Run SpotFi's AoA-ToF MUSIC algorithm on the smoothed and sanitized CSI matrix
@@ -187,7 +220,8 @@ function run(data_files)
         % Cluster AoA and ToF for each packet
         % Worked Pretty Well
         linkage_tree = linkage(full_measurement_matrix, 'ward');
-        cluster_indices_vector = cluster(linkage_tree, 'CutOff', 0.8, 'criterion', 'distance');
+        % TODO: validate, CutOff WAS 0.8...I'm playing with it...
+        cluster_indices_vector = cluster(linkage_tree, 'CutOff', 0.4, 'criterion', 'distance');
         cluster_count_vector = zeros(0, 1);
         num_clusters = 0;
         for ii = 1:length(cluster_indices_vector)
@@ -198,11 +232,13 @@ function run(data_files)
         end
         if ~OUTPUT_FIGURES_SUPPRESSED
             % Dendrogram
+            %{
             dendrogram_figure_name = sprintf('Dendrogram for file: %s', data_files{data_file_index});
             figure('Name', dendrogram_figure_name, 'NumberTitle', 'off')
-            dendrogram(linkage_tree)
+            dendrogram(linkage_tree, 'ColorThreshold', 'default')
             set(gca, 'YTick', linspace(0, 10, 100));
             title(dendrogram_figure_name)
+            %}
         end
         
         % Collect data and indices into cluster-specific cell arrays
@@ -217,22 +253,52 @@ function run(data_files)
             cluster_indices{cluster_indices_vector(ii, 1)}(cluster_index_tail_index, 1) = ii;
         end
         
+        %% TODO: Validate this method
+        %%{
+        % Delete outliers from each cluster
+        for ii = 1:length(clusters)
+            % Delete clusters that are < 5% of the size of the number of packets
+            if length(clusters{ii}) < 0.05 * num_packets
+                clusters{ii} = [];
+                cluster_indices{ii} = [];
+                continue;
+            end
+            
+            fprintf('Outliers from cluster %d\n', ii)
+            alpha = 0.05;
+            [~, outlier_indices, ~] = deleteoutliers(clusters{ii}(:, 1), alpha);
+            cluster_indices{ii}(outlier_indices(:), :) = [];
+            clusters{ii}(outlier_indices(:), :) = [];
+            
+            alpha = 0.05;
+            [~, outlier_indices, ~] = deleteoutliers(clusters{ii}(:, 2), alpha);
+            cluster_indices{ii}(outlier_indices(:), :) = [];
+            clusters{ii}(outlier_indices(:), :) = [];
+        end
+        %%}
+        
         cluster_plot_style = {'bo', 'go', 'ro', 'ko', ...
                         'bs', 'gs', 'rs', 'ks', ...
                         'b^', 'g^', 'r^', 'k^', ... 
                         'bp', 'gp', 'rp', 'kp', ... 
+                        'b*', 'g*', 'r*', 'k*', ... 
         };
+        
+        %% TODO: Tune parameters
+        % Good base: 5, 10000, 75000, 0 (in order)
+        % Likelihood parameters
+        weight_num_cluster_points = 5;
+        weight_aoa_variance = 100000; % prev = 10000
+        weight_tof_variance = 100000;
+        weight_tof_mean = 50; % prev = 50, prev = 10
+        
         % Compute likelihoods
-        weight_num_cluster_points = 1;
-        weight_aoa_variance = 10000;
-        weight_tof_variance = 1000;
-        weight_tof_mean = 100;
         likelihood = zeros(length(clusters), 1);
         cluster_aoa = zeros(length(clusters), 1);
         max_likelihood_index = 1;
         for ii = 1:length(clusters)
             % Ignore clusters of size 1
-            if size(clusters{ii}, 1) == 1
+            if size(clusters{ii}, 1) == 0
                 continue
             end
             % Initialize variables
@@ -279,8 +345,8 @@ function run(data_files)
                 fprintf('ToF Mean: %.9f, Weighted ToF Mean: %.9f\n', ...
                         tof_mean, (weight_tof_mean * tof_mean))
                 fprintf('Exponential Body: %.9f\n', exp_body)
-                fprintf('Likelihood for cluster %d is %f, has the formatting %s, and AoA %f\n', ...
-                        ii, likelihood(ii, 1), cluster_plot_style{ii}, cluster_aoa(ii, 1))
+                fprintf('Cluster %d has formatting: %s, AoA: %f, and likelihood: %f\n', ...
+                        ii, cluster_plot_style{ii}, cluster_aoa(ii, 1), likelihood(ii, 1))
             end
             % Check for maximum likelihood
             if likelihood(ii, 1) > likelihood(max_likelihood_index, 1)
@@ -298,11 +364,30 @@ function run(data_files)
             hold on
             % Plot the data from each cluster and draw a circle around each cluster 
             for ii = 1:length(cluster_indices)
+                % Some clusters may all be considered outliers...we'll see how this affects the 
+                % results, but it shouldn't result in a crash!!
+                if isempty(cluster_indices{ii})
+                    continue
+                end
                 % If there's an index out of bound error, 'cluster_plot_style' is to blame
                 plot(full_measurement_matrix(cluster_indices{ii, 1}, 1) * aoa_max, ...
                         full_measurement_matrix(cluster_indices{ii}, 2), ...
                         cluster_plot_style{ii}, ...
                         'MarkerSize', 8, 'LineWidth', 2.5)
+                
+                % Compute Means
+                num_cluster_points = size(cluster_indices{ii}, 1);
+                aoa_mean = 0;
+                tof_mean = 0;
+                for jj = 1:num_cluster_points
+                    % Denormalize AoA for presentation
+                    aoa_mean = aoa_mean + (aoa_max * clusters{ii}(jj, 1));
+                    tof_mean = tof_mean + clusters{ii}(jj, 2);
+                end
+                aoa_mean = aoa_mean / num_cluster_points;
+                tof_mean = tof_mean / num_cluster_points;
+                cluster_text = sprintf('Size: %d', num_cluster_points);
+                text(aoa_mean + 5, tof_mean, cluster_text)
             end
             [ellipse_x, ellipse_y] = compute_ellipse(...
                     clusters{max_likelihood_index}(:, 1) * aoa_max, ...
@@ -334,7 +419,7 @@ end
 function [ellipse_x, ellipse_y] = compute_ellipse(x, y)
     % Buffer room for each dimension
     marker_adjustment_quantity_x = 4;
-    marker_adjustment_quantity_y = 0.2;
+    marker_adjustment_quantity_y = 0.05;
     % Find centroid
     centroid_x = sum(x) / length(x);
     centroid_y = sum(y) / length(y);
@@ -545,7 +630,6 @@ function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
         end
     end
     
-    %% TODO: compute the max number of peaks to make the matrix below have FAR fewer than length(tau) columns
     % Find ToF peaks
     time_peak_indices = zeros(length(aoa_peak_indices), length(tau));
     % AoA loop (only looping over peaks in AoA found above)
@@ -553,8 +637,9 @@ function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
         aoa_index = aoa_peak_indices(ii);
         % For each AoA, find ToF peaks
         [peak_values, tof_peak_indices] = findpeaks(Pmusic(aoa_index, :));
-        %% TODO: EXPERIMENT, REMOVE LATER
-        tof_peak_indices = tof_peak_indices(1);
+        if isempty(tof_peak_indices)
+            tof_peak_indices = 1;
+        end
         if OUTPUT_TOFS && ~OUTPUT_SUPPRESSED
             fprintf('Time of Flight Peaks along Angle of Arrival %f\n', theta(aoa_index))
             peak_values(1)
@@ -685,7 +770,7 @@ end
 % delta_f    -- the difference in frequency between subcarriers
 % Return:
 % csi_matrix -- the same CSI matrix with modified phase
-function csi_matrix = spotfi_algorithm_1(csi_matrix, delta_f)
+function [csi_matrix, phase_matrix] = spotfi_algorithm_1(csi_matrix, delta_f, packet_one_phase_matrix)
     %% Time of Flight (ToF) Sanitization Algorithm
     %  Obtain a linear fit for the phase
     %  Using the expression:
@@ -703,24 +788,36 @@ function csi_matrix = spotfi_algorithm_1(csi_matrix, delta_f)
     %
     % Unwrap phase from CSI matrix
     R = abs(csi_matrix);
-    phase_matrix = unwrap(angle(csi_matrix));
+    phase_matrix = unwrap(angle(csi_matrix), pi, 2);
     
-    % Define objective function to find linear fit
-    function objective = objective_fun(args)
-        objective = 0;
-        for local_m = 1:size(phase_matrix, 1)
-            for local_n = 1:size(phase_matrix, 2)
-                objective = objective + (phase_matrix(local_m, local_n)...
-                    + 2 * pi * delta_f * (local_n - 1) * args(1) + args(2))^2;
-            end
+    % Parse input args
+    if nargin < 3
+        packet_one_phase_matrix = phase_matrix;
+    end
+
+    % STO is the same across subcarriers....
+    % Data points are:
+    % subcarrier_index -> unwrapped phase on antenna_1
+    % subcarrier_index -> unwrapped phase on antenna_2
+    % subcarrier_index -> unwrapped phase on antenna_3
+    fit_X(1:30, 1) = 1:1:30;
+    fit_X(31:60, 1) = 1:1:30;
+    fit_X(61:90, 1) = 1:1:30;
+    fit_Y = zeros(90, 1);
+    for i = 1:size(phase_matrix, 1)
+        for j = 1:size(phase_matrix, 2)
+            fit_Y((i - 1) * 30 + j) = packet_one_phase_matrix(i, j);
         end
     end
-    args = fminsearch(@objective_fun, [0, 0]);
-    tau = args(1);
+
+    % Linear fit is common across all antennas
+    result = polyfit(fit_X, fit_Y, 1);
+    tau = result(1);
+        
     for m = 1:size(phase_matrix, 1)
         for n = 1:size(phase_matrix, 2)
             % Subtract the phase added from sampling time offset (STO)
-            phase_matrix(m, n) = phase_matrix(m, n) + 2 * pi * delta_f * (n - 1) * tau;
+            phase_matrix(m, n) = packet_one_phase_matrix(m, n) + (2 * pi * delta_f * (n - 1) * tau);
         end
     end
     
@@ -728,21 +825,24 @@ function csi_matrix = spotfi_algorithm_1(csi_matrix, delta_f)
     csi_matrix = R .* exp(1i * phase_matrix);
 end
 
-function close_figures
-    % Close all figures.
-    window_handles = findall(0);
-    delete(window_handles(2:end));
+function [csi_matrix] = pin_loc_sanitization_algorithm(csi_matrix)
+    % Unwrap phase from CSI matrix
+    R = abs(csi_matrix);
+    phase_matrix = unwrap(angle(csi_matrix), pi, 2);
+    
+    for i = 1:size(phase_matrix, 1)
+        a = (phase_matrix(i, size(phase_matrix, 2)) - phase_matrix(i, 1)) / (2 * pi * 30);
+        b = 1 / size(phase_matrix, 2) * sum(phase_matrix(i, :));
+        for j = 1:size(phase_matrix, 2)
+            phase_matrix(i, j) = phase_matrix(i, j) - a * j - b;
+        end
+    end
+    
+    % Reconstruct the CSI matrix with the adjusted phase
+    csi_matrix = R .* exp(1i * phase_matrix);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Takes a number and quantity of decimal places and rounds the number to that many decimal places.
-% number         -- the number to be rounded
-% decimal_places -- the number of decimal places to preserve
-% Return:
-% rounded_number -- the number rounded to the given decimal places
-function rounded_number = round_to_decimal_place(number, decimal_places)
-    rounded_number = floor(number) + floor((number - floor(number)) * 10^decimal_places) * 10^-decimal_places;
-end
 
 %% Tests Algorithm 1 using the passed in data_file
 % data_file -- the data file to use for testing Algorithm 1
@@ -755,15 +855,69 @@ function test_algorithm_1(data_file)
     fprintf('Have CSI for %d packets\n', length(csi_trace))
 
     % Get CSI for the first packet
-    csi_entry = csi_trace{1};
-    csi = get_scaled_csi(csi_entry);
-    %% TODO: Remove later, only transmit on 1 antenna
-    csi = csi(1, :, :);
+    csi_entry_1 = csi_trace{1};
+    csi_entry_2 = csi_trace{2};
+    csi_1 = get_scaled_csi(csi_entry_1);
+    csi_2 = get_scaled_csi(csi_entry_2);
+    % Only consider CSI from transmission on 1 antenna
+    csi_1 = csi_1(1, :, :);
+    csi_2 = csi_2(1, :, :);
     % Remove the single element dimension
-    csi = squeeze(csi);
-    
+    csi_1 = squeeze(csi_1);
+    csi_2 = squeeze(csi_2);
     % Sanitize ToFs with Algorithm 1
-    delta_f = 40 * 10^6;
-    spotfi_algorithm_1(csi, delta_f);
+    % delta_f for HT20
+    %delta_f = 20 * 10^6 / 30;
+    % delta_f for HT40
+    delta_f = 40 * 10^6 / 30;
+    fprintf('Running SpotFi Algorithm 1\n')
+    [modified_csi_1, packet_one_phase_matrix] = spotfi_algorithm_1(csi_1, delta_f);
+    [modified_csi_2, packet_two_phase_matrix] = spotfi_algorithm_1(csi_2, delta_f, unwrap(angle(csi_1), pi, 2));
+    %modified_csi_1 = pin_loc_sanitization_algorithm(csi_1);
+    %modified_csi_2 = pin_loc_sanitization_algorithm(csi_1);
+    
+    % Unmodified figures
+    %%{
+    figure('Name', 'Unmodified CSI Phase', 'NumberTitle', 'off')
+    hold on
+    csi_1_phase = unwrap(angle(csi_1), pi, 2);
+    plot(1:1:30, csi_1_phase(1, :), '-k')
+    plot(1:1:30, csi_1_phase(2, :), '-r')
+    plot(1:1:30, csi_1_phase(3, :), '-g')
+    
+    csi_2_phase = unwrap(angle(csi_2), pi, 2);
+    plot(1:1:30, csi_2_phase(1, :), '--k')
+    plot(1:1:30, csi_2_phase(2, :), '--r')
+    plot(1:1:30, csi_2_phase(3, :), '--g')
+    xlabel('Subcarrier Index')
+    ylabel('Unwrapped CSI Phase')
+    title('Unmodified CSI Phase')
+    legend('Packet 1, Antenna 1', 'Packet 1, Antenna 2', 'Packet 1, Antenna 3', ...
+            'Packet 2, Antenna 1', 'Packet 2, Antenna 2', 'Packet 2, Antenna 3')
+    grid on
+    hold off
+    %%}
+    
+    % Modified CSI Phase
+    figure('Name', 'Modified CSI Phase', 'NumberTitle', 'off')
+    hold on
+    
+    modified_csi_1_phase = unwrap(angle(modified_csi_1), pi, 2);
+    plot(1:1:30, modified_csi_1_phase(1, :), '-k')
+    plot(1:1:30, modified_csi_1_phase(2, :), '-r')
+    plot(1:1:30, modified_csi_1_phase(3, :), '-g')
+    
+    modified_csi_2_phase = unwrap(angle(modified_csi_2), pi, 2);
+    plot(1:1:30, modified_csi_2_phase(1, :), '^--k', 'LineWidth', 3)
+    plot(1:1:30, modified_csi_2_phase(2, :), '^--r', 'LineWidth', 3)
+    plot(1:1:30, modified_csi_2_phase(3, :), '^--g', 'LineWidth', 3)
+    
+    xlabel('Subcarrier Index')
+    ylabel('Modified Unwrapped CSI Phase')
+    title('Modified CSI Phase')
+    legend('Antenna 1, Packet 1', 'Antenna 2, Packet 1', 'Antenna 3, Packet 1', ...
+            'Antenna 1, Packet 2', 'Antenna 2, Packet 2', 'Antenna 3, Packet 2')
+    grid on
+    hold off
     return
 end
