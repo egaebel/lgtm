@@ -68,14 +68,21 @@
 using namespace cv;
 using namespace std;
 
-// Function Headers---------------------------------------------------------------------------------
+//~Constants----------------------------------------------------------------------------------------
+static const int ANGLE_TOLERANCE = 2;
+static const string viewingWindow = "Viewing Window";
+static const string confirmationWindow = "Is this who you want to communicate with?";
+
+//~Function Headers---------------------------------------------------------------------------------
 static void readCsv(const string& fileName, vector<Mat>& images, vector<int>& labels);
+static bool withinBounds(double &leftSideAngle, double &rightSideAngle, int &angle);
 static void drawTargettingLines(int &frameWidth, int &frameHeight, Mat &frame);
 static void findAngleBounds(int &frameWidth, int &frameHeight, Rect &faceRectangle, 
-        double &leftSideAngle, double &rightSideAngle, double &topAngle, double &bottomAngle);
+        double &leftSideAngle, double &rightSideAngle);
 
 /**
- *
+ * Runs facial recognition on a specific face (specified in the arguments) 
+ * and only acknowledges that face if it is at a particular angle(s) (specified in arguments).
  */
 int main(int argc, const char *argv[]) {
     // Validate input.
@@ -98,16 +105,11 @@ int main(int argc, const char *argv[]) {
     string csvFileName = string(argv[2]);
     int deviceId = atoi(argv[3]);
     int faceId = atoi(argv[4]);
-
-    // TODO: make sure I'm removing this....
-    /*
-    string trainedClassifierPath;
-    if (argc == 5) {
-        cout << "Reading trainedClassifierPath from input...." << endl;
-        trainedClassifierPath = string(argv[4]);
-        cout << "Read trainedClassifierPath as: " << trainedClassifierPath << endl;
+    vector<int> anglesOfArrival;
+    for (int i = 0; i < (argc - 5); i++) {
+        // Offset index to account for arguments already parsed.
+        anglesOfArrival.push_back(atoi(argv[i + 5]));
     }
-    */
 
     vector<Mat> images;
     vector<int> labels;
@@ -188,6 +190,7 @@ int main(int argc, const char *argv[]) {
         // Holds the current frame from the Video device:
         Mat frame;
         for(;;) {
+            bool lgtmConfirm = false;
             cap >> frame;
             // Clone the current frame:
             Mat original = frame.clone();
@@ -209,56 +212,64 @@ int main(int argc, const char *argv[]) {
                 double confidence = 0.0;
                 model->predict(resizedFace, prediction, confidence);
 
-                // If the prediction is the face we are looking for.
-                if (prediction == faceId) {
-                    rectangle(original, curFace, CV_RGB(0, 255,0), 1);
-                    // Create the text we will annotate the box with:
-                    string boxPredictionText = format("Prediction = %d", prediction);
-                    string boxConfidenceText = format("With confidence: %g", confidence);
-                    // Calculate the position for annotated text (make sure we don't
-                    // put illegal values in there):
-                    // TODO: See below, 10 was the original
-                    int predictionPosX = std::max(curFace.tl().x - 25, 0);
-                    int predictionPosY = std::max(curFace.tl().y - 25, 0);
-                    int confidencePosX = std::max(curFace.tl().x - 10, 0);
-                    int confidencePosY = std::max(curFace.tl().y - 10, 0);
-                    // And now put it into the image:
-                    putText(original, boxPredictionText, Point(predictionPosX, predictionPosY), 
-                            FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
-                    putText(original, boxConfidenceText, Point(confidencePosX, confidencePosY), 
-                            FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
+                // Loop over the passed angles of arrival to check if the face is at that angle
+                for (int j = 0; j < anglesOfArrival.size(); j++) {
+                    anglesOfArrival[j];
                     double leftSideAngle = -1;
                     double rightSideAngle = -1;
-                    double topAngle = -1;
-                    double bottomAngle = -1;
-                    findAngleBounds(capFrameWidth, capFrameHeight, curFace, leftSideAngle, rightSideAngle, 
-                            topAngle, bottomAngle);
-                    int thetaPosX = std::max(curFace.tl().x + 10, 0);
-                    int thetaPosY = std::max(curFace.br().y + 10, 0);
-                    int phiPosX = std::max(curFace.tl().x + 25, 0);
-                    int phiPosY = std::max(curFace.br().y + 25, 0);
-                    string boxThetaText = format("Theta 1: %g, Theta2: %g", 
+                    findAngleBounds(capFrameWidth, capFrameHeight, curFace, 
                             leftSideAngle, rightSideAngle);
-                    string boxPhiText = format("Phi1: %g, Phi2: %g", topAngle, bottomAngle);
-                    putText(original, boxThetaText, Point(thetaPosX, thetaPosY), 
-                            FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
-                    putText(original, boxPhiText, Point(phiPosX, phiPosY), 
-                            FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
+                    leftSideAngle -= ANGLE_TOLERANCE;
+                    rightSideAngle += ANGLE_TOLERANCE;
+                    // If the prediction is the face we are looking for.
+                    if (prediction == faceId 
+                            && withinBounds(leftSideAngle, rightSideAngle, anglesOfArrival[j])) {
+                        rectangle(original, curFace, CV_RGB(0, 255,0), 1);
+                        // Create the text we will annotate the box with:
+                        string boxPredictionText = format("Prediction = %d", prediction);
+                        string boxConfidenceText = format("With confidence: %g", confidence);
+                        // Calculate the position for annotated text (make sure we don't
+                        // put illegal values in there):
+                        // TODO: See below, 10 was the original
+                        int predictionPosX = std::max(curFace.tl().x - 25, 0);
+                        int predictionPosY = std::max(curFace.tl().y - 25, 0);
+                        int confidencePosX = std::max(curFace.tl().x - 25, 0);
+                        int confidencePosY = std::max(curFace.tl().y - 10, 0);
+                        // And now put it into the image:
+                        putText(original, boxPredictionText, Point(predictionPosX, predictionPosY), 
+                                FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
+                        putText(original, boxConfidenceText, Point(confidencePosX, confidencePosY), 
+                                FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
+                        // Present confirmation text
+                        int confirmPosX = std::max(curFace.tl().x - 65, 0);
+                        int confirmPosY = std::max(curFace.br().y + 10, 0);
+                        string boxConfirmText = "Press space to confirm this face";
+                        putText(original, boxConfirmText, Point(confirmPosX, confirmPosY), 
+                                FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
+                        lgtmConfirm = true;
+                    }
                 }
             }
             // Add "targeting" lines
             drawTargettingLines(capFrameWidth, capFrameHeight, original);
 
             // Show the result:
-            imshow("face_recognizer", original);
-            // And display it:
+            imshow(viewingWindow, original);
             int key = waitKey(20);
-            // Exit this loop on escape OR space:
-            if(key == 27 || key == 32) {
+            // Confirm the recognized face with space
+            if (key == 32 && lgtmConfirm) {
+                cout << "LOOKS GOOD TO ME!"
+                        << " PROCEEDING TO ESTABLISH ENCRYPTED COMMUNICATION!" << endl;
+                exit(1);
+            // Reject the recognized face with escape
+            } else if (key == 27) {
+                cout << "FACE REJECTED! IT DID NOT LOOK GOOD TO ME!" << endl;
+                destroyWindow(confirmationWindow);
                 break;
             } else if (key != -1) {
-                cout << "Keydown was: " << key 
-                        << " Need to press esc or space to exit loop!" << endl;
+                cout << "Keydown was: " << key << endl
+                        << "Press esc to reject the face"
+                        << " or space to accept the face (if LGTM has passed it)!" << endl;
             }
         }
     } catch(Exception e) {
@@ -268,43 +279,80 @@ int main(int argc, const char *argv[]) {
     return 0;
 }
 
+/**
+ * Checks if angle is between leftSideAngle and rightSideAngle. 
+ * If it is, true is returned.
+ */
+static bool withinBounds(double &leftSideAngle, double &rightSideAngle, int &angle) {
+    return leftSideAngle <= angle && angle <= rightSideAngle;
+}
+
+/**
+ * Wraps the passed angle to the range [-pi / 2, pi / 2]
+ */
+static double wrapAngle(double angle) {
+    return angle - M_PI * floor(angle / M_PI) - (M_PI / 2);
+}
+
+/**
+ * Calculates the horizontal angles and vertical angles of the passed in rectangle.
+ * Annotates the rectangle on the frame with text describing the output.
+ */
 static void findAngleBounds(int &frameWidth, int &frameHeight, Rect &faceRectangle, 
-        double &leftSideAngle, double &rightSideAngle, double &topAngle, double &bottomAngle) {
+        double &leftSideAngle, double &rightSideAngle) {
     // Get points at the two bottom corners of the rectangle
     int x1 = faceRectangle.tl().x - frameWidth / 2;
     int x2 = faceRectangle.br().x - frameWidth / 2;
-    int y1 = faceRectangle.tl().y - frameHeight / 2;
-    int y2 = faceRectangle.br().y - frameHeight / 2;
 
     // Compute theta1 and theta2 (leftSideAngle and rightSideAngle)
-    int z = 500;
-    // Convert to spherical
-    double r1 = sqrt(x1 * x1 + y1 * y1 + z * z);
-    double r2 = sqrt(x2 * x2 + y1 * y1 + z * z);
-    leftSideAngle = acos(z / r1) * (180 / M_PI);
-    rightSideAngle = acos(z / r2) * (180 / M_PI);
-    // Convert to -90 - +90 range
-    leftSideAngle -= 90;
-    rightSideAngle -= 90;
-
-    // Compute phi1 and phi2 (topAngle and bottomAngle)
-    topAngle = atan(y1 / x1) * (180 / M_PI);
-    bottomAngle = atan(y2 / x1) * (180 / M_PI);
+    // Convert to polar coordinates, with known r and unknown angle
+    double r = 639;
+    leftSideAngle = acos(x1 / r);
+    rightSideAngle = acos(x2 / r);
+    // Wrap angles to [-90, 90]
+    leftSideAngle = wrapAngle(leftSideAngle) * (180 / M_PI);
+    rightSideAngle = wrapAngle(rightSideAngle) * (180 / M_PI);
+    // Invert the circle revolution direction
+    leftSideAngle *= -1;
+    rightSideAngle *= -1;
 }
 
+/**
+ * Draw a straight horizontal line across the center of the frame and annotate it with 
+ * smaller vertical lines which have angle annotations from -30 - 30
+ */ 
 static void drawTargettingLines(int &frameWidth, int &frameHeight, Mat &frame) {
+    // Straight horizontal line across the center of the frame
     line(frame, Point(0, frameHeight / 2), Point(frameWidth, frameHeight / 2), CV_RGB(0, 255,0), 1);
     int topY = frameHeight / 2 - 50;
     int bottomY = frameHeight / 2 + 50;
-    double x;
-    string angleString;
-    for (int i = 0; i <= 60; i+=10) {
-        x = 739 * sin(i * (M_PI) / 180);
-        cout << x << endl;
-        line(frame, Point(x, topY), Point(x, bottomY), CV_RGB(0, 255,0), 1);
-        angleString = format("%d", (i));
-        putText(frame, angleString, Point(x - 5, bottomY + 15), FONT_HERSHEY_PLAIN, 1.0, 
-                CV_RGB(0, 255, 0), 2.0);    
+    double x1, x2;
+    double r = 639;
+    double theta;
+    string angleString1;
+    string angleString2;
+    for (int i = 0; i <= 30; i+=10) {
+        x1 = r * sin(i * (M_PI / 180));
+        x1 += frameWidth / 2;        
+        x2 = r * sin(-i * (M_PI / 180));
+        x2 += frameWidth / 2;
+        line(frame, Point(x1, topY), Point(x1, bottomY), CV_RGB(0, 255,0), 1);
+        line(frame, Point(x2, topY), Point(x2, bottomY), CV_RGB(0, 255,0), 1);
+        angleString1 = format("%d", i);
+        angleString2 = format("%d", -i);
+        if (i != 30) {
+            putText(frame, angleString1, Point(x1 - 5, bottomY + 15), FONT_HERSHEY_PLAIN, 1.0, 
+                    CV_RGB(0, 255, 0), 2.0);    
+            if (i != 0) {
+                putText(frame, angleString2, Point(x2 - 20, bottomY + 15), FONT_HERSHEY_PLAIN, 1.0, 
+                        CV_RGB(0, 255, 0), 2.0);    
+            }
+        } else {
+            putText(frame, angleString1, Point(x1 - 20, bottomY + 15), FONT_HERSHEY_PLAIN, 1.0, 
+                    CV_RGB(0, 255, 0), 2.0);    
+            putText(frame, angleString2, Point(x2 - 5, bottomY + 15), FONT_HERSHEY_PLAIN, 1.0, 
+                    CV_RGB(0, 255, 0), 2.0);    
+        }
     }
 }
 
