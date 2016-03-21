@@ -35,6 +35,7 @@ PACKET_DELAY=0
 
 # LGTM Magic String Constants-----------------------------------------------------------------------
 LGTM_BEGIN_TOKEN="lgtm-begin-protocol"
+FACIAL_RECOGNITION_HEADER="facial-recognition-params"
 FACIAL_RECOGNITION_FOOTER="facial-recognition-params-finished"
 
 # Functions-----------------------------------------------------------------------------------------
@@ -183,14 +184,14 @@ if [[ $input == 'l' ]]; then
     # Send facial recognition params
     echo "Sending 'facial recognition params'!"
     rm .lgtm-facial-recognition-params
-    echo facial-recognition-params > .lgtm-facial-recognition-params
-    #cat facial-recognition-model >> .lgtm-facial-recognition-params
-    cat facial_recognition_file >> .lgtm-facial-recognition-params
+    echo $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
+    cat $facial_recognition_file >> .lgtm-facial-recognition-params
     echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
     echo "Checking for face/signal overlap................................."
     # Strip off $FACIAL_RECOGNITION footer
-    cat $(<.lgtm-facial-recognition-params rev | cut -c ${#$FACIAL_RECOGNITION_FOOTER}- | rev) > .lgtm-facial-recognition-params
+    cat .lgtm-facial-recognition-params | cut -c ${#$FACIAL_RECOGNITION_HEADER}- > .lgtm-facial-recognition-params
+    cat .lgtm-facial-recognition-params | rev | cut -c ${#$FACIAL_RECOGNITION_FOOTER}- | rev > .lgtm-facial-recognition-params
     tar xf .lgtm-facial-recognition-params
     # Create CSV file for just-received photos
     ./../facial-recognition/openCV/lgtm-recognition/create_yalefaces_csv.py .lgtm-facial-recognition-params > .lgtm-facial-recognition-training-photo-paths.cs | head -n1 | grep ;.*\nv
@@ -215,8 +216,8 @@ if [ $begin_lgtm -gt 0 ]; then
     # Send acknowledgement + facial recognition params, TODO: later this will include a public key
     echo "Sending 'facial recognition params'!"
     rm .lgtm-facial-recognition-params
-    echo facial-recognition-params > .lgtm-facial-recognition-params
-    cat facial_recognition_file >> .lgtm-facial-recognition-params
+    echo $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
+    cat $facial_recognition_file >> .lgtm-facial-recognition-params
     echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1 $PACKET_DELAY
     # Setup Monitor mode
@@ -238,8 +239,9 @@ if [ $begin_lgtm -gt 0 ]; then
     sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
     echo "Successfully localized signal source!"
     echo "Checking for face/signal overlap................................."
-    # Strip off $FACIAL_RECOGNITION footer
-    cat $(<.lgtm-facial-recognition-params rev | cut -c ${#$FACIAL_RECOGNITION_FOOTER}- | rev) > .lgtm-facial-recognition-params
+    # Strip off $FACIAL_RECOGNITION_FOOTER and $FACIAL_RECOGNITION_HEADER
+    cat .lgtm-facial-recognition-params | cut -c ${#$FACIAL_RECOGNITION_HEADER}- > .lgtm-facial-recognition-params
+    cat .lgtm-facial-recognition-params | rev | cut -c ${#$FACIAL_RECOGNITION_FOOTER}- | rev > .lgtm-facial-recognition-params
     tar xf .lgtm-facial-recognition-params
     # Create CSV file for just-received photos
     ./../facial-recognition/openCV/lgtm-recognition/create_yalefaces_csv.py .lgtm-facial-recognition-params > .lgtm-facial-recognition-training-photo-paths.cs | head -n1 | grep ;.*\nv
