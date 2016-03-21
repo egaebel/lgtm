@@ -98,14 +98,6 @@ monitor_mode () {
     echo "Monitor mode active!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 }
 
-face_signal_overlap() {
-    top_aoas=$1
-    received_facial_recognition_file=$2
-    # Run C++ facial recognition and output one of the angles given to indicate the face is there
-    # Output -1 if the face appears nowhere
-    # Make the program look for like 1-3 seconds or so
-}
-
 pkill log_to_file
 monitor_mode
 
@@ -167,9 +159,9 @@ if [[ $input == 'l' ]]; then
     echo facial-recognition-params-finished >> .lgtm-facial-recognition-params
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
     echo "Checking for face/signal overlap................................."
-    # TODO: ADD OUTPUT TO FILE TO SPOTFI FILE SO THAT I CAN RETRIEVE THE TOP-3 AoAS FROM FILE
     top_aoas=$(cat .lgtm-top-aoas)
-    face_signal_overlap $top_aoas $received_facial_recognition_file
+    lgtm_success=./../facial-recognition/openCV/lgtm-recognition/run_lgtm_facial_recognition.sh top_aoas
+    echo lgtm_success
     # Done!
     echo "LGTM COMPLETE!"
     exit
@@ -209,6 +201,9 @@ if [ $begin_lgtm -gt 0 ]; then
     sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
     echo "Successfully localized signal source!"
     echo "Checking for face/signal overlap................................."
+    top_aoas=$(cat .lgtm-top-aoas)
+    lgtm_success=./../facial-recognition/openCV/lgtm-recognition/run_lgtm_facial_recognition.sh top_aoas
+    echo lgtm_success
     # Done!
     echo "LGTM COMPLETE!"
     exit
