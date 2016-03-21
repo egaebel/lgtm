@@ -44,8 +44,8 @@ function spotfi
     % data_files = {'test-data/line-of-sight-localization-tests--in-room/los-test-heater.dat'};
     % top_aoas = run(data_files);
     % top_aoas
-    %data_file = {'../injection-monitor/.lgtm-monitor.dat'};
-    data_file = {'test-data/line-of-sight-localization-tests--in-room/los-test-heater.dat'};
+    data_file = {'../injection-monitor/.lgtm-monitor.dat'};
+    %data_file = {'test-data/line-of-sight-localization-tests--in-room/los-test-heater.dat'};
     top_aoas = run(data_file);
     output_file_name = '../injection-monitor/.lgtm-top-aoas';
     output_top_aoas(top_aoas, output_file_name);
