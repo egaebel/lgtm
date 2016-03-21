@@ -174,6 +174,7 @@ if [[ $input == 'l' ]]; then
     echo "Received 'facial recognition params'!"
     echo "Localizing signal source!"
     chmod 644 .lgtm-monitor.dat
+
     logged_on_user=$(who | head -n1 | awk '{print $1;}')
     sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
     echo "Successfully localized signal source!"
@@ -197,7 +198,7 @@ if [[ $input == 'l' ]]; then
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
     
     echo "Checking for face/signal overlap................................."
-    # Strip off $FACIAL_RECOGNITION footer
+    # Strip off $FACIAL_RECOGNITION_FOOTER and $FACIAL_RECOGNITION_HEADER and anything before and after
     cat .lgtm-received-facial-recognition-params | cut -c ${#$FACIAL_RECOGNITION_HEADER}- > .lgtm-received-facial-recognition-params
     cat .lgtm-received-facial-recognition-params | rev | cut -c ${#$FACIAL_RECOGNITION_FOOTER}- | rev > .lgtm-received-facial-recognition-params
     tar xf .lgtm-received-facial-recognition-params
@@ -244,6 +245,7 @@ if [ $begin_lgtm -gt 0 ]; then
     echo "Received 'facial recognition params'!"
     echo "Localizing signal source!"
     chmod 644 .lgtm-monitor.dat
+
     logged_on_user=$(who | head -n1 | awk '{print $1;}')
     sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
     echo "Successfully localized signal source!"
@@ -254,7 +256,7 @@ if [ $begin_lgtm -gt 0 ]; then
     echo "Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 
     echo "Checking for face/signal overlap................................."
-    # Strip off $FACIAL_RECOGNITION_FOOTER and $FACIAL_RECOGNITION_HEADER
+    # Strip off $FACIAL_RECOGNITION_FOOTER and $FACIAL_RECOGNITION_HEADER and anything before and after
     cat .lgtm-received-facial-recognition-params | cut -c ${#$FACIAL_RECOGNITION_HEADER}- > .lgtm-received-facial-recognition-params
     cat .lgtm-received-facial-recognition-params | rev | cut -c ${#$FACIAL_RECOGNITION_FOOTER}- | rev > .lgtm-received-facial-recognition-params
     tar xf .lgtm-received-facial-recognition-params
