@@ -194,7 +194,7 @@ if [[ $input == 'l' ]]; then
     cat .lgtm-facial-recognition-params | rev | cut -c ${#$FACIAL_RECOGNITION_FOOTER}- | rev > .lgtm-facial-recognition-params
     tar xf .lgtm-facial-recognition-params
     # Create CSV file for just-received photos
-    ./../facial-recognition/openCV/lgtm-recognition/create_yalefaces_csv.py .lgtm-facial-recognition-params > .lgtm-facial-recognition-training-photo-paths.cs | head -n1 | grep ;.*\nv
+    ./../facial-recognition/openCV/lgtm-recognition/create_yalefaces_csv.py .lgtm-facial-recognition-params > .lgtm-facial-recognition-training-photo-paths.csv
     # Grab the characters after the semi-colon to the end of the line on the first line
     face_id=$(cat .lgtm-facial-recognition-training-photo-paths.csv | head -n1 | grep -o ";.*$" | cut -c 2-)
     top_aoas=$(cat .lgtm-top-aoas)
@@ -244,7 +244,7 @@ if [ $begin_lgtm -gt 0 ]; then
     cat .lgtm-facial-recognition-params | rev | cut -c ${#$FACIAL_RECOGNITION_FOOTER}- | rev > .lgtm-facial-recognition-params
     tar xf .lgtm-facial-recognition-params
     # Create CSV file for just-received photos
-    ./../facial-recognition/openCV/lgtm-recognition/create_yalefaces_csv.py .lgtm-facial-recognition-params > .lgtm-facial-recognition-training-photo-paths.cs | head -n1 | grep ;.*\nv
+    ./../facial-recognition/openCV/lgtm-recognition/create_yalefaces_csv.py .lgtm-facial-recognition-params > .lgtm-facial-recognition-training-photo-paths.csv
     # Grab the characters after the semi-colon to the end of the line on the first line
     face_id=$(cat .lgtm-facial-recognition-training-photo-paths.csv | head -n1 | grep -o ";.*$" | cut -c 2-)
     top_aoas=$(cat .lgtm-top-aoas)
