@@ -2,36 +2,36 @@
 
 channel_number=$1
 channel_type=$2
-WLAN_INTERFACE=$3
+wlan_interface=$3
 SLEEP_TIME=2
 SWITCH_WAIT_TIME=5
 PACKET_DELAY=0
 
 injection_mode () {
-    echo "Switching $WLAN_INTERFACE to inject........................................"
-    ip link set $WLAN_INTERFACE down
+    echo "Switching $wlan_interface to inject........................................"
+    ip link set $wlan_interface down
     echo "Deleting mon0...................................................."
     iw dev mon0 del 2>/dev/null 1>/dev/null
     echo "Bringing up firmware............................................."
     modprobe -r iwlwifi mac80211 cfg80211
     modprobe iwlwifi debug=0x40000
-    echo "Running ip link show on $WLAN_INTERFACE, looping until success............."  
-    ip link show $WLAN_INTERFACE 2>/dev/null 1>/dev/null
+    echo "Running ip link show on $wlan_interface, looping until success............."  
+    ip link show $wlan_interface 2>/dev/null 1>/dev/null
     while [ $? -ne 0 ]; do
-        ip link show $WLAN_INTERFACE 2>/dev/null 1>/dev/null
+        ip link show $wlan_interface 2>/dev/null 1>/dev/null
     done
-    echo "Setting $WLAN_INTERFACE into monitor mode.................................."
-    iw dev $WLAN_INTERFACE set type monitor 2>/dev/null 1>/dev/null
+    echo "Setting $wlan_interface into monitor mode.................................."
+    iw dev $wlan_interface set type monitor 2>/dev/null 1>/dev/null
     mode_change=$?
     while [ $mode_change -ne 0 ]; do
-        ip link set $WLAN_INTERFACE down 2>/dev/null 1>/dev/null
-        iw dev $WLAN_INTERFACE set type monitor 2>/dev/null 1>/dev/null
+        ip link set $wlan_interface down 2>/dev/null 1>/dev/null
+        iw dev $wlan_interface set type monitor 2>/dev/null 1>/dev/null
         mode_change=$?
     done
-    echo "Bringing up $WLAN_INTERFACE ..............................................."
-    ip link set $WLAN_INTERFACE up
-    echo "Adding monitor to $WLAN_INTERFACE ........................................."
-    iw dev $WLAN_INTERFACE interface add mon0 type monitor
+    echo "Bringing up $wlan_interface ..............................................."
+    ip link set $wlan_interface up
+    echo "Adding monitor to $wlan_interface ........................................."
+    iw dev $wlan_interface interface add mon0 type monitor
     echo "Bringing up mon0................................................."
     ip link set mon0 up
     echo "Killing default wireless interface, wlan0........................"
@@ -40,9 +40,9 @@ injection_mode () {
     iw dev mon0 set channel $channel_number $channel_type
     channel_set=$?
     while [ $channel_set -ne 0 ]; do
-        ip link set $WLAN_INTERFACE down 2>/dev/null 1>/dev/null
-        iw dev $WLAN_INTERFACE set type monitor 2>/dev/null 1>/dev/null
-        ip link set $WLAN_INTERFACE up
+        ip link set $wlan_interface down 2>/dev/null 1>/dev/null
+        iw dev $wlan_interface set type monitor 2>/dev/null 1>/dev/null
+        ip link set $wlan_interface up
         iw dev mon0 set channel $channel_number $channel_type
         channel_set=$?
         if [ $channel_set -eq 0 ]; then
@@ -55,39 +55,39 @@ injection_mode () {
 }
 
 monitor_mode () {
-    echo "Switching $WLAN_INTERFACE to monitor......................................."
+    echo "Switching $wlan_interface to monitor......................................."
     echo "Bringing up firmware............................................."
     modprobe -r iwlwifi mac80211 cfg80211
     modprobe iwlwifi connector_log=0x5
-    echo "Bringing down $WLAN_INTERFACE ............................................."
-    ip link set $WLAN_INTERFACE down 2>/dev/null 1>/dev/null
-    echo "Setting $WLAN_INTERFACE into monitor mode.................................."
-    iw dev $WLAN_INTERFACE set type monitor 2>/dev/null 1>/dev/null
+    echo "Bringing down $wlan_interface ............................................."
+    ip link set $wlan_interface down 2>/dev/null 1>/dev/null
+    echo "Setting $wlan_interface into monitor mode.................................."
+    iw dev $wlan_interface set type monitor 2>/dev/null 1>/dev/null
     mode_change=$?
     while [ $mode_change -ne 0 ]; do
-        ip link set $WLAN_INTERFACE down 2>/dev/null 1>/dev/null
-        iw dev $WLAN_INTERFACE set type monitor 2>/dev/null 1>/dev/null
+        ip link set $wlan_interface down 2>/dev/null 1>/dev/null
+        iw dev $wlan_interface set type monitor 2>/dev/null 1>/dev/null
         mode_change=$?
     done
-    echo "Bringing up $WLAN_INTERFACE ..............................................."
-    ip link set $WLAN_INTERFACE up
-    wlan_interface_up=$(ip link show up | grep $WLAN_INTERFACE | wc -l)
+    echo "Bringing up $wlan_interface ..............................................."
+    ip link set $wlan_interface up
+    wlan_interface_up=$(ip link show up | grep $wlan_interface | wc -l)
     while [ $wlan_interface_up -ne 1 ]
     do
-        ip link set $WLAN_INTERFACE up
-        wlan_interface_up=$(ip link show up | grep $WLAN_INTERFACE | wc -l)
+        ip link set $wlan_interface up
+        wlan_interface_up=$(ip link show up | grep $wlan_interface | wc -l)
     done
     echo "Bringing down default wireless interface wlan0..................."
     ip link set wlan0 down
-    echo "Setting channel to monitor on $WLAN_INTERFACE to $channel_number $channel_type .................." 
-    iw dev $WLAN_INTERFACE set channel $channel_number $channel_type
+    echo "Setting channel to monitor on $wlan_interface to $channel_number $channel_type .................." 
+    iw dev $wlan_interface set channel $channel_number $channel_type
     channel_set=$?
     while [ $channel_set -ne 0 ]; do
-        ip link set $WLAN_INTERFACE down 2>/dev/null 1>/dev/null
-        iw dev $WLAN_INTERFACE set type monitor 2>/dev/null 1>/dev/null
-        ip link set $WLAN_INTERFACE up 2>/dev/null 1>/dev/null
+        ip link set $wlan_interface down 2>/dev/null 1>/dev/null
+        iw dev $wlan_interface set type monitor 2>/dev/null 1>/dev/null
+        ip link set $wlan_interface up 2>/dev/null 1>/dev/null
         ip link set wlan0 down 2>/dev/null 1>/dev/null
-        iw dev $WLAN_INTERFACE set channel $channel_number $channel_type 2>/dev/null 1>/dev/null
+        iw dev $wlan_interface set channel $channel_number $channel_type 2>/dev/null 1>/dev/null
         channel_set=$?
         if [ $channel_set -eq 0 ]; then
             echo "Fixed problem with set channel command..........................."
@@ -143,6 +143,7 @@ if [[ $input == 'l' ]]; then
     chmod 644 .lgtm-monitor.dat
     logged_on_user=$(who | head -n1 | awk '{print $1;}')
     sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
+    cat .lgtm-top-aoas
     echo "Successfully localized signal source!"
     # Sleep for 5 seconds to ensure other party has switched into monitor mode.... TODO: Shorten or remove this....
     sleep $SWITCH_WAIT_TIME
@@ -193,6 +194,7 @@ if [ $begin_lgtm -gt 0 ]; then
     chmod 644 .lgtm-monitor.dat
     logged_on_user=$(who | head -n1 | awk '{print $1;}')
     sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
+    cat .lgtm-top-aoas
     echo "Successfully localized signal source!"
     # Done!
     echo "LGTM COMPLETE!"
