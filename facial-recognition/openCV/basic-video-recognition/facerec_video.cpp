@@ -1,4 +1,32 @@
-// /home/egaebel/Programs/openCV/opencv-3.0.0/data/haarcascades/haarcascade_frontalface_default.xml
+/**
+ * The MIT License (MIT)
+ * Copyright (c) 2016 Ethan Gaebel <egaebel@vt.edu>
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a 
+ * copy of this software and associated documentation files (the "Software"), 
+ * to deal in the Software without restriction, including without limitation 
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+ * and/or sell copies of the Software, and to permit persons to whom the 
+ * Software is furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included 
+ * in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+ * DEALINGS IN THE SOFTWARE.
+ */
+
+/**
+ * The license below covers the code in int main as well as the readCsv function.
+ *
+ * The prior MIT license covers any modifications to that code chunk and all of
+ * the code besides the chunks indicated above.
+ */ 
 
 /*
  * Copyright (c) 2011. Philipp Wagner <bytefish[at]gmx[dot]de>.
@@ -34,13 +62,20 @@
 #include <chrono>
 #include <ctime>
 
+#include <cmath>
+
 using namespace cv;
 using namespace std;
+
+// Function Headers---------------------------------------------------------------------------------
+static void drawTargettingLines(int &frameWidth, int &frameHeight, Mat &frame);
+static void findAngleBounds(int &frameWidth, int &frameHeight, Rect &faceRectangle, 
+        double &leftSideAngle, double &rightSideAngle, double &topAngle, double &bottomAngle);
 
 /**
  * Read images and labels from the csv file specified by fileName.
  */
-static void read_csv(const string& fileName, vector<Mat>& images, vector<int>& labels, 
+static void readCsv(const string& fileName, vector<Mat>& images, vector<int>& labels, 
         char separator=';') {
     std::ifstream file(fileName.c_str(), ifstream::in);
     if (!file) {
@@ -99,7 +134,7 @@ int main(int argc, const char *argv[]) {
         // but you'll get an error message):
         try {
             // Loop over all files in directory
-            read_csv(csvFileName, images, labels);
+            readCsv(csvFileName, images, labels);
         } catch (cv::Exception& e) {
             cerr << "Error opening file \"" << csvFileName << "\". Reason: " << e.msg << endl;
             // nothing more we can do
@@ -107,13 +142,8 @@ int main(int argc, const char *argv[]) {
         }
     }
 
-    // Get the height from the first image. We'll need this
-    // later in code to reshape the images to their original
-    // size AND we need to reshape incoming faces to this size:
-    // TODO: differentiate between when the csv file path is passed 
-    //      and when a classifier path is passed
-    int imgWidth = 168;//images[0].cols;
-    int imgHeight = 168;//images[0].rows;
+    int imgWidth = 168;
+    int imgHeight = 168;
 
     // Create a FaceRecognizer and train it on the given images:
     Ptr<face::FaceRecognizer> model;
@@ -189,6 +219,8 @@ int main(int argc, const char *argv[]) {
         cerr << "Capture Device ID " << deviceId << "cannot be opened." << endl;
         return -1;
     }
+    int capFrameWidth = cap.get(CV_CAP_PROP_FRAME_WIDTH);
+    int capFrameHeight = cap.get(CV_CAP_PROP_FRAME_HEIGHT);
 
     try {
         // Holds the current frame from the Video device:
@@ -247,8 +279,28 @@ int main(int argc, const char *argv[]) {
                             FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
                     putText(original, boxConfidenceText, Point(confidencePosX, confidencePosY), 
                             FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
+                    double leftSideAngle = -1;
+                    double rightSideAngle = -1;
+                    double topAngle = -1;
+                    double bottomAngle = -1;
+                    findAngleBounds(capFrameWidth, capFrameHeight, curFace, leftSideAngle, rightSideAngle, 
+                            topAngle, bottomAngle);
+                    int thetaPosX = std::max(curFace.tl().x + 10, 0);
+                    int thetaPosY = std::max(curFace.br().y + 10, 0);
+                    int phiPosX = std::max(curFace.tl().x + 25, 0);
+                    int phiPosY = std::max(curFace.br().y + 25, 0);
+                    string boxThetaText = format("Theta 1: %g, Theta2: %g", 
+                            leftSideAngle, rightSideAngle);
+                    string boxPhiText = format("Phi1: %g, Phi2: %g", topAngle, bottomAngle);
+                    putText(original, boxThetaText, Point(thetaPosX, thetaPosY), 
+                            FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
+                    putText(original, boxPhiText, Point(phiPosX, phiPosY), 
+                            FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
                 }
             }
+            // Add "targeting" lines
+            drawTargettingLines(capFrameWidth, capFrameHeight, original);
+
             // Show the result:
             imshow("face_recognizer", original);
             // And display it:
@@ -266,4 +318,56 @@ int main(int argc, const char *argv[]) {
     }
     cap.release();
     return 0;
+}
+
+/**
+ * Calculates the horizontal angles and vertical angles of the passed in rectangle.
+ * Annotates the rectangle on the frame with text describing the output.
+ */
+static void findAngleBounds(int &frameWidth, int &frameHeight, Rect &faceRectangle, 
+        double &leftSideAngle, double &rightSideAngle, double &topAngle, double &bottomAngle) {
+    // Get points at the two bottom corners of the rectangle
+    int x1 = faceRectangle.tl().x - frameWidth / 2;
+    int x2 = faceRectangle.br().x - frameWidth / 2;
+    int y1 = faceRectangle.tl().y - frameHeight / 2;
+    int y2 = faceRectangle.br().y - frameHeight / 2;
+
+    // Compute theta1 and theta2 (leftSideAngle and rightSideAngle)
+    int z = 500;
+    // Convert to spherical
+    double r1 = sqrt(x1 * x1 + y1 * y1 + z * z);
+    double r2 = sqrt(x2 * x2 + y1 * y1 + z * z);
+    leftSideAngle = acos(z / r1) * (180 / M_PI);
+    rightSideAngle = acos(z / r2) * (180 / M_PI);
+    // Convert to -90 - +90 range
+    leftSideAngle -= 90;
+    rightSideAngle -= 90;
+
+    // Compute phi1 and phi2 (topAngle and bottomAngle)
+    topAngle = atan(y1 / x1) * (180 / M_PI);
+    bottomAngle = atan(y2 / x1) * (180 / M_PI);
+}
+
+/**
+ * Draw a straight horizontal line across the center of the frame and annotate it with 
+ * smaller vertical lines which have angle annotations from -30 - 30
+ */ 
+static void drawTargettingLines(int &frameWidth, int &frameHeight, Mat &frame) {
+    line(frame, Point(0, frameHeight / 2), Point(frameWidth, frameHeight / 2), CV_RGB(0, 255,0), 1);
+    int topY = frameHeight / 2 - 50;
+    int bottomY = frameHeight / 2 + 50;
+    double x;
+    string angleString;
+    for (int i = 0; i <= 60; i+=10) {
+        x = 739 * sin(i * (M_PI) / 180);
+        line(frame, Point(x, topY), Point(x, bottomY), CV_RGB(0, 255,0), 1);
+        angleString = format("%d", (i - 30));
+        if (i != 60) {
+            putText(frame, angleString, Point(x - 5, bottomY + 15), FONT_HERSHEY_PLAIN, 1.0, 
+                    CV_RGB(0, 255, 0), 2.0);    
+        } else {
+            putText(frame, angleString, Point(x - 20, bottomY + 15), FONT_HERSHEY_PLAIN, 1.0, 
+                    CV_RGB(0, 255, 0), 2.0);    
+        }
+    }
 }
