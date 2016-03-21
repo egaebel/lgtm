@@ -92,8 +92,8 @@ int main(int argc, const char *argv[]) {
                 << " <face id> <angles of arrival>" << endl;
         cout << "\t </path/to/haarCascade> -- Path to the Haar Cascade for face detection." 
                 << endl;
-        cout << "\t </path/to/csv.ext> -- Path to the CSV file with the face database." << endl;
         cout << "\t <device id> -- The webcam device id to grab frames from." << endl;
+        cout << "\t </path/to/csv.ext> -- Path to the CSV file with the face database." << endl;
         cout << "\t <face id> -- The identification number of the face we WANT to recognize" 
                 << "for LGTM. This is the number " << endl;
         cout << "\t <angles of arrival> -- A space separated sequence of angle of arrivals" << endl;
@@ -102,8 +102,8 @@ int main(int argc, const char *argv[]) {
 
     // Parse inputs
     string haarCascadeFileName = string(argv[1]);
-    string csvFileName = string(argv[2]);
-    int deviceId = atoi(argv[3]);
+    int deviceId = atoi(argv[2]);
+    string csvFileName = string(argv[3]);
     int faceId = atoi(argv[4]);
     vector<int> anglesOfArrival;
     for (int i = 0; i < (argc - 5); i++) {
@@ -260,7 +260,8 @@ int main(int argc, const char *argv[]) {
             if (key == 32 && lgtmConfirm) {
                 cout << "LOOKS GOOD TO ME!"
                         << " PROCEEDING TO ESTABLISH ENCRYPTED COMMUNICATION!" << endl;
-                exit(1);
+                // Only exit that is considered a success
+                exit(0);
             // Reject the recognized face with escape
             } else if (key == 27) {
                 cout << "FACE REJECTED! IT DID NOT LOOK GOOD TO ME!" << endl;
@@ -276,7 +277,7 @@ int main(int argc, const char *argv[]) {
         cap.release();
     }
     cap.release();
-    return 0;
+    return 1;
 }
 
 /**
