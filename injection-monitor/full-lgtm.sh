@@ -33,6 +33,10 @@ SLEEP_TIME=2
 SWITCH_WAIT_TIME=5
 PACKET_DELAY=0
 
+# LGTM Magic String Constants-----------------------------------------------------------------------
+LGTM_BEGIN_TOKEN="lgtm-begin-protocol"
+FACIAL_RECOGNITION_FOOTER="facial-recognition-params-finished"
+
 # Functions-----------------------------------------------------------------------------------------
 injection_mode () {
     echo "Switching $wlan_interface to inject........................................"
@@ -138,7 +142,7 @@ input='a'
 while [[ $input != 'l' ]] && [[ $begin_lgtm -lt 1 ]]; do
     read -n 1 -s -t 2 -r input
     # TODO: Later this token, "begin-lgtm-protocol", will also include a public key
-    begin_lgtm=$(cat .lgtm-monitor.dat | grep "lgtm-begin-protocol" | wc -l)
+    begin_lgtm=$(cat .lgtm-monitor.dat | grep $LGTM_BEGIN_TOKEN | wc -l)
 done
 
 # Key pressed to initiate LGTM
@@ -152,7 +156,7 @@ if [[ $input == 'l' ]]; then
     injection_mode
     # Send "begin-lgtm-protocol", TODO: later this will include a public key
     rm .lgtm-begin-protocol
-    echo lgtm-begin-protocol > .lgtm-begin-protocol
+    echo $LGTM_BEGIN_TOKEN > .lgtm-begin-protocol
     ./packets-from-file/packets_from_file .lgtm-begin-protocol 1 $PACKET_DELAY
     # Switch to monitor mode
     monitor_mode
@@ -163,7 +167,7 @@ if [[ $input == 'l' ]]; then
     lgtm_ack=0
     while [ $lgtm_ack -lt 1 ]; do
         # Receive ack + params
-        lgtm_ack=$(cat .lgtm-monitor.dat | grep "facial-recognition-params-finished" | wc -l)
+        lgtm_ack=$(cat .lgtm-monitor.dat | grep $FACIAL_RECOGNITION_FOOTER | wc -l)
     done
     pkill log_to_file
     echo "Received 'facial recognition params'!"
@@ -182,12 +186,20 @@ if [[ $input == 'l' ]]; then
     echo facial-recognition-params > .lgtm-facial-recognition-params
     #cat facial-recognition-model >> .lgtm-facial-recognition-params
     cat facial_recognition_file >> .lgtm-facial-recognition-params
-    echo facial-recognition-params-finished >> .lgtm-facial-recognition-params
+    echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
     echo "Checking for face/signal overlap................................."
+    # Strip off $FACIAL_RECOGNITION footer
+    cat $(<.lgtm-facial-recognition-params rev | cut -c ${#$FACIAL_RECOGNITION_FOOTER}- | rev) > .lgtm-facial-recognition-params
+    tar xf .lgtm-facial-recognition-params
+    # Create CSV file for just-received photos
+    ./../facial-recognition/openCV/lgtm-recognition/create_yalefaces_csv.py .lgtm-facial-recognition-params > .lgtm-facial-recognition-training-photo-paths.cs | head -n1 | grep ;.*\nv
+    # Grab the characters after the semi-colon to the end of the line on the first line
+    face_id=$(cat .lgtm-facial-recognition-training-photo-paths.csv | head -n1 | grep -o ";.*$" | cut -c 2-)
     top_aoas=$(cat .lgtm-top-aoas)
-    lgtm_success=./../facial-recognition/openCV/lgtm-recognition/run_lgtm_facial_recognition.sh top_aoas
-    echo lgtm_success
+    ./../facial-recognition/openCV/lgtm-recognition/run_lgtm_facial_recognition.sh .lgtm-facial-recognition-training-photo-paths.csv $face_id top_aoas
+    # Echo exit status of LGTM facial recognition command
+    echo $?
     # Done!
     echo "LGTM COMPLETE!"
     exit
@@ -200,13 +212,12 @@ if [ $begin_lgtm -gt 0 ]; then
     injection_mode
     # Sleep for 5 seconds to ensure other party has switched into monitor mode....
     sleep $SWITCH_WAIT_TIME
-    # Send acknowledgement + facial recognition params, TODO: later this will inlcude a public key
+    # Send acknowledgement + facial recognition params, TODO: later this will include a public key
     echo "Sending 'facial recognition params'!"
     rm .lgtm-facial-recognition-params
     echo facial-recognition-params > .lgtm-facial-recognition-params
-    #cat facial-recognition-model >> .lgtm-facial-recognition-params
     cat facial_recognition_file >> .lgtm-facial-recognition-params
-    echo facial-recognition-params-finished >> .lgtm-facial-recognition-params
+    echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1 $PACKET_DELAY
     # Setup Monitor mode
     monitor_mode
@@ -217,7 +228,7 @@ if [ $begin_lgtm -gt 0 ]; then
     lgtm_ack=0
     while [[ $lgtm_ack -lt 1 ]]; do
         # Receive ack + params
-        lgtm_ack=$(cat .lgtm-monitor.dat | grep "facial-recognition-params-finished" | wc -l)
+        lgtm_ack=$(cat .lgtm-monitor.dat | grep $FACIAL_RECOGNITION_FOOTER | wc -l)
     done
     pkill log_to_file
     echo "Received 'facial recognition params'!"
@@ -227,9 +238,17 @@ if [ $begin_lgtm -gt 0 ]; then
     sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
     echo "Successfully localized signal source!"
     echo "Checking for face/signal overlap................................."
+    # Strip off $FACIAL_RECOGNITION footer
+    cat $(<.lgtm-facial-recognition-params rev | cut -c ${#$FACIAL_RECOGNITION_FOOTER}- | rev) > .lgtm-facial-recognition-params
+    tar xf .lgtm-facial-recognition-params
+    # Create CSV file for just-received photos
+    ./../facial-recognition/openCV/lgtm-recognition/create_yalefaces_csv.py .lgtm-facial-recognition-params > .lgtm-facial-recognition-training-photo-paths.cs | head -n1 | grep ;.*\nv
+    # Grab the characters after the semi-colon to the end of the line on the first line
+    face_id=$(cat .lgtm-facial-recognition-training-photo-paths.csv | head -n1 | grep -o ";.*$" | cut -c 2-)
     top_aoas=$(cat .lgtm-top-aoas)
-    lgtm_success=./../facial-recognition/openCV/lgtm-recognition/run_lgtm_facial_recognition.sh top_aoas
-    echo lgtm_success
+    ./../facial-recognition/openCV/lgtm-recognition/run_lgtm_facial_recognition.sh .lgtm-facial-recognition-training-photo-paths.csv $face_id top_aoas
+    # Echo exit status of LGTM facial recognition command
+    echo $?
     # Done!
     echo "LGTM COMPLETE!"
     exit
