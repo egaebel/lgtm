@@ -177,10 +177,17 @@ if [[ $input == 'l' ]]; then
     logged_on_user=$(who | head -n1 | awk '{print $1;}')
     sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
     echo "Successfully localized signal source!"
+
+    echo "Extracting data from received packets............................"
+    # Extract data on facial recognition params from received data
+    sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('read_mpdu_file.m'), exit"    
+    echo "Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    
     # Sleep for 5 seconds to ensure other party has switched into monitor mode.... TODO: Shorten or remove this....
     sleep $SWITCH_WAIT_TIME
     # Switch to injection mode
     injection_mode
+
     # Send facial recognition params
     echo "Sending 'facial recognition params'!"
     rm .lgtm-facial-recognition-params
@@ -188,13 +195,14 @@ if [[ $input == 'l' ]]; then
     cat $facial_recognition_file >> .lgtm-facial-recognition-params
     echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
+    
     echo "Checking for face/signal overlap................................."
     # Strip off $FACIAL_RECOGNITION footer
-    cat .lgtm-facial-recognition-params | cut -c ${#$FACIAL_RECOGNITION_HEADER}- > .lgtm-facial-recognition-params
-    cat .lgtm-facial-recognition-params | rev | cut -c ${#$FACIAL_RECOGNITION_FOOTER}- | rev > .lgtm-facial-recognition-params
-    tar xf .lgtm-facial-recognition-params
+    cat .lgtm-received-facial-recognition-params | cut -c ${#$FACIAL_RECOGNITION_HEADER}- > .lgtm-received-facial-recognition-params
+    cat .lgtm-received-facial-recognition-params | rev | cut -c ${#$FACIAL_RECOGNITION_FOOTER}- | rev > .lgtm-received-facial-recognition-params
+    tar xf .lgtm-received-facial-recognition-params
     # Create CSV file for just-received photos
-    ./../facial-recognition/openCV/lgtm-recognition/create_yalefaces_csv.py .lgtm-facial-recognition-params > .lgtm-facial-recognition-training-photo-paths.csv
+    ./../facial-recognition/openCV/lgtm-recognition/create_yalefaces_csv.py .lgtm-received-facial-recognition-params > .lgtm-facial-recognition-training-photo-paths.csv
     # Grab the characters after the semi-colon to the end of the line on the first line
     face_id=$(cat .lgtm-facial-recognition-training-photo-paths.csv | head -n1 | grep -o ";.*$" | cut -c 2-)
     top_aoas=$(cat .lgtm-top-aoas)
@@ -220,6 +228,7 @@ if [ $begin_lgtm -gt 0 ]; then
     cat $facial_recognition_file >> .lgtm-facial-recognition-params
     echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1 $PACKET_DELAY
+    
     # Setup Monitor mode
     monitor_mode
     # Await facial recognition params
@@ -238,13 +247,19 @@ if [ $begin_lgtm -gt 0 ]; then
     logged_on_user=$(who | head -n1 | awk '{print $1;}')
     sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
     echo "Successfully localized signal source!"
+
+    echo "Extracting data from received packets............................"
+    # Extract data on facial recognition params from received data
+    sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('read_mpdu_file.m'), exit"
+    echo "Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+
     echo "Checking for face/signal overlap................................."
     # Strip off $FACIAL_RECOGNITION_FOOTER and $FACIAL_RECOGNITION_HEADER
-    cat .lgtm-facial-recognition-params | cut -c ${#$FACIAL_RECOGNITION_HEADER}- > .lgtm-facial-recognition-params
-    cat .lgtm-facial-recognition-params | rev | cut -c ${#$FACIAL_RECOGNITION_FOOTER}- | rev > .lgtm-facial-recognition-params
-    tar xf .lgtm-facial-recognition-params
+    cat .lgtm-received-facial-recognition-params | cut -c ${#$FACIAL_RECOGNITION_HEADER}- > .lgtm-received-facial-recognition-params
+    cat .lgtm-received-facial-recognition-params | rev | cut -c ${#$FACIAL_RECOGNITION_FOOTER}- | rev > .lgtm-received-facial-recognition-params
+    tar xf .lgtm-received-facial-recognition-params
     # Create CSV file for just-received photos
-    ./../facial-recognition/openCV/lgtm-recognition/create_yalefaces_csv.py .lgtm-facial-recognition-params > .lgtm-facial-recognition-training-photo-paths.csv
+    ./../facial-recognition/openCV/lgtm-recognition/create_yalefaces_csv.py .lgtm-received-facial-recognition-params > .lgtm-facial-recognition-training-photo-paths.csv
     # Grab the characters after the semi-colon to the end of the line on the first line
     face_id=$(cat .lgtm-facial-recognition-training-photo-paths.csv | head -n1 | grep -o ";.*$" | cut -c 2-)
     top_aoas=$(cat .lgtm-top-aoas)

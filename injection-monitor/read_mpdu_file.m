@@ -9,11 +9,16 @@ function read_mpdu_file(input_filename, output_filename)
     fprintf('read_mpdu_file called: checking nargchk....\n')
     %% Input check
     if nargin == 0
-        input_filename = 'lgtm-monitor.dat';
-        output_filename = 'lgtm-monitor-check';
+        input_filename = '.lgtm-monitor.dat';
+        output_filename = '.lgtm-received-facial-recognition-params';
     else
         narginchk(2, 2);
     end
+    
+    % Get the full path to the currently executing file and change the
+    % pwd to the folder this file is contained in...
+    [current_directory, ~, ~] = fileparts(mfilename('fullpath'));
+    cd(current_directory);
     
     %% Open file
     f = fopen(input_filename, 'rb');
