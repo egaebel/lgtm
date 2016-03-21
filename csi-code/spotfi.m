@@ -80,7 +80,8 @@ function globals_init
     global DEBUG_BRIDGE_CODE_CALLING
     DEBUG_PATHS = false;
     DEBUG_PATHS_LIGHT = false;
-    NUMBER_OF_PACKETS_TO_CONSIDER = -1; % Set to -1 to ignore this variable's value
+    %% TODO: Tune this for prod
+    NUMBER_OF_PACKETS_TO_CONSIDER = 40; % Set to -1 to ignore this variable's value
     DEBUG_GMM = false;
     DEBUG_BRIDGE_CODE_CALLING = false;
     
