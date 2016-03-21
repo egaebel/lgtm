@@ -35,7 +35,6 @@ if __name__ == "__main__":
     exclude_set = {}
     for arg in sys.argv[2:]:
         exclude_set[int(arg)] = True
-    print(exclude_set)
     for dirname, dirnames, filenames in os.walk(BASE_PATH):
         for subdirname in dirnames:
             label = -1
