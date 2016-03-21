@@ -51,14 +51,14 @@ function globals_init
     %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%
     % Debug Controls
     global DEBUG_PATHS
+    global DEBUG_PATHS_LIGHT
     global NUMBER_OF_PACKETS_TO_CONSIDER
     global DEBUG_GMM
-    global DEBUG_CLUSTER
     global DEBUG_BRIDGE_CODE_CALLING
     DEBUG_PATHS = false;
-    NUMBER_OF_PACKETS_TO_CONSIDER = 100; % Set to -1 to ignore this variable's value
+    DEBUG_PATHS_LIGHT = false;
+    NUMBER_OF_PACKETS_TO_CONSIDER = 200; % Set to -1 to ignore this variable's value
     DEBUG_GMM = false;
-    DEBUG_CLUSTER = true;
     DEBUG_BRIDGE_CODE_CALLING = false;
     
     % Output controls
@@ -74,8 +74,8 @@ function globals_init
     global OUTPUT_FIGURES_SUPPRESSED
     OUTPUT_AOAS = false;
     OUTPUT_TOFS = false;
-    OUTPUT_AOA_MUSIC_PEAK_GRAPH = false;
-    OUTPUT_TOF_MUSIC_PEAK_GRAPH = false;
+    OUTPUT_AOA_MUSIC_PEAK_GRAPH = false;%true;
+    OUTPUT_TOF_MUSIC_PEAK_GRAPH = false;%true;
     OUTPUT_AOA_TOF_MUSIC_PEAK_GRAPH = false;
     OUTPUT_SELECTIVE_AOA_TOF_MUSIC_PEAK_GRAPH = false;
     OUTPUT_AOA_VS_TOF_PLOT = true;
@@ -91,7 +91,6 @@ function run(data_files)
     %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%
     % Debug Controls
     global NUMBER_OF_PACKETS_TO_CONSIDER
-    global DEBUG_CLUSTER
     
     % Output controls
     global OUTPUT_SUPPRESSED
@@ -132,7 +131,29 @@ function run(data_files)
         aoa_packet_data = cell(num_packets, 1);
         tof_packet_data = cell(num_packets, 1);
         packet_one_phase_matrix = 0;
-        for packet_index = 1:num_packets;
+        
+        
+        % Do computations for packet one so the packet loop can be parallelized
+        % Get CSI for current packet
+        csi_entry = csi_trace{1};
+        csi = get_scaled_csi(csi_entry);
+        % Only consider measurements for transmitting on one antenna
+        csi = csi(1, :, :);
+        % Remove the single element dimension
+        csi = squeeze(csi);
+
+        % Sanitize ToFs with Algorithm 1
+        packet_one_phase_matrix = unwrap(angle(csi), pi, 2);
+        sanitized_csi = spotfi_algorithm_1(csi, sub_freq_delta);
+        % Acquire smoothed CSI matrix
+        smoothed_sanitized_csi = smooth_csi(sanitized_csi);
+        % Run SpotFi's AoA-ToF MUSIC algorithm on the smoothed and sanitized CSI matrix
+        [aoa_packet_data{1}, tof_packet_data{1}] = aoa_tof_music(...
+                smoothed_sanitized_csi, antenna_distance, frequency, sub_freq_delta, ...
+                data_files{data_file_index});
+        
+        %% TODO: REMEMBER THIS IS A PARFOR LOOP, AND YOU CHANGED THE ABOVE CODE AND THE BEGIN INDEX
+        parfor (packet_index = 2:num_packets, 3)
             if ~OUTPUT_SUPPRESSED && OUTPUT_PACKET_PROGRESS
                 fprintf('Packet %d of %d\n', packet_index, num_packets)
             end
@@ -145,12 +166,17 @@ function run(data_files)
             csi = squeeze(csi);
 
             % Sanitize ToFs with Algorithm 1
+            %% TODO: this is commented out for parfor's sake
+            %{
             if packet_index == 1
                 packet_one_phase_matrix = unwrap(angle(csi), pi, 2);
                 sanitized_csi = spotfi_algorithm_1(csi, sub_freq_delta);
             else
                 sanitized_csi = spotfi_algorithm_1(csi, sub_freq_delta, packet_one_phase_matrix);
             end
+            %}
+            sanitized_csi = spotfi_algorithm_1(csi, sub_freq_delta, packet_one_phase_matrix);
+            
             % Acquire smoothed CSI matrix
             smoothed_sanitized_csi = smooth_csi(sanitized_csi);
             % Run SpotFi's AoA-ToF MUSIC algorithm on the smoothed and sanitized CSI matrix
@@ -214,13 +240,15 @@ function run(data_files)
         % Cluster AoA and ToF for each packet
         % Worked Pretty Well
         linkage_tree = linkage(full_measurement_matrix, 'ward');
-        % TODO: validate, CutOff WAS 0.8...I'm playing with it...
-        cluster_indices_vector = cluster(linkage_tree, 'CutOff', 0.45, 'criterion', 'distance');
+        % cluster_indices_vector = cluster(linkage_tree, 'CutOff', 0.45, 'criterion', 'distance');
+        % cluster_indices_vector = cluster(linkage_tree, 'CutOff', 0.85, 'criterion', 'distance');
+        cluster_indices_vector = cluster(linkage_tree, 'CutOff', 1.0, 'criterion', 'distance');
         cluster_count_vector = zeros(0, 1);
         num_clusters = 0;
         for ii = 1:size(cluster_indices_vector, 1)
             if ~ismember(cluster_indices_vector(ii), cluster_count_vector)
                 cluster_count_vector(size(cluster_count_vector, 1) + 1, 1) = cluster_indices_vector(ii);
+                num_clusters = num_clusters + 1;
             end
         end
         if ~OUTPUT_FIGURES_SUPPRESSED
@@ -246,7 +274,6 @@ function run(data_files)
             cluster_indices{cluster_indices_vector(ii, 1)}(cluster_index_tail_index, 1) = ii;
         end
         
-        %% TODO: Validate this method
         %%{
         % Delete outliers from each cluster
         if ~OUTPUT_SUPPRESSED
@@ -283,21 +310,44 @@ function run(data_files)
                         'b^', 'g^', 'r^', 'k^', ... 
                         'bp', 'gp', 'rp', 'kp', ... 
                         'b*', 'g*', 'r*', 'k*', ... 
+                        'bh', 'gh', 'rh', 'kh', ... 
+                        'bx', 'gx', 'rx', 'kx', ... 
+                        'b<', 'g<', 'r<', 'k<', ... 
+                        'b>', 'g>', 'r>', 'k>', ... 
+                        'b+', 'g+', 'r+', 'k+', ... 
+                        'bd', 'gd', 'rd', 'kd', ... 
+                        'bv', 'gv', 'rv', 'kv', ... 
+                        'b.', 'g.', 'r.', 'k.', ... 
+                        %{
+                        'co', 'mo', 'yo', 'wo', ...
+                        'cs', 'ms', 'ys', 'ws', ...
+                        'c^', 'm^', 'y^', 'w^', ... 
+                        'cp', 'mp', 'yp', 'wp', ... 
+                        'c*', 'm*', 'y*', 'w*', ... 
+                        'ch', 'mh', 'yh', 'wh', ... 
+                        'cx', 'mx', 'yx', 'wx', ... 
+                        'c<', 'm<', 'y<', 'w<', ... 
+                        'c>', 'm>', 'y>', 'w>', ... 
+                        'c+', 'm+', 'y+', 'w+', ... 
+                        'cd', 'md', 'yd', 'wd', ... 
+                        'cv', 'mv', 'yv', 'wv', ... 
+                        'c.', 'm.', 'y.', 'w.', ... 
+                        %}
         };
         
         %% TODO: Tune parameters
         % Good base: 5, 10000, 75000, 0 (in order)
         % Likelihood parameters
         weight_num_cluster_points = 5;
-        weight_aoa_variance = 10000; % prev = 100000
+        weight_aoa_variance = 50000; % prev = 10000; prev = 100000;
         weight_tof_variance = 100000;
-        weight_tof_mean = 50; % prev = 10
-        
+        weight_tof_mean = 1000; % prev = 50; % prev = 10;
+        constant_offset = 300;
         % Compute likelihoods
         likelihood = zeros(length(clusters), 1);
         cluster_aoa = zeros(length(clusters), 1);
-        max_likelihood_index = 1;
-        top_3_likelihood_indices = [-1; -1; -1;];
+        max_likelihood_index = -1;
+        top_likelihood_indices = [-1; -1; -1;];% -1; -1;];
         for ii = 1:length(clusters)
             % Ignore clusters of size 1
             if size(clusters{ii}, 1) == 0
@@ -328,7 +378,7 @@ function run(data_files)
                     - weight_aoa_variance * aoa_variance ...
                     - weight_tof_variance * tof_variance ...
                     - weight_tof_mean * tof_mean ...
-                    - 300;
+                    - constant_offset;
             likelihood(ii, 1) = exp_body;%exp(exp_body);
             % Compute Cluster Average AoA
             for jj = 1:size(clusters{ii}, 1)
@@ -352,44 +402,64 @@ function run(data_files)
                         ii, cluster_plot_style{ii}, cluster_aoa(ii, 1), likelihood(ii, 1))
             end
             % Check for maximum likelihood
-            if likelihood(ii, 1) > likelihood(max_likelihood_index, 1)
+            if max_likelihood_index == -1 ...
+                    || likelihood(ii, 1) > likelihood(max_likelihood_index, 1)
                 max_likelihood_index = ii;
             end
-            % Record the top 3 maximum likelihoods
-            for jj = 1:size(top_3_likelihood_indices, 1)
-                % Replace
-                if top_3_likelihood_indices(jj, 1) == -1
-                    top_3_likelihood_indices(jj, 1) = ii;
+            % Record the top maximum likelihoods
+            for jj = 1:size(top_likelihood_indices, 1)
+                % Replace empty slot
+                if top_likelihood_indices(jj, 1) == -1
+                    top_likelihood_indices(jj, 1) = ii;
                     break;
-                % Shift indices down
-                elseif likelihood(ii, 1) > likelihood(top_3_likelihood_indices(jj, 1), 1)
-                    for kk = size(top_3_likelihood_indices, 1):-1:(jj + 1)
-                        top_3_likelihood_indices(kk, 1) = top_3_likelihood_indices(kk - 1, 1);
+                % Add somewhere in the list
+                elseif likelihood(ii, 1) > likelihood(top_likelihood_indices(jj, 1), 1)
+                    % Shift indices down
+                    for kk = size(top_likelihood_indices, 1):-1:(jj + 1)
+                        top_likelihood_indices(kk, 1) = top_likelihood_indices(kk - 1, 1);
                     end
-                    top_3_likelihood_indices(jj, 1) = ii;
+                    top_likelihood_indices(jj, 1) = ii;
+                    break;
+                % Add an extra item to the list because the likelihoods are all equal...
+                elseif likelihood(ii, 1) == likelihood(top_likelihood_indices(jj, 1), 1) ...
+                        && jj == size(top_likelihood_indices, 1)
+                    top_likelihood_indices(jj + 1, 1) = ii;
                     break;
                 end
             end
         end
         if ~OUTPUT_SUPPRESSED
             fprintf('\nThe cluster with the maximum likelihood is cluster %d\n', max_likelihood_index)
-            fprintf('The top 3 clusters are: %d, %d, %d\n', ...
-                    top_3_likelihood_indices(1, 1), top_3_likelihood_indices(2, 1), ...
-                    top_3_likelihood_indices(3, 1))
-            fprintf('The clusters have plot point designations: ')
-            for jj = 1:size(top_3_likelihood_indices, 1)
-                if top_3_likelihood_indices(jj, 1) ~= -1
-                    fprintf('%s, ', ...
-                            cluster_plot_style{top_3_likelihood_indices(jj, 1)})
+            fprintf('The top clusters are: ')
+            for jj = 1:size(top_likelihood_indices, 1)
+                if top_likelihood_indices(jj, 1) ~= -1
+                    fprintf('%d, ', top_likelihood_indices(jj, 1));
                 end
             end
             fprintf('\n')
-            %{
-            fprintf('The clusters have plot point designations: %s, %s, %s\n', ...
-                    cluster_plot_style{top_3_likelihood_indices(1, 1)}, ...
-                    cluster_plot_style{top_3_likelihood_indices(2, 1)}, ...
-                    cluster_plot_style{top_3_likelihood_indices(3, 1)})
-            %}
+            fprintf('The clusters have AoAs: ')
+            for jj = 1:size(top_likelihood_indices, 1)
+                if top_likelihood_indices(jj, 1) ~= -1
+                    fprintf('%g, ', cluster_aoa(top_likelihood_indices(jj, 1), 1));
+                end
+            end
+            fprintf('\n')
+            fprintf('The clusters have plot point designations: ')
+            for jj = 1:size(top_likelihood_indices, 1)
+                if top_likelihood_indices(jj, 1) ~= -1
+                    fprintf('%s, ', ...
+                            cluster_plot_style{top_likelihood_indices(jj, 1)})
+                end
+            end
+            fprintf('\n')
+            fprintf('The clusters have likelihoods: ')
+            for jj = 1:size(top_likelihood_indices, 1)
+                if top_likelihood_indices(jj, 1) ~= -1
+                    fprintf('%g, ', ...
+                            likelihood(top_likelihood_indices(jj, 1), 1))
+                end
+            end
+            fprintf('\n')
         end
             
         % Plot AoA & ToF
@@ -425,6 +495,7 @@ function run(data_files)
                 text(aoa_mean + 5, tof_mean, cluster_text)
                 drawnow
             end
+
             [ellipse_x, ellipse_y] = compute_ellipse(...
                     clusters{max_likelihood_index}(:, 1) * aoa_max, ...
                     clusters{max_likelihood_index}(:, 2));
@@ -508,6 +579,7 @@ function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
     globals_init();
     % Debug Variables
     global DEBUG_PATHS
+    global DEBUG_PATHS_LIGHT
     
     % Output Variables
     global OUTPUT_AOAS
@@ -550,7 +622,6 @@ function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
         end
     end
     
-    path_eigenvalue_threshold = 0.1;
     % Find the largest decrease ratio that occurs between the last 10 elements (largest 10 elements)
     % and is not the first decrease (from the largest eigenvalue to the next largest)
     % Compute the decrease factors between each adjacent pair of elements, except the first decrease
@@ -560,12 +631,11 @@ function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
     k = 1;
     for ii = start_index:-1:end_index
         temp_decrease_ratio = eigenvalue_matrix(ii + 1, ii + 1) / eigenvalue_matrix(ii, ii);
-        if eigenvalue_matrix(ii + 1, ii + 1) > path_eigenvalue_threshold
-            decrease_ratios(k) = temp_decrease_ratio;
-        else
-            decrease_ratios(k) = -1;
-        end
+        decrease_ratios(k, 1) = temp_decrease_ratio;
         k = k + 1;
+    end
+    if DEBUG_PATHS_LIGHT && ~OUTPUT_SUPPRESSED
+        fprintf('\n')
     end
     [max_decrease_ratio, max_decrease_ratio_index] = max(decrease_ratios);
     if DEBUG_PATHS && ~OUTPUT_SUPPRESSED
@@ -576,8 +646,12 @@ function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
     index_in_eigenvalues = size(eigenvalue_matrix, 1) - max_decrease_ratio_index;
     num_computed_paths = size(eigenvalue_matrix, 1) - index_in_eigenvalues + 1;
     
-    if DEBUG_PATHS && ~OUTPUT_SUPPRESSED
+    if (DEBUG_PATHS || DEBUG_PATHS_LIGHT) && ~OUTPUT_SUPPRESSED
         fprintf('True number of computed paths: %d\n', num_computed_paths)
+        for ii = size(eigenvalue_matrix, 1):-1:end_index
+            fprintf('%g, ', eigenvalue_matrix(ii, ii))
+        end
+        fprintf('\n')
     end
     
     % Estimate noise subspace
@@ -585,9 +659,12 @@ function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
     eigenvectors = eigenvectors(:, column_indices); 
     % Peak search
     % Angle in degrees (converts to radians in phase calculations)
+    %% TODO: Tuning theta too??
     theta = -90:1:90; 
     % time in milliseconds
-    tau = 0:(1.0 * 10^-9):(50 * 10^-9);
+    %% TODO: Tuning tau....
+    %tau = 0:(1.0 * 10^-9):(50 * 10^-9);
+    tau = 0:(100.0 * 10^-9):(3000 * 10^-9);
     Pmusic = zeros(length(theta), length(tau));
     % Angle of Arrival Loop (AoA)
     for ii = 1:length(theta)
@@ -601,7 +678,6 @@ function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
     end
 
     % Convert to decibels
-    %% TODO: convert to single line
     % ToF loop
     for jj = 1:size(Pmusic, 2)
         % AoA loop
@@ -675,12 +751,15 @@ function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
         % For each AoA, find ToF peaks
         [peak_values, tof_peak_indices] = findpeaks(Pmusic(aoa_index, :));
         if isempty(tof_peak_indices)
+            if ~OUTPUT_SUPPRESSED
+                fprintf('\n\nNO PEAKS FOR TIME OF FLIGHT. SELECTING THE FIRST TOF. \n\n')
+            end
             tof_peak_indices = 1;
         end
         if OUTPUT_TOFS && ~OUTPUT_SUPPRESSED
             fprintf('Time of Flight Peaks along Angle of Arrival %f\n', theta(aoa_index))
-            peak_values(1)
-            tau(tof_peak_indices(1))
+            fprintf('Found %d peaks\n', length(peak_values))
+            %tau(tof_peak_indices)
         end
         % Pad result with -1 so we don't have a jagged matrix (and so we can do < 0 testing)
         negative_ones_for_padding = -1 * ones(1, length(tau) - length(tof_peak_indices));
@@ -708,18 +787,13 @@ end
 function steering_vector = compute_steering_vector(theta, tau, freq, sub_freq_delta, ant_dist)
     steering_vector = zeros(30, 1);
     k = 1;
-    % First Half
-    for ii = 1:15
-        tof_phase = omega_tof_phase(tau, sub_freq_delta)^(ii - 1);
-        steering_vector(k) =  tof_phase;
-        k = k + 1;
-    end
-    % Second Half
-    for ii = 1:15
-        tof_phase = omega_tof_phase(tau, sub_freq_delta)^(ii - 1);
-        aoa_phase = phi_aoa_phase(theta, freq, ant_dist);
-        steering_vector(k) = tof_phase * aoa_phase;
-        k = k + 1;
+    base_element = 1;
+    for ii = 1:2
+        for jj = 1:15
+            steering_vector(k, 1) = base_element * omega_tof_phase(tau, sub_freq_delta)^(jj - 1);
+            k = k + 1;
+        end
+        base_element = base_element * phi_aoa_phase(theta, freq, ant_dist);
     end
 end
 
