@@ -200,8 +200,8 @@ if [[ $input == 'l' ]]; then
     echo "Checking for face/signal overlap................................."
     # Strip off $FACIAL_RECOGNITION_FOOTER and $FACIAL_RECOGNITION_HEADER and anything before and after
     # Strip off $FACIAL_RECOGNITION_FOOTER and $FACIAL_RECOGNITION_HEADER and anything before and after
-    cat .lgtm-received-facial-recognition-params | cut -c ${#FACIAL_RECOGNITION_HEADER}- > .lgtm-received-facial-recognition-params--no-header
-    cat .lgtm-received-facial-recognition-params--no-header | rev | cut -c ${#FACIAL_RECOGNITION_FOOTER}- | rev > .lgtm-received-facial-recognition-params--no-header--no-footer
+    cat .lgtm-received-facial-recognition-params | cut -c ${((#FACIAL_RECOGNITION_HEADER + 1))}- > .lgtm-received-facial-recognition-params--no-header
+    cat .lgtm-received-facial-recognition-params--no-header | rev | cut -c ${((#FACIAL_RECOGNITION_FOOTER + 1))}- | rev > .lgtm-received-facial-recognition-params--no-header--no-footer
     tar xf .lgtm-received-facial-recognition-params
     # Create CSV file for just-received photos
     ./../facial-recognition/openCV/lgtm-recognition/create_yalefaces_csv.py .lgtm-received-facial-recognition-params--no-header--no-footer > .lgtm-facial-recognition-training-photo-paths.csv
