@@ -205,7 +205,7 @@ compare_wireless_location_with_face_location () {
     cd ../facial-recognition/lgtm-recognition/
 
     # Run facial recognition
-    ./run_lgtm_facial_recognition.sh $webcam_id $old_dir/.lgtm-facial-recognition-training-photo-paths.csv $face_id $top_aoas
+    ./run_lgtm_facial_recognition.sh $webcam_id $old_dir/.lgtm-facial-recognition-training-photo-paths.csv $face_id $top_aoas 2>/dev/null
 
     # Echo exit status of LGTM facial recognition command
     echo $?
