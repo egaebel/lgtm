@@ -191,8 +191,6 @@ compare_wireless_location_with_face_location () {
     mv $facial_recognition_params_folder .lgtm-facial-recognition-training-photos
 
     # Generate csv file with paths to images for training and labels
-    ./create_yalefaces_csv.py .lgtm-facial-recognition-training-photos
-    # Create CSV file for just-received photos
     ./create_yalefaces_csv.py .lgtm-facial-recognition-training-photos > .lgtm-facial-recognition-training-photo-paths.csv
 
     # Grab the label from the first entry (they're assumed to all be the same)
@@ -207,15 +205,15 @@ compare_wireless_location_with_face_location () {
     # Run facial recognition
     ./run_lgtm_facial_recognition.sh $webcam_id $old_dir/.lgtm-facial-recognition-training-photo-paths.csv $face_id $top_aoas 2>/dev/null
 
-    # Echo exit status of LGTM facial recognition command
-    echo $?
+    # Return to original directory
     cd $old_dir
-    pwd
 }
 
 # Main code-----------------------------------------------------------------------------------------
 pkill log_to_file
 monitor_mode
+# Sleep to ensure other party has also switched into monitor mode
+sleep $SWITCH_WAIT_TIME
 
 echo "Waiting for LGTM initiation......................................"
 rm .lgtm-monitor.dat
@@ -236,7 +234,7 @@ if [[ $input == 'l' ]]; then
     echo "Initiating LGTM protocol........................................."
     pkill log_to_file
 
-    # Sleep for 5 seconds to ensure other party has switched into monitor mode
+    # Sleep to ensure other party has switched into monitor mode
     sleep $SWITCH_WAIT_TIME
 
     # Setup Injection mode
