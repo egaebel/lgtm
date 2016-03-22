@@ -69,7 +69,7 @@ injection_mode () {
     ip link set mon0 up
     echo "Killing default wireless interface, wlan0........................"
     ip link set wlan0 down
-    echo "Setting channel on mon0 to $channel_number $channel_type .............................."
+    echo "Setting channel on mon0 to $channel_number $channel_type ............................."
     iw dev mon0 set channel $channel_number $channel_type
     channel_set=$?
     while [ $channel_set -ne 0 ]; do
@@ -112,7 +112,7 @@ monitor_mode () {
     done
     echo "Bringing down default wireless interface wlan0..................."
     ip link set wlan0 down
-    echo "Setting channel to monitor on $wlan_interface to $channel_number $channel_type .................." 
+    echo "Setting channel to monitor on $wlan_interface to $channel_number $channel_type ................." 
     iw dev $wlan_interface set channel $channel_number $channel_type
     channel_set=$?
     while [ $channel_set -ne 0 ]; do
@@ -226,7 +226,7 @@ echo "Press 'L' to initiate LGTM from this computer...................."
 begin_lgtm=0
 input='a'
 while [[ $input != 'l' ]] && [[ $begin_lgtm -lt 1 ]]; do
-    read -n 1 -s -t 2 -r input
+    read -n 1 -s -r input
     # TODO: Later this token, "begin-lgtm-protocol", will also include a public key
     begin_lgtm=$(cat .lgtm-begin-monitor.dat | grep $LGTM_BEGIN_TOKEN | wc -l)
 done
