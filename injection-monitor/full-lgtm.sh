@@ -226,7 +226,7 @@ echo "Press 'L' to initiate LGTM from this computer...................."
 begin_lgtm=0
 input='a'
 while [[ $input != 'l' ]] && [[ $begin_lgtm -lt 1 ]]; do
-    read -n 1 -s -r input
+    read -n 1 -s -t 1 -r input
     # TODO: Later this token, "begin-lgtm-protocol", will also include a public key
     begin_lgtm=$(cat .lgtm-begin-monitor.dat | grep $LGTM_BEGIN_TOKEN | wc -l)
 done
