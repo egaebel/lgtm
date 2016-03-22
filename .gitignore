@@ -95,3 +95,14 @@ facial-recognition/lgtm-recognition/CMakeCache.txt
 facial-recognition/lgtm-recognition/lgtm_facial_recognition
 facial-recognition/lgtm-recognition/new-facial-recognition-model
 facial-recognition/Makefile
+injection-monitor/log-to-file/bf_to_eff.o
+injection-monitor/log-to-file/iwl_nl.o
+injection-monitor/log-to-file/q_approx.o
+injection-monitor/log-to-file/util.o
+injection-monitor/log-to-file/get_first_bfee
+injection-monitor/log-to-file/log_to_file
+injection-monitor/log-to-file/nl_bf_to_eff
+injection-monitor/log-to-file/parse_log
+injection-monitor/log-to-file/print_packets
+injection-monitor/packets-from-file/packets_from_file
+injection-monitor/packets-from-file/util.o
