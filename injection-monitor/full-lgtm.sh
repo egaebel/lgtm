@@ -247,9 +247,9 @@ if [[ $input == 'l' ]]; then
     echo $LGTM_BEGIN_TOKEN > .lgtm-begin-protocol
     ./packets-from-file/packets_from_file .lgtm-begin-protocol 1 $PACKET_DELAY
     
-    receive_and_process_facial_recognition_params()
-    send_facial_recognition_params()
-    compare_wireless_location_with_face_location()
+    receive_and_process_facial_recognition_params
+    send_facial_recognition_params
+    compare_wireless_location_with_face_location
 
     # Done!
     echo "LGTM COMPLETE!"
@@ -260,9 +260,9 @@ fi
 if [ $begin_lgtm -gt 0 ]; then
     echo "Other party initiated LGTM protocol.............................."
     
-    send_facial_recognition_params()
-    receive_and_process_facial_recognition_params()
-    compare_wireless_location_with_face_location()
+    send_facial_recognition_params
+    receive_and_process_facial_recognition_params
+    compare_wireless_location_with_face_location
     
     # Done!
     echo "LGTM COMPLETE!"
