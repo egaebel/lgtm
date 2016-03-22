@@ -5,9 +5,14 @@ used by the adapter unmanaged by the NetworkManager.
 To do this, open the file /etc/network/interfaces
 within, there will likely be the following lines, or something similar:
 
+
  # interfaces(5) file used by ifup(8) and ifdown(8)
+ 
  auto lo
+ 
  iface lo inet loopback
+ 
+ 
 
 Insert the following line at the end of this: (you must have super user privileges to do this)
 
