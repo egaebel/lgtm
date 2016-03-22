@@ -31,7 +31,7 @@ facial_recognition_file=$4
 # Constants-----------------------------------------------------------------------------------------
 SLEEP_TIME=2
 SWITCH_WAIT_TIME=5
-PACKET_DELAY=0
+PACKET_DELAY=1000
 
 # LGTM Magic String Constants-----------------------------------------------------------------------
 LGTM_BEGIN_TOKEN="lgtm-begin-protocol"
@@ -212,9 +212,14 @@ if [[ $input == 'l' ]]; then
     # Grab the characters after the semi-colon to the end of the line on the first line
     face_id=$(cat .lgtm-facial-recognition-training-photo-paths.csv | head -n1 | grep -o ";.*$" | cut -c 2-)
     top_aoas=$(cat .lgtm-top-aoas)
-    ./../facial-recognition/lgtm-recognition/run_lgtm_facial_recognition.sh .lgtm-facial-recognition-training-photo-paths.csv $face_id top_aoas
+    old_dir=$(pwd)
+    cd ../facial-recognition/lgtm-recognition/
+    ls $old_dir/
+    ./run_lgtm_facial_recognition.sh $old_dir/.lgtm-facial-recognition-training-photo-paths.csv $face_id top_aoas
     # Echo exit status of LGTM facial recognition command
     echo $?
+    cd $old_dir
+    pwd
     # Done!
     echo "LGTM COMPLETE!"
     exit
