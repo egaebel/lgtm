@@ -192,10 +192,8 @@ if [[ $input == 'l' ]]; then
     # Send facial recognition params
     echo "Sending 'facial recognition params'!"
     rm .lgtm-facial-recognition-params
-    cp -r $facial_recognition_file .lgtm-received-facial-recognition-params--no-header--no-footer-dir
-    tar czf .lgtm-received-facial-recognition-params--no-header--no-footer .lgtm-received-facial-recognition-params--no-header--no-footer-dir 
     echo $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
-    cat .lgtm-received-facial-recognition-params--no-header--no-footer >> .lgtm-facial-recognition-params
+    cat $facial_recognition_file >> .lgtm-facial-recognition-params
     echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
     
@@ -238,10 +236,8 @@ if [ $begin_lgtm -gt 0 ]; then
     # Send facial recognition params
     echo "Sending 'facial recognition params'!"
     rm .lgtm-facial-recognition-params
-    cp -r $facial_recognition_file .lgtm-received-facial-recognition-params--no-header--no-footer-dir
-    tar czf .lgtm-received-facial-recognition-params--no-header--no-footer .lgtm-received-facial-recognition-params--no-header--no-footer-dir 
     echo $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
-    cat .lgtm-received-facial-recognition-params--no-header--no-footer >> .lgtm-facial-recognition-params
+    cat $facial_recognition_file >> .lgtm-facial-recognition-params
     echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
 
