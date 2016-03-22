@@ -156,26 +156,25 @@ receive_facial_recognition_params () {
     ./log-to-file/log_to_file .lgtm-monitor.dat &
     lgtm_ack=0
     while [ $lgtm_ack -lt 1 ]; do
+        # Extract data from mpdus in packets
+        echo "Extracting data from received packets............................"
+        # Extract data on facial recognition params from received data
+        sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('read_mpdu_file.m'), exit"    
+        echo "Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
         # Receive ack + params
-        lgtm_ack=$(cat .lgtm-monitor.dat | grep $FACIAL_RECOGNITION_FOOTER | wc -l)
+        lgtm_ack=$(cat .lgtm-received-facial-recognition-params | grep $FACIAL_RECOGNITION_FOOTER | wc -l)
     done
     pkill log_to_file
     chmod 644 .lgtm-monitor.dat
     echo "Received 'facial recognition params'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 }
 
-process_facial_recognition_params () {
+localize_wireless_signal () {
     # Localize wireless signal
     echo "Localizing signal source........................................."
     logged_on_user=$(who | head -n1 | awk '{print $1;}')
     sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
     echo "Successfully localized signal source!"
-
-    # Extract data from mpdus in packets
-    echo "Extracting data from received packets............................"
-    # Extract data on facial recognition params from received data
-    sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('read_mpdu_file.m'), exit"    
-    echo "Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 }
 
 compare_wireless_location_with_face_location () {
@@ -249,7 +248,7 @@ if [[ $input == 'l' ]]; then
     
     receive_facial_recognition_params
     send_facial_recognition_params
-    process_facial_recognition_params
+    localize_wireless_signal
     compare_wireless_location_with_face_location
 
     # Done!
@@ -263,7 +262,7 @@ if [ $begin_lgtm -gt 0 ]; then
     
     send_facial_recognition_params
     receive_facial_recognition_params
-    process_facial_recognition_params
+    localize_wireless_signal
     compare_wireless_location_with_face_location
     
     # Done!
