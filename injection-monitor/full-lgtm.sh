@@ -192,8 +192,9 @@ if [[ $input == 'l' ]]; then
     # Send facial recognition params
     echo "Sending 'facial recognition params'!"
     rm .lgtm-facial-recognition-params
+    cp $facial_recognition_file .lgtm-received-facial-recognition-params
     echo $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
-    cat $facial_recognition_file >> .lgtm-facial-recognition-params
+    cat .lgtm-received-facial-recognition-params >> .lgtm-facial-recognition-params
     echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
     
@@ -233,13 +234,16 @@ if [ $begin_lgtm -gt 0 ]; then
     # Sleep for 5 seconds to ensure other party has switched into monitor mode....
     sleep $SWITCH_WAIT_TIME
     # Send acknowledgement + facial recognition params, TODO: later this will include a public key
+    # Send facial recognition params
     echo "Sending 'facial recognition params'!"
     rm .lgtm-facial-recognition-params
+    cp $facial_recognition_file .lgtm-received-facial-recognition-params
     echo $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
-    cat $facial_recognition_file >> .lgtm-facial-recognition-params
+    cat .lgtm-received-facial-recognition-params >> .lgtm-facial-recognition-params
     echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
-    ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1 $PACKET_DELAY
-    
+    ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
+
+
     # Setup Monitor mode
     monitor_mode
     # Await facial recognition params
