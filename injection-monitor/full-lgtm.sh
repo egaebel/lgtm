@@ -168,6 +168,8 @@ receive_facial_recognition_params () {
         echo logged_on_user: $logged_on_user
         sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('read_mpdu_file.m'), exit"    
         echo "Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        # Strip off error correction
+        melt.sh .lgtm-received-facial-recognition-params.ecc > .lgtm-received-facial-recognition-params
         # Receive ack + params
         lgtm_ack=$(cat .lgtm-received-facial-recognition-params | grep $FACIAL_RECOGNITION_FOOTER | wc -l)
     done
@@ -186,9 +188,6 @@ localize_wireless_signal () {
 
 compare_wireless_location_with_face_location () {
     echo "Checking for face/signal overlap................................."
-
-    # Strip off error correction
-    melt.sh .lgtm-received-facial-recognition-params.ecc > .lgtm-received-facial-recognition-params
 
     # Strip off $FACIAL_RECOGNITION_HEADER, $FACIAL_RECOGNITION_FOOTER, and anything before or after
     # Plus one for the string terminator ('\0')
