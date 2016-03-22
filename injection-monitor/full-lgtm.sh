@@ -192,9 +192,10 @@ if [[ $input == 'l' ]]; then
     # Send facial recognition params
     echo "Sending 'facial recognition params'!"
     rm .lgtm-facial-recognition-params
-    cp $facial_recognition_file .lgtm-received-facial-recognition-params
+    cp $facial_recognition_file .lgtm-received-facial-recognition-params--no-header--no-footer-dir
+    tar czf .lgtm-received-facial-recognition-params--no-header--no-footer .lgtm-received-facial-recognition-params--no-header--no-footer-dir 
     echo $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
-    cat .lgtm-received-facial-recognition-params >> .lgtm-facial-recognition-params
+    cat .lgtm-received-facial-recognition-params--no-header--no-footer >> .lgtm-facial-recognition-params
     echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
     
@@ -206,7 +207,7 @@ if [[ $input == 'l' ]]; then
     cat .lgtm-received-facial-recognition-params | dd bs=1 skip=$num_header_bytes > .lgtm-received-facial-recognition-params--no-header
     byte_offset=$(cat .lgtm-received-facial-recognition-params--no-header | grep --byte-offset --only-matching --text $FACIAL_RECOGNITION_FOOTER | grep --only-matching [0-9]*)
     cat .lgtm-received-facial-recognition-params--no-header | dd bs=1 count=$byte_offset > .lgtm-received-facial-recognition-params--no-header--no-footer
-    #cat .lgtm-received-facial-recognition-params--no-header | rev | cut -c $((${#FACIAL_RECOGNITION_FOOTER} + 1))- | rev > .lgtm-received-facial-recognition-params--no-header--no-footer
+    echo byte offset: $byte_offset
     tar xf .lgtm-received-facial-recognition-params--no-header--no-footer
     # Create CSV file for just-received photos
     ./../facial-recognition/lgtm-recognition/create_yalefaces_csv.py .lgtm-received-facial-recognition-params--no-header--no-footer > .lgtm-facial-recognition-training-photo-paths.csv
@@ -237,12 +238,12 @@ if [ $begin_lgtm -gt 0 ]; then
     # Send facial recognition params
     echo "Sending 'facial recognition params'!"
     rm .lgtm-facial-recognition-params
-    cp $facial_recognition_file .lgtm-received-facial-recognition-params
+    cp $facial_recognition_file .lgtm-received-facial-recognition-params--no-header--no-footer-dir
+    tar czf .lgtm-received-facial-recognition-params--no-header--no-footer .lgtm-received-facial-recognition-params--no-header--no-footer-dir 
     echo $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
-    cat .lgtm-received-facial-recognition-params >> .lgtm-facial-recognition-params
+    cat .lgtm-received-facial-recognition-params--no-header--no-footer >> .lgtm-facial-recognition-params
     echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
-
 
     # Setup Monitor mode
     monitor_mode
