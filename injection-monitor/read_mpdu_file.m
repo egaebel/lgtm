@@ -33,7 +33,7 @@ function read_mpdu_file(input_filename, output_filename)
     %% Input check
     if nargin == 0
         input_filename = '.lgtm-monitor.dat';
-        output_filename = '.lgtm-received-facial-recognition-params';
+        output_filename = '.lgtm-received-facial-recognition-params.ecc';
     else
         narginchk(2, 2);
     end
