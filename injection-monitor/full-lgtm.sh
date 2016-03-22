@@ -27,6 +27,7 @@ channel_number=$1
 channel_type=$2
 wlan_interface=$3
 facial_recognition_file=$4
+webcam_id=$5
 
 # Constants-----------------------------------------------------------------------------------------
 SLEEP_TIME=2
@@ -206,16 +207,17 @@ if [[ $input == 'l' ]]; then
     byte_offset=$(cat .lgtm-received-facial-recognition-params--no-header | grep --byte-offset --only-matching --text $FACIAL_RECOGNITION_FOOTER | grep --only-matching [0-9]*)
     cat .lgtm-received-facial-recognition-params--no-header | dd bs=1 count=$byte_offset > .lgtm-received-facial-recognition-params--no-header--no-footer
     echo byte offset: $byte_offset
-    tar xf .lgtm-received-facial-recognition-params--no-header--no-footer
+    facial_recognition_params_folder=$(tar xvf .lgtm-received-facial-recognition-params--no-header--no-footer | head -n 1)
+    echo "facial_recognition_params_folder: " $facial_recognition_params_folder
+    ./create_yalefaces_csv.py $facial_recognition_params_folder
     # Create CSV file for just-received photos
-    ./../facial-recognition/lgtm-recognition/create_yalefaces_csv.py .lgtm-received-facial-recognition-params--no-header--no-footer > .lgtm-facial-recognition-training-photo-paths.csv
+    ./create_yalefaces_csv.py $facial_recognition_params_folder > .lgtm-facial-recognition-training-photo-paths.csv
     # Grab the characters after the semi-colon to the end of the line on the first line
     face_id=$(cat .lgtm-facial-recognition-training-photo-paths.csv | head -n1 | grep -o ";.*$" | cut -c 2-)
     top_aoas=$(cat .lgtm-top-aoas)
     old_dir=$(pwd)
     cd ../facial-recognition/lgtm-recognition/
-    ls $old_dir/
-    ./run_lgtm_facial_recognition.sh $old_dir/.lgtm-facial-recognition-training-photo-paths.csv $face_id top_aoas
+    ./run_lgtm_facial_recognition.sh $webcam_id $old_dir/.lgtm-facial-recognition-training-photo-paths.csv $face_id $top_aoas
     # Echo exit status of LGTM facial recognition command
     echo $?
     cd $old_dir

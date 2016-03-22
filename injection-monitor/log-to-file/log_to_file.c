@@ -84,7 +84,7 @@ int main(int argc, char** argv)
 		cmsg = NLMSG_DATA(buf);
 		if (count % SLOW_MSG_CNT == 0)
                 {
-			printf("received %d bytes: id: %d val: %d seq: %d clen: %d\n", cmsg->len, cmsg->id.idx, cmsg->id.val, cmsg->seq, cmsg->len);
+			// printf("received %d bytes: id: %d val: %d seq: %d clen: %d\n", cmsg->len, cmsg->id.idx, cmsg->id.val, cmsg->seq, cmsg->len);
                 }
 		/* Log the data to file */
 		l = (unsigned short) cmsg->len;
