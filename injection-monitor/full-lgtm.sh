@@ -154,6 +154,7 @@ receive_facial_recognition_params () {
     # Listen for facial recognition parameters, TODO: later it will be ack + recog params + public key
     echo "Awaiting 'facial recognition params'............................."
     rm .lgtm-monitor.dat
+    rm .lgtm-received-facial-recognition-params
     ./log-to-file/log_to_file .lgtm-monitor.dat &
     lgtm_ack=0
     # Figure this out to use with sudo -u below
@@ -189,7 +190,6 @@ localize_wireless_signal () {
 compare_wireless_location_with_face_location () {
     echo "Checking for face/signal overlap................................."
 
-    rm .lgtm-received-facial-recognition-params
     rm .lgtm-received-facial-recognition-params--no-header
     rm .lgtm-received-facial-recognition-params--no-header--no-footer
     # Strip off $FACIAL_RECOGNITION_HEADER, $FACIAL_RECOGNITION_FOOTER, and anything before or after
