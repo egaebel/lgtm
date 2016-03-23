@@ -81,7 +81,7 @@ function globals_init
     DEBUG_PATHS = false;
     DEBUG_PATHS_LIGHT = false;
     %% TODO: Tune this for prod
-    NUMBER_OF_PACKETS_TO_CONSIDER = 40; % Set to -1 to ignore this variable's value
+    NUMBER_OF_PACKETS_TO_CONSIDER = 100; % Set to -1 to ignore this variable's value
     DEBUG_GMM = false;
     DEBUG_BRIDGE_CODE_CALLING = false;
     
@@ -126,7 +126,8 @@ function output_top_aoas = run(data_files)
     % Set physical layer parameters (frequency, subfrequency spacing, and antenna spacing
     antenna_distance = 0.1;
     % frequency = 5 * 10^9;
-    frequency = 5.785 * 10^9;
+    % frequency = 5.785 * 10^9;
+    frequency = 5.32 * 10^9;
     sub_freq_delta = (40 * 10^6) / 30;
     
     % Loop over passed in data files
