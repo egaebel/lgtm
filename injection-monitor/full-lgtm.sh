@@ -139,7 +139,7 @@ send_facial_recognition_params () {
     # Send facial recognition params
     rm .lgtm-facial-recognition-params
     echo $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
-    cat $facial_recognition_file >> .lgtm-facial-recognition-params
+    dd if=$facial_recognition_file of=.lgtm-facial-recognition-params seek=${#FACIAL_RECOGNITION_HEADER} bs=1
     echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
 
     # Add error correction to the file
@@ -162,16 +162,21 @@ receive_facial_recognition_params () {
     # Figure this out to use with sudo -u below
     logged_on_user=$(who | head -n1 | awk '{print $1;}')
     while [ $lgtm_ack -lt 1 ]; do
-        # Extract data from mpdus in packets
-        echo "Extracting data from received packets............................"
-        # Extract data on facial recognition params from received data
-        echo logged_on_user: $logged_on_user
-        sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('read_mpdu_file.m'), exit"    
-        echo "Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-        # Strip off error correction
-        melt.sh .lgtm-received-facial-recognition-params.ecc > .lgtm-received-facial-recognition-params
-        # Receive ack + params
-        lgtm_ack=$(cat .lgtm-received-facial-recognition-params | grep $FACIAL_RECOGNITION_FOOTER | wc -l)
+        # Count the file size in bytes using wc, and cut off the file name from the output (only want the number!)
+        file_size=$(wc --bytes .lgtm-monitor.dat | cut -d ' ' -f 1)
+        echo file size: $file_size
+        if [ "${file_size:0}" -gt 0 ]; then
+            # Extract data from mpdus in packets
+            echo "Extracting data from received packets............................"
+            # Extract data on facial recognition params from received data
+            sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('read_mpdu_file.m'), exit"    
+            echo "Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+            # Strip off error correction
+            melt.sh .lgtm-received-facial-recognition-params.ecc > .lgtm-received-facial-recognition-params
+            # Receive ack + params
+            lgtm_ack=$(cat .lgtm-received-facial-recognition-params | grep $FACIAL_RECOGNITION_FOOTER | wc -l)
+        fi
+        sleep 3
     done
     pkill log_to_file
     chmod 644 .lgtm-monitor.dat
@@ -192,9 +197,9 @@ compare_wireless_location_with_face_location () {
     # Strip off $FACIAL_RECOGNITION_HEADER, $FACIAL_RECOGNITION_FOOTER, and anything before or after
     # Plus one for the string terminator ('\0')
     num_header_bytes=$((${#FACIAL_RECOGNITION_HEADER} + 1))
-    cat .lgtm-received-facial-recognition-params | dd bs=1 skip=$num_header_bytes > .lgtm-received-facial-recognition-params--no-header
-    byte_offset=$(cat .lgtm-received-facial-recognition-params--no-header | grep --byte-offset --only-matching --text $FACIAL_RECOGNITION_FOOTER | grep --only-matching [0-9]*)
-    cat .lgtm-received-facial-recognition-params--no-header | dd bs=1 count=$byte_offset > .lgtm-received-facial-recognition-params--no-header--no-footer
+    dd if=.lgtm-received-facial-recognition-params bs=1 skip=$num_header_bytes of=.lgtm-received-facial-recognition-params--no-header
+    byte_offset=$(dd if=.lgtm-received-facial-recognition-params--no-header bs=1 | grep --byte-offset --only-matching --text $FACIAL_RECOGNITION_FOOTER | grep --only-matching [0-9]*)
+    dd if=.lgtm-received-facial-recognition-params--no-header bs=1 count=$byte_offset of=.lgtm-received-facial-recognition-params--no-header--no-footer
     
     # Extract files from tar archive
     tar xvf .lgtm-received-facial-recognition-params--no-header--no-footer   
