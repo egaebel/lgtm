@@ -70,7 +70,7 @@ function read_mpdu_file(input_filename, output_filename)
 
     payload_file = fopen(output_filename, 'wb');
     if (payload_file < 0)
-        error('Couldn''t open file %s', 'payload_file');
+        error('Couldn''t open file %s', output_filename);
     end
     num_bytes_written = 0;
     
