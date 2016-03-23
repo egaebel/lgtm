@@ -139,13 +139,15 @@ send_facial_recognition_params () {
     # Send facial recognition params
     rm .lgtm-facial-recognition-params
     echo $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
-    dd if=$facial_recognition_file of=.lgtm-facial-recognition-params seek=${#FACIAL_RECOGNITION_HEADER} bs=1
+    #dd if=$facial_recognition_file of=.lgtm-facial-recognition-params seek=${#FACIAL_RECOGNITION_HEADER} bs=1
+    freeze.sh .lgtm-facial-recognition-params >> .lgtm-facial-recognition-params
     echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
 
     # Add error correction to the file
-    freeze.sh .lgtm-facial-recognition-params > .lgtm-facial-recognition-params.ecc
+    #freeze.sh .lgtm-facial-recognition-params > .lgtm-facial-recognition-params.ecc
 
-    ./packets-from-file/packets_from_file .lgtm-facial-recognition-params.ecc 1
+    #./packets-from-file/packets_from_file .lgtm-facial-recognition-params.ecc 1
+    ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
     echo "Sent 'facial recognition params'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 }
 
@@ -172,9 +174,9 @@ receive_facial_recognition_params () {
             sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('read_mpdu_file.m'), exit"    
             echo "Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
             # Strip off error correction
-            melt.sh .lgtm-received-facial-recognition-params.ecc > .lgtm-received-facial-recognition-params
+            #melt.sh .lgtm-received-facial-recognition-params.ecc > .lgtm-received-facial-recognition-params
             # Receive ack + params
-            lgtm_ack=$(cat .lgtm-received-facial-recognition-params | grep $FACIAL_RECOGNITION_FOOTER | wc -l)
+            lgtm_ack=$(cat .lgtm-received-facial-recognition-params.ecc | grep $FACIAL_RECOGNITION_FOOTER | wc -l)
         fi
         sleep 3
     done
@@ -197,9 +199,11 @@ compare_wireless_location_with_face_location () {
     # Strip off $FACIAL_RECOGNITION_HEADER, $FACIAL_RECOGNITION_FOOTER, and anything before or after
     # Plus one for the string terminator ('\0')
     num_header_bytes=$((${#FACIAL_RECOGNITION_HEADER} + 1))
-    dd if=.lgtm-received-facial-recognition-params bs=1 skip=$num_header_bytes of=.lgtm-received-facial-recognition-params--no-header
+    dd if=.lgtm-received-facial-recognition-params.ecc bs=1 skip=$num_header_bytes of=.lgtm-received-facial-recognition-params--no-header
     byte_offset=$(dd if=.lgtm-received-facial-recognition-params--no-header bs=1 | grep --byte-offset --only-matching --text $FACIAL_RECOGNITION_FOOTER | grep --only-matching [0-9]*)
-    dd if=.lgtm-received-facial-recognition-params--no-header bs=1 count=$byte_offset of=.lgtm-received-facial-recognition-params--no-header--no-footer
+    dd if=.lgtm-received-facial-recognition-params--no-header bs=1 count=$byte_offset of=.lgtm-received-facial-recognition-params--no-header--no-footer.ecc
+    # Strip off error correction
+    melt.sh .lgtm-received-facial-recognition-params--no-header--no-footer.ecc > .lgtm-received-facial-recognition-params--no-header--no-footer
     
     # Extract files from tar archive
     tar xvf .lgtm-received-facial-recognition-params--no-header--no-footer   
