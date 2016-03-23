@@ -69,7 +69,7 @@ using namespace cv;
 using namespace std;
 
 //~Constants----------------------------------------------------------------------------------------
-static const int ANGLE_TOLERANCE = 2;
+static const int ANGLE_TOLERANCE = 4;
 static const string viewingWindow = "Viewing Window";
 static const string confirmationWindow = "Is this who you want to communicate with?";
 
