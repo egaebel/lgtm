@@ -191,7 +191,7 @@ compare_wireless_location_with_face_location () {
 
     # Strip off $FACIAL_RECOGNITION_HEADER, $FACIAL_RECOGNITION_FOOTER, and anything before or after
     # Plus one for the string terminator ('\0')
-    num_header_bytes=$((${#FACIAL_RECOGNITION_HEADER} + 1))
+    num_header_bytes=${#FACIAL_RECOGNITION_HEADER}
     dd if=.lgtm-received-facial-recognition-params bs=1 skip=$num_header_bytes of=.lgtm-received-facial-recognition-params--no-header
     byte_offset=$(dd if=.lgtm-received-facial-recognition-params--no-header bs=1 | grep --byte-offset --only-matching --text $FACIAL_RECOGNITION_FOOTER | grep --only-matching [0-9]*)
     dd if=.lgtm-received-facial-recognition-params--no-header bs=1 count=$byte_offset of=.lgtm-received-facial-recognition-params--no-header--no-footer
