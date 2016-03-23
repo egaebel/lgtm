@@ -189,6 +189,9 @@ localize_wireless_signal () {
 compare_wireless_location_with_face_location () {
     echo "Checking for face/signal overlap................................."
 
+    rm .lgtm-received-facial-recognition-params
+    rm .lgtm-received-facial-recognition-params--no-header
+    rm .lgtm-received-facial-recognition-params--no-header--no-footer
     # Strip off $FACIAL_RECOGNITION_HEADER, $FACIAL_RECOGNITION_FOOTER, and anything before or after
     # Plus one for the string terminator ('\0')
     num_header_bytes=${#FACIAL_RECOGNITION_HEADER}
@@ -200,9 +203,11 @@ compare_wireless_location_with_face_location () {
     tar xvf .lgtm-received-facial-recognition-params--no-header--no-footer   
     facial_recognition_params_folder=$(tar xvf .lgtm-received-facial-recognition-params--no-header--no-footer | head -n 1)
     echo "facial_recognition_params_folder: " $facial_recognition_params_folder
+    rm -rf .lgtm-facial-recognition-training-photos
     mv $facial_recognition_params_folder .lgtm-facial-recognition-training-photos
 
     # Generate csv file with paths to images for training and labels
+    rm .lgtm-facial-recognition-training-photo-paths.csv
     ./create_yalefaces_csv.py .lgtm-facial-recognition-training-photos > .lgtm-facial-recognition-training-photo-paths.csv
 
     # Grab the label from the first entry (they're assumed to all be the same)
