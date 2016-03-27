@@ -21,8 +21,7 @@
 % DEALINGS IN THE SOFTWARE.
 %
 
-%{
-function spotfi
+function spotfi_file_runner
     %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%
     globals_init()
     global DEBUG_BRIDGE_CODE_CALLING
@@ -44,8 +43,8 @@ function spotfi
     % data_files = {'test-data/line-of-sight-localization-tests--in-room/los-test-heater.dat'};
     % top_aoas = run(data_files);
     % top_aoas
-    data_file = {'../injection-monitor/.lgtm-monitor.dat'};
-    %data_file = {'test-data/line-of-sight-localization-tests--in-room/los-test-heater.dat'};
+    %data_file = '../injection-monitor/.lgtm-monitor.dat';
+    data_file = 'test-data/line-of-sight-localization-tests--in-room/los-test-heater.dat';
     top_aoas = run(data_file);
     output_file_name = '../injection-monitor/.lgtm-top-aoas';
     output_top_aoas(top_aoas, output_file_name);
@@ -53,9 +52,7 @@ function spotfi
         fprintf('Done Running!\n')
     end
 end
-%}
 
-%{
 %% Output the array of top_aoas to the given file as doubles
 % top_aoas         -- The angle of arrivals selected as the most likely.
 % output_file_name -- The name of the file to write the angle of arrivals to.
@@ -71,32 +68,105 @@ function output_top_aoas(top_aoas, output_file_name)
     fprintf(output_file, '\n');
     fclose(output_file);
 end
-%}
+
+function globals_init
+    %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%
+    % Debug Controls
+    %{
+    global DEBUG_PATHS
+    global DEBUG_PATHS_LIGHT
+    %}
+    global NUMBER_OF_PACKETS_TO_CONSIDER
+    global DEBUG_BRIDGE_CODE_CALLING
+    %{
+    DEBUG_PATHS = false;
+    DEBUG_PATHS_LIGHT = false;
+    %}
+    %% TODO: Tune this for prod
+    NUMBER_OF_PACKETS_TO_CONSIDER = -1; % Set to -1 to ignore this variable's value
+    DEBUG_BRIDGE_CODE_CALLING = false;
+    
+    % Output controls
+    %{
+    global OUTPUT_AOAS
+    global OUTPUT_TOFS
+    global OUTPUT_AOA_MUSIC_PEAK_GRAPH
+    global OUTPUT_TOF_MUSIC_PEAK_GRAPH
+    global OUTPUT_AOA_TOF_MUSIC_PEAK_GRAPH
+    global OUTPUT_SELECTIVE_AOA_TOF_MUSIC_PEAK_GRAPH
+    global OUTPUT_AOA_VS_TOF_PLOT
+    %}
+    global OUTPUT_SUPPRESSED
+    %{
+    global OUTPUT_PACKET_PROGRESS
+    global OUTPUT_FIGURES_SUPPRESSED
+    OUTPUT_AOAS = false;
+    OUTPUT_TOFS = false;
+    OUTPUT_AOA_MUSIC_PEAK_GRAPH = false;%true;
+    OUTPUT_TOF_MUSIC_PEAK_GRAPH = false;%true;
+    OUTPUT_AOA_TOF_MUSIC_PEAK_GRAPH = false;
+    OUTPUT_SELECTIVE_AOA_TOF_MUSIC_PEAK_GRAPH = false;
+    OUTPUT_AOA_VS_TOF_PLOT = false;
+    %}
+    OUTPUT_SUPPRESSED = true;
+    %{
+    OUTPUT_PACKET_PROGRESS = false;
+    OUTPUT_FIGURES_SUPPRESSED = false; % Set to true when running in deployment from command line
+    %}
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+end
 
 %% Runs the SpotFi test over the passed in data files which each contain CSI data for many packets
-% csi_trace        -- the csi_trace for several packets
-% frequency        -- the base frequency of the signal
-% sub_freq_delta   -- the difference between adjacent subcarriers
-% antenna_distance -- the distance between each antenna in the array, measured in meters
-% data_name        -- a label for the data which is included in certain outputs
-function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_distance, data_name)
+% data_files -- a cell array of file paths to data files
+function output_top_aoas = run(data_file)
     %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%
+    % Debug Controls
+    global NUMBER_OF_PACKETS_TO_CONSIDER
+    
     % Output controls
     global OUTPUT_SUPPRESSED
+    %{
     global OUTPUT_AOA_VS_TOF_PLOT
     global OUTPUT_PACKET_PROGRESS
     global OUTPUT_FIGURES_SUPPRESSED
+    %}
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % globals_init();
-    if nargin < 5
-        data_name = ' - ';
+
+    % Set physical layer parameters (frequency, subfrequency spacing, and antenna spacing
+    antenna_distance = 0.1;
+    % frequency = 5 * 10^9;
+    frequency = 5.785 * 10^9;
+    sub_freq_delta = (40 * 10^6) / 30;
+
+    % Read data file in
+    if ~OUTPUT_SUPPRESSED
+        fprintf('\n\nRunning on data file: %s\n', data_file)
     end
-    
+    csi_trace = read_bf_file(data_file);
+
+    % Extract CSI information for each packet
+    if ~OUTPUT_SUPPRESSED
+        fprintf('Have CSI for %d packets\n', length(csi_trace))
+    end
+
+    % Set the number of packets to consider, by default consider all
     num_packets = length(csi_trace);
+    if NUMBER_OF_PACKETS_TO_CONSIDER ~= -1
+        num_packets = NUMBER_OF_PACKETS_TO_CONSIDER;
+    end
+    if ~OUTPUT_SUPPRESSED
+        fprintf('Considering CSI for %d packets\n', num_packets)
+    end
+    sampled_csi_trace = csi_sampling(csi_trace, num_packets);
+    
+    output_top_aoas = spotfi(sampled_csi_trace, frequency, sub_freq_delta, antenna_distance);
+    
+    %{
     % Loop over packets, estimate AoA and ToF from the CSI data for each packet
     aoa_packet_data = cell(num_packets, 1);
     tof_packet_data = cell(num_packets, 1);
     packet_one_phase_matrix = 0;
+
 
     % Do computations for packet one so the packet loop can be parallelized
     % Get CSI for current packet
@@ -114,7 +184,8 @@ function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_
     smoothed_sanitized_csi = smooth_csi(sanitized_csi);
     % Run SpotFi's AoA-ToF MUSIC algorithm on the smoothed and sanitized CSI matrix
     [aoa_packet_data{1}, tof_packet_data{1}] = aoa_tof_music(...
-            smoothed_sanitized_csi, antenna_distance, frequency, sub_freq_delta, data_name);
+            smoothed_sanitized_csi, antenna_distance, frequency, sub_freq_delta, ...
+            data_files{data_file_index});
 
     %% TODO: REMEMBER THIS IS A PARFOR LOOP, AND YOU CHANGED THE ABOVE CODE AND THE BEGIN INDEX
     parfor (packet_index = 2:num_packets, 3)
@@ -130,22 +201,14 @@ function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_
         csi = squeeze(csi);
 
         % Sanitize ToFs with Algorithm 1
-        %% TODO: this is commented out for parfor's sake
-        %{
-        if packet_index == 1
-            packet_one_phase_matrix = unwrap(angle(csi), pi, 2);
-            sanitized_csi = spotfi_algorithm_1(csi, sub_freq_delta);
-        else
-            sanitized_csi = spotfi_algorithm_1(csi, sub_freq_delta, packet_one_phase_matrix);
-        end
-        %}
         sanitized_csi = spotfi_algorithm_1(csi, sub_freq_delta, packet_one_phase_matrix);
 
         % Acquire smoothed CSI matrix
         smoothed_sanitized_csi = smooth_csi(sanitized_csi);
         % Run SpotFi's AoA-ToF MUSIC algorithm on the smoothed and sanitized CSI matrix
         [aoa_packet_data{packet_index}, tof_packet_data{packet_index}] = aoa_tof_music(...
-                smoothed_sanitized_csi, antenna_distance, frequency, sub_freq_delta, data_name);
+                smoothed_sanitized_csi, antenna_distance, frequency, sub_freq_delta, ...
+                data_files{data_file_index});
     end
 
     % Find the number of elements that will be in the full_measurement_matrix
@@ -216,13 +279,11 @@ function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_
     end
     if ~OUTPUT_FIGURES_SUPPRESSED
         % Dendrogram
-        %{
-        dendrogram_figure_name = sprintf('Dendrogram for file: %s', data_files{data_file_index});
-        figure('Name', dendrogram_figure_name, 'NumberTitle', 'off')
-        dendrogram(linkage_tree, 'ColorThreshold', 'default')
-        set(gca, 'YTick', linspace(0, 10, 100));
-        title(dendrogram_figure_name)
-        %}
+        % dendrogram_figure_name = sprintf('Dendrogram for file: %s', data_files{data_file_index});
+        % figure('Name', dendrogram_figure_name, 'NumberTitle', 'off')
+        % dendrogram(linkage_tree, 'ColorThreshold', 'default')
+        % set(gca, 'YTick', linspace(0, 10, 100));
+        % title(dendrogram_figure_name)
     end
 
     % Collect data and indices into cluster-specific cell arrays
@@ -267,31 +328,31 @@ function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_
     end
 
     cluster_plot_style = {'bo', 'go', 'ro', 'ko', ...
-                        'bs', 'gs', 'rs', 'ks', ...
-                        'b^', 'g^', 'r^', 'k^', ... 
-                        'bp', 'gp', 'rp', 'kp', ... 
-                        'b*', 'g*', 'r*', 'k*', ... 
-                        'bh', 'gh', 'rh', 'kh', ... 
-                        'bx', 'gx', 'rx', 'kx', ... 
-                        'b<', 'g<', 'r<', 'k<', ... 
-                        'b>', 'g>', 'r>', 'k>', ... 
-                        'b+', 'g+', 'r+', 'k+', ... 
-                        'bd', 'gd', 'rd', 'kd', ... 
-                        'bv', 'gv', 'rv', 'kv', ... 
-                        'b.', 'g.', 'r.', 'k.', ... 
-                        'co', 'mo', 'yo', 'wo', ...
-                        'cs', 'ms', 'ys', ...
-                        'c^', 'm^', 'y^', ... 
-                        'cp', 'mp', 'yp', ... 
-                        'c*', 'm*', 'y*', ... 
-                        'ch', 'mh', 'yh', ... 
-                        'cx', 'mx', 'yx', ... 
-                        'c<', 'm<', 'y<', ... 
-                        'c>', 'm>', 'y>', ... 
-                        'c+', 'm+', 'y+', ... 
-                        'cd', 'md', 'yd', ... 
-                        'cv', 'mv', 'yv', ... 
-                        'c.', 'm.', 'y.', ... 
+                    'bs', 'gs', 'rs', 'ks', ...
+                    'b^', 'g^', 'r^', 'k^', ... 
+                    'bp', 'gp', 'rp', 'kp', ... 
+                    'b*', 'g*', 'r*', 'k*', ... 
+                    'bh', 'gh', 'rh', 'kh', ... 
+                    'bx', 'gx', 'rx', 'kx', ... 
+                    'b<', 'g<', 'r<', 'k<', ... 
+                    'b>', 'g>', 'r>', 'k>', ... 
+                    'b+', 'g+', 'r+', 'k+', ... 
+                    'bd', 'gd', 'rd', 'kd', ... 
+                    'bv', 'gv', 'rv', 'kv', ... 
+                    'b.', 'g.', 'r.', 'k.', ... 
+                    % 'co', 'mo', 'yo', 'wo', ...
+                    % 'cs', 'ms', 'ys', 'ws', ...
+                    % 'c^', 'm^', 'y^', 'w^', ... 
+                    % 'cp', 'mp', 'yp', 'wp', ... 
+                    % 'c*', 'm*', 'y*', 'w*', ... 
+                    % 'ch', 'mh', 'yh', 'wh', ... 
+                    % 'cx', 'mx', 'yx', 'wx', ... 
+                    % 'c<', 'm<', 'y<', 'w<', ... 
+                    % 'c>', 'm>', 'y>', 'w>', ... 
+                    % 'c+', 'm+', 'y+', 'w+', ... 
+                    % 'cd', 'md', 'yd', 'wd', ... 
+                    % 'cv', 'mv', 'yv', 'wv', ... 
+                    % 'c.', 'm.', 'y.', 'w.', ... 
     };
 
     %% TODO: Tune parameters
@@ -306,7 +367,7 @@ function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_
     likelihood = zeros(length(clusters), 1);
     cluster_aoa = zeros(length(clusters), 1);
     max_likelihood_index = -1;
-    top_likelihood_indices = [-1; -1; -1; -1; -1;];
+    top_likelihood_indices = [-1; -1; -1;];% -1; -1;];
     for ii = 1:length(clusters)
         % Ignore clusters of size 1
         if size(clusters{ii}, 1) == 0
@@ -423,7 +484,7 @@ function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_
 
     % Plot AoA & ToF
     if OUTPUT_AOA_VS_TOF_PLOT && ~OUTPUT_SUPPRESSED && ~OUTPUT_FIGURES_SUPPRESSED
-        figure_name_string = sprintf('%s: AoA vs ToF Plot', 'data_file_index');
+        figure_name_string = sprintf('%s: AoA vs ToF Plot', data_files{data_file_index});
         figure('Name', figure_name_string, 'NumberTitle', 'off')
         hold on
         % Plot the data from each cluster and draw a circle around each cluster 
@@ -470,10 +531,11 @@ function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_
     max_likelihood_average_aoa = cluster_aoa(max_likelihood_index, 1);
     if ~OUTPUT_SUPPRESSED
         fprintf('The Estimated Angle of Arrival for data set %s is %f\n', ...
-                'data_file_index', max_likelihood_average_aoa)
+                data_files{data_file_index}, max_likelihood_average_aoa)
     end
     % Profit
     output_top_aoas = cluster_aoa(top_likelihood_indices);
+    %}
 end
 
 %% Computes ellipse totally enclosing the points defined by x and y, includes room for markers, etc.
@@ -518,41 +580,6 @@ function [ellipse_x, ellipse_y] = compute_ellipse(x, y)
     ellipse_y = radius_y * sin(t) + centroid_y;
 end
 %{
-function globals_init
-    %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%
-    % Debug Controls
-    global DEBUG_PATHS
-    global DEBUG_PATHS_LIGHT
-    global DEBUG_BRIDGE_CODE_CALLING
-    DEBUG_PATHS = false;
-    DEBUG_PATHS_LIGHT = false;
-    DEBUG_BRIDGE_CODE_CALLING = false;
-    
-    % Output controls
-    global OUTPUT_AOAS
-    global OUTPUT_TOFS
-    global OUTPUT_AOA_MUSIC_PEAK_GRAPH
-    global OUTPUT_TOF_MUSIC_PEAK_GRAPH
-    global OUTPUT_AOA_TOF_MUSIC_PEAK_GRAPH
-    global OUTPUT_SELECTIVE_AOA_TOF_MUSIC_PEAK_GRAPH
-    global OUTPUT_AOA_VS_TOF_PLOT
-    global OUTPUT_SUPPRESSED
-    global OUTPUT_PACKET_PROGRESS
-    global OUTPUT_FIGURES_SUPPRESSED
-    OUTPUT_AOAS = false;
-    OUTPUT_TOFS = false;
-    OUTPUT_AOA_MUSIC_PEAK_GRAPH = false;
-    OUTPUT_TOF_MUSIC_PEAK_GRAPH = false;
-    OUTPUT_AOA_TOF_MUSIC_PEAK_GRAPH = false;
-    OUTPUT_SELECTIVE_AOA_TOF_MUSIC_PEAK_GRAPH = false;
-    OUTPUT_AOA_VS_TOF_PLOT = false;
-    OUTPUT_SUPPRESSED = false;
-    OUTPUT_PACKET_PROGRESS = false;
-    OUTPUT_FIGURES_SUPPRESSED = true; % Set to true when running in deployment from command line
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-end
-%}
-
 %% Run MUSIC algorithm with SpotFi method including ToF and AoA
 % x                -- the signal matrix
 % antenna_distance -- the distance between the antennas in the linear array
@@ -570,7 +597,7 @@ end
 function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
         antenna_distance, frequency, sub_freq_delta, data_name)
     %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%
-    % globals_init();
+    globals_init();
     % Debug Variables
     global DEBUG_PATHS
     global DEBUG_PATHS_LIGHT
@@ -585,9 +612,6 @@ function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
     global OUTPUT_SUPPRESSED
     global OUTPUT_FIGURES_SUPPRESSED
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    if nargin == 4
-        data_name = '-';
-    end
     
     % Data covarivance matrix
     R = x * x'; 
@@ -932,3 +956,4 @@ function [csi_matrix, phase_matrix] = spotfi_algorithm_1(csi_matrix, delta_f, pa
     % Reconstruct the CSI matrix with the adjusted phase
     csi_matrix = R .* exp(1i * phase_matrix);
 end
+%}

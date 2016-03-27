@@ -65,26 +65,27 @@ function spotfi_test
         'los-test-jennys-table.dat' ...
     };
     run(data_files)
-    if DEBUG_BRIDGE_CODE_CALLING
-        fprintf('Done Running!\n')
-    end
+    fprintf('Done Running!\n')
 end
 
 function globals_init
     %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%
     % Debug Controls
+    %{
     global DEBUG_PATHS
     global DEBUG_PATHS_LIGHT
+    %}
     global NUMBER_OF_PACKETS_TO_CONSIDER
-    global DEBUG_GMM
     global DEBUG_BRIDGE_CODE_CALLING
+    %{
     DEBUG_PATHS = false;
     DEBUG_PATHS_LIGHT = false;
-    NUMBER_OF_PACKETS_TO_CONSIDER = 200; % Set to -1 to ignore this variable's value
-    DEBUG_GMM = false;
+    %}
+    NUMBER_OF_PACKETS_TO_CONSIDER = -1; % Set to -1 to ignore this variable's value
     DEBUG_BRIDGE_CODE_CALLING = false;
     
     % Output controls
+    %{
     global OUTPUT_AOAS
     global OUTPUT_TOFS
     global OUTPUT_AOA_MUSIC_PEAK_GRAPH
@@ -92,7 +93,9 @@ function globals_init
     global OUTPUT_AOA_TOF_MUSIC_PEAK_GRAPH
     global OUTPUT_SELECTIVE_AOA_TOF_MUSIC_PEAK_GRAPH
     global OUTPUT_AOA_VS_TOF_PLOT
+    %}
     global OUTPUT_SUPPRESSED
+    %{
     global OUTPUT_PACKET_PROGRESS
     global OUTPUT_FIGURES_SUPPRESSED
     OUTPUT_AOAS = false;
@@ -102,9 +105,12 @@ function globals_init
     OUTPUT_AOA_TOF_MUSIC_PEAK_GRAPH = false;
     OUTPUT_SELECTIVE_AOA_TOF_MUSIC_PEAK_GRAPH = false;
     OUTPUT_AOA_VS_TOF_PLOT = true;
-    OUTPUT_SUPPRESSED = false;
+    %}
+    OUTPUT_SUPPRESSED = true;
+    %{
     OUTPUT_PACKET_PROGRESS = false;
     OUTPUT_FIGURES_SUPPRESSED = false; % Set to true when running in deployment from command line
+    %}
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end
 
@@ -116,10 +122,12 @@ function run(data_files)
     global NUMBER_OF_PACKETS_TO_CONSIDER
     
     % Output controls
-    global OUTPUT_SUPPRESSED
+    % global OUTPUT_SUPPRESSED
+    %{
     global OUTPUT_AOA_VS_TOF_PLOT
     global OUTPUT_PACKET_PROGRESS
     global OUTPUT_FIGURES_SUPPRESSED
+    %}
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     % Set physical layer parameters (frequency, subfrequency spacing, and antenna spacing
@@ -131,25 +139,39 @@ function run(data_files)
     % Loop over passed in data files
     for data_file_index = 1:length(data_files)
         % Read data file in
-        if ~OUTPUT_SUPPRESSED
-            fprintf('\n\nRunning on data file: %s\n', data_files{data_file_index})
-        end
+        fprintf('\n\nRunning on data file: %s\n', data_files{data_file_index})
         csi_trace = read_bf_file(data_files{data_file_index});
         
         % Extract CSI information for each packet
-        if ~OUTPUT_SUPPRESSED
-            fprintf('Have CSI for %d packets\n', length(csi_trace))
-        end
+        fprintf('Have CSI for %d packets\n', length(csi_trace))
         
         % Set the number of packets to consider, by default consider all
         num_packets = length(csi_trace);
         if NUMBER_OF_PACKETS_TO_CONSIDER ~= -1
             num_packets = NUMBER_OF_PACKETS_TO_CONSIDER;
         end
-        if ~OUTPUT_SUPPRESSED
-            fprintf('Considering CSI for %d packets\n', num_packets)
-        end
+        fprintf('Considering CSI for %d packets\n', num_packets)
+        sampled_csi_trace = csi_sampling(csi_trace, num_packets);
+        output_top_aoas = spotfi(sampled_csi_trace, frequency, sub_freq_delta, antenna_distance)
         
+        %%
+        % Extract CSI information for each packet
+        %if ~OUTPUT_SUPPRESSED
+        %    fprintf('Have CSI for %d packets\n', length(csi_trace))
+        %end
+        
+        % Set the number of packets to consider, by default consider all
+        %num_packets = length(csi_trace);
+        %if NUMBER_OF_PACKETS_TO_CONSIDER ~= -1
+        %    num_packets = NUMBER_OF_PACKETS_TO_CONSIDER;
+        %end
+        %if ~OUTPUT_SUPPRESSED
+        %    fprintf('Considering CSI for %d packets\n', num_packets)
+        %end
+        %%
+        
+        %{
+        num_packets = length(csi_trace);
         % Loop over packets, estimate AoA and ToF from the CSI data for each packet
         aoa_packet_data = cell(num_packets, 1);
         tof_packet_data = cell(num_packets, 1);
@@ -189,15 +211,6 @@ function run(data_files)
             csi = squeeze(csi);
 
             % Sanitize ToFs with Algorithm 1
-            %% TODO: this is commented out for parfor's sake
-            %{
-            if packet_index == 1
-                packet_one_phase_matrix = unwrap(angle(csi), pi, 2);
-                sanitized_csi = spotfi_algorithm_1(csi, sub_freq_delta);
-            else
-                sanitized_csi = spotfi_algorithm_1(csi, sub_freq_delta, packet_one_phase_matrix);
-            end
-            %}
             sanitized_csi = spotfi_algorithm_1(csi, sub_freq_delta, packet_one_phase_matrix);
             
             % Acquire smoothed CSI matrix
@@ -276,13 +289,11 @@ function run(data_files)
         end
         if ~OUTPUT_FIGURES_SUPPRESSED
             % Dendrogram
-            %{
-            dendrogram_figure_name = sprintf('Dendrogram for file: %s', data_files{data_file_index});
-            figure('Name', dendrogram_figure_name, 'NumberTitle', 'off')
-            dendrogram(linkage_tree, 'ColorThreshold', 'default')
-            set(gca, 'YTick', linspace(0, 10, 100));
-            title(dendrogram_figure_name)
-            %}
+            % dendrogram_figure_name = sprintf('Dendrogram for file: %s', data_files{data_file_index});
+            % figure('Name', dendrogram_figure_name, 'NumberTitle', 'off')
+            % dendrogram(linkage_tree, 'ColorThreshold', 'default')
+            % set(gca, 'YTick', linspace(0, 10, 100));
+            % title(dendrogram_figure_name)
         end
         
         % Collect data and indices into cluster-specific cell arrays
@@ -297,7 +308,6 @@ function run(data_files)
             cluster_indices{cluster_indices_vector(ii, 1)}(cluster_index_tail_index, 1) = ii;
         end
         
-        %%{
         % Delete outliers from each cluster
         if ~OUTPUT_SUPPRESSED
             fprintf('Deleting outliers and clusters deemed outliers....\n')
@@ -326,7 +336,6 @@ function run(data_files)
             cluster_indices{ii}(outlier_indices(:), :) = [];
             clusters{ii}(outlier_indices(:), :) = [];
         end
-        %%}
         
         cluster_plot_style = {'bo', 'go', 'ro', 'ko', ...
                         'bs', 'gs', 'rs', 'ks', ...
@@ -341,21 +350,19 @@ function run(data_files)
                         'bd', 'gd', 'rd', 'kd', ... 
                         'bv', 'gv', 'rv', 'kv', ... 
                         'b.', 'g.', 'r.', 'k.', ... 
-                        %{
-                        'co', 'mo', 'yo', 'wo', ...
-                        'cs', 'ms', 'ys', 'ws', ...
-                        'c^', 'm^', 'y^', 'w^', ... 
-                        'cp', 'mp', 'yp', 'wp', ... 
-                        'c*', 'm*', 'y*', 'w*', ... 
-                        'ch', 'mh', 'yh', 'wh', ... 
-                        'cx', 'mx', 'yx', 'wx', ... 
-                        'c<', 'm<', 'y<', 'w<', ... 
-                        'c>', 'm>', 'y>', 'w>', ... 
-                        'c+', 'm+', 'y+', 'w+', ... 
-                        'cd', 'md', 'yd', 'wd', ... 
-                        'cv', 'mv', 'yv', 'wv', ... 
-                        'c.', 'm.', 'y.', 'w.', ... 
-                        %}
+                        % 'co', 'mo', 'yo', 'wo', ...
+                        % 'cs', 'ms', 'ys', 'ws', ...
+                        % 'c^', 'm^', 'y^', 'w^', ... 
+                        % 'cp', 'mp', 'yp', 'wp', ... 
+                        % 'c*', 'm*', 'y*', 'w*', ... 
+                        % 'ch', 'mh', 'yh', 'wh', ... 
+                        % 'cx', 'mx', 'yx', 'wx', ... 
+                        % 'c<', 'm<', 'y<', 'w<', ... 
+                        % 'c>', 'm>', 'y>', 'w>', ... 
+                        % 'c+', 'm+', 'y+', 'w+', ... 
+                        % 'cd', 'md', 'yd', 'wd', ... 
+                        % 'cv', 'mv', 'yv', 'wv', ... 
+                        % 'c.', 'm.', 'y.', 'w.', ... 
         };
         
         %% TODO: Tune parameters
@@ -537,9 +544,12 @@ function run(data_files)
                     data_files{data_file_index}, max_likelihood_average_aoa)
         end
         % Profit
+        %}
     end
 end
 
+
+%{
 %% Computes ellipse totally enclosing the points defined by x and y, includes room for markers, etc.
 % x         -- the x coordinates of the points that the ellipse should enclose
 % y         -- the y coordinates of the points that the ellipse should enclose
@@ -898,6 +908,7 @@ function smoothed_csi = smooth_csi(csi)
         m = m + 1;
     end
 end
+%}
 
 %% Time of Flight (ToF) Sanitization Algorithm, find a linear fit for the unwrapped CSI phase
 % csi_matrix -- the CSI matrix whose phase is to be adjusted
