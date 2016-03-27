@@ -21,58 +21,6 @@
 % DEALINGS IN THE SOFTWARE.
 %
 
-%{
-function spotfi
-    %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%
-    globals_init()
-    global DEBUG_BRIDGE_CODE_CALLING
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Get the full path to the currently executing file and change the
-    % pwd to the folder this file is contained in...
-    [current_directory, ~, ~] = fileparts(mfilename('fullpath'));
-    cd(current_directory);
-    % Paths for the csitool functions provided
-    path('../../linux-80211n-csitool-supplementary/matlab', path);
-    if DEBUG_BRIDGE_CODE_CALLING
-        fprintf('The path: %s\n', path)
-        fprintf('The pwd: %s\n', pwd)
-    end
-    if ~DEBUG_BRIDGE_CODE_CALLING
-        close all
-        clc
-    end
-    % data_files = {'test-data/line-of-sight-localization-tests--in-room/los-test-heater.dat'};
-    % top_aoas = run(data_files);
-    % top_aoas
-    data_file = {'../injection-monitor/.lgtm-monitor.dat'};
-    %data_file = {'test-data/line-of-sight-localization-tests--in-room/los-test-heater.dat'};
-    top_aoas = run(data_file);
-    output_file_name = '../injection-monitor/.lgtm-top-aoas';
-    output_top_aoas(top_aoas, output_file_name);
-    if DEBUG_BRIDGE_CODE_CALLING
-        fprintf('Done Running!\n')
-    end
-end
-%}
-
-%{
-%% Output the array of top_aoas to the given file as doubles
-% top_aoas         -- The angle of arrivals selected as the most likely.
-% output_file_name -- The name of the file to write the angle of arrivals to.
-function output_top_aoas(top_aoas, output_file_name)
-    output_file = fopen(output_file_name, 'wb');
-    if (output_file < 0)
-        error('Couldn''t open file %s', output_file_name);
-    end
-    top_aoas
-    for ii = 1:size(top_aoas, 1)
-        fprintf(output_file, '%g ', top_aoas(ii, 1));
-    end
-    fprintf(output_file, '\n');
-    fclose(output_file);
-end
-%}
-
 %% Runs the SpotFi test over the passed in data files which each contain CSI data for many packets
 % csi_trace        -- the csi_trace for several packets
 % frequency        -- the base frequency of the signal
@@ -130,15 +78,6 @@ function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_
         csi = squeeze(csi);
 
         % Sanitize ToFs with Algorithm 1
-        %% TODO: this is commented out for parfor's sake
-        %{
-        if packet_index == 1
-            packet_one_phase_matrix = unwrap(angle(csi), pi, 2);
-            sanitized_csi = spotfi_algorithm_1(csi, sub_freq_delta);
-        else
-            sanitized_csi = spotfi_algorithm_1(csi, sub_freq_delta, packet_one_phase_matrix);
-        end
-        %}
         sanitized_csi = spotfi_algorithm_1(csi, sub_freq_delta, packet_one_phase_matrix);
 
         % Acquire smoothed CSI matrix
@@ -519,6 +458,7 @@ function [ellipse_x, ellipse_y] = compute_ellipse(x, y)
 end
 
 %{
+%% This function must be used in a calling function to initialize globals
 function globals_init
     %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%
     % Debug Controls
