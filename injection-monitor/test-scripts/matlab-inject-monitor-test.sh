@@ -164,7 +164,7 @@ if [[ $input == 'l' ]]; then
     echo "Localizing signal source!"
     chmod 644 .lgtm-monitor.dat
     logged_on_user=$(who | head -n1 | awk '{print $1;}')
-    sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
+    sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/lgtm_spotfi_runner.m'), exit"
     cat .lgtm-top-aoas
     echo "Successfully localized signal source!"
     # Sleep for 5 seconds to ensure other party has switched into monitor mode.... TODO: Shorten or remove this....
@@ -215,7 +215,7 @@ if [ $begin_lgtm -gt 0 ]; then
     echo "Localizing signal source!"
     chmod 644 .lgtm-monitor.dat
     logged_on_user=$(who | head -n1 | awk '{print $1;}')
-    sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
+    sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/lgtm_spotfi_runner.m'), exit"
     cat .lgtm-top-aoas
     echo "Successfully localized signal source!"
     # Done!

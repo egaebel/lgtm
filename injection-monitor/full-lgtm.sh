@@ -183,7 +183,7 @@ localize_wireless_signal () {
     # Localize wireless signal
     echo "Localizing signal source........................................."
     logged_on_user=$(who | head -n1 | awk '{print $1;}')
-    sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
+    sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/lgtm_spotfi_runner.m'), exit"
     echo "Successfully localized signal source!"
 }
 
