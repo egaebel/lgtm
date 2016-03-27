@@ -517,6 +517,7 @@ function [ellipse_x, ellipse_y] = compute_ellipse(x, y)
     ellipse_x = radius_x * cos(t) + centroid_x;
     ellipse_y = radius_y * sin(t) + centroid_y;
 end
+
 %{
 function globals_init
     %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%

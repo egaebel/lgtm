@@ -139,8 +139,9 @@ send_facial_recognition_params () {
     # Send facial recognition params
     rm .lgtm-facial-recognition-params
     echo $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
-    cat $facial_recognition_file >> .lgtm-facial-recognition-params
+    dd if=$facial_recognition_file of=.lgtm-facial-recognition-params seek=${#FACIAL_RECOGNITION_HEADER} bs=1
     echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
+
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
     echo "Sent 'facial recognition params'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 }
@@ -153,46 +154,60 @@ receive_facial_recognition_params () {
     # Listen for facial recognition parameters, TODO: later it will be ack + recog params + public key
     echo "Awaiting 'facial recognition params'............................."
     rm .lgtm-monitor.dat
+    rm .lgtm-received-facial-recognition-params
     ./log-to-file/log_to_file .lgtm-monitor.dat &
     lgtm_ack=0
+    # Figure this out to use with sudo -u below
+    logged_on_user=$(who | head -n1 | awk '{print $1;}')
     while [ $lgtm_ack -lt 1 ]; do
-        # Receive ack + params
-        lgtm_ack=$(cat .lgtm-monitor.dat | grep $FACIAL_RECOGNITION_FOOTER | wc -l)
+        # Count the file size in bytes using wc, and cut off the file name from the output (only want the number!)
+        file_size=$(wc --bytes .lgtm-monitor.dat | cut -d ' ' -f 1)
+        echo file size: $file_size
+        if [ "${file_size:0}" -gt 0 ]; then
+            # Extract data from mpdus in packets
+            echo "Extracting data from received packets............................"
+            # Extract data on facial recognition params from received data
+            sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('read_mpdu_file.m'), exit"    
+            echo "Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+            # Receive ack + params
+            lgtm_ack=$(cat .lgtm-received-facial-recognition-params | grep $FACIAL_RECOGNITION_FOOTER | wc -l)
+        fi
+        sleep 3
     done
     pkill log_to_file
     chmod 644 .lgtm-monitor.dat
     echo "Received 'facial recognition params'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 }
 
-process_facial_recognition_params () {
+localize_wireless_signal () {
     # Localize wireless signal
     echo "Localizing signal source........................................."
     logged_on_user=$(who | head -n1 | awk '{print $1;}')
     sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/spotfi.m'), exit"
     echo "Successfully localized signal source!"
-
-    # Extract data from mpdus in packets
-    echo "Extracting data from received packets............................"
-    # Extract data on facial recognition params from received data
-    sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('read_mpdu_file.m'), exit"    
-    echo "Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 }
 
 compare_wireless_location_with_face_location () {
     echo "Checking for face/signal overlap................................."
+
+    rm .lgtm-received-facial-recognition-params--no-header
+    rm .lgtm-received-facial-recognition-params--no-header--no-footer
     # Strip off $FACIAL_RECOGNITION_HEADER, $FACIAL_RECOGNITION_FOOTER, and anything before or after
     # Plus one for the string terminator ('\0')
-    num_header_bytes=$((${#FACIAL_RECOGNITION_HEADER} + 1))
-    cat .lgtm-received-facial-recognition-params | dd bs=1 skip=$num_header_bytes > .lgtm-received-facial-recognition-params--no-header
-    byte_offset=$(cat .lgtm-received-facial-recognition-params--no-header | grep --byte-offset --only-matching --text $FACIAL_RECOGNITION_FOOTER | grep --only-matching [0-9]*)
-    cat .lgtm-received-facial-recognition-params--no-header | dd bs=1 count=$byte_offset > .lgtm-received-facial-recognition-params--no-header--no-footer
+    num_header_bytes=${#FACIAL_RECOGNITION_HEADER}
+    dd if=.lgtm-received-facial-recognition-params bs=1 skip=$num_header_bytes of=.lgtm-received-facial-recognition-params--no-header
+    byte_offset=$(dd if=.lgtm-received-facial-recognition-params--no-header bs=1 | grep --byte-offset --only-matching --text $FACIAL_RECOGNITION_FOOTER | grep --only-matching [0-9]*)
+    dd if=.lgtm-received-facial-recognition-params--no-header bs=1 count=$byte_offset of=.lgtm-received-facial-recognition-params--no-header--no-footer
     
-    # Extract files from tar archive    
+    # Extract files from tar archive
+    tar xvf .lgtm-received-facial-recognition-params--no-header--no-footer   
     facial_recognition_params_folder=$(tar xvf .lgtm-received-facial-recognition-params--no-header--no-footer | head -n 1)
     echo "facial_recognition_params_folder: " $facial_recognition_params_folder
+    rm -rf .lgtm-facial-recognition-training-photos
     mv $facial_recognition_params_folder .lgtm-facial-recognition-training-photos
 
     # Generate csv file with paths to images for training and labels
+    rm .lgtm-facial-recognition-training-photo-paths.csv
     ./create_yalefaces_csv.py .lgtm-facial-recognition-training-photos > .lgtm-facial-recognition-training-photo-paths.csv
 
     # Grab the label from the first entry (they're assumed to all be the same)
@@ -205,7 +220,7 @@ compare_wireless_location_with_face_location () {
     cd ../facial-recognition/lgtm-recognition/
 
     # Run facial recognition
-    ./run_lgtm_facial_recognition.sh $webcam_id $old_dir/.lgtm-facial-recognition-training-photo-paths.csv $face_id $top_aoas 2>/dev/null
+    ./run_lgtm_facial_recognition.sh $webcam_id $old_dir/.lgtm-facial-recognition-training-photo-paths.csv $face_id $top_aoas
 
     # Return to original directory
     cd $old_dir
@@ -249,7 +264,7 @@ if [[ $input == 'l' ]]; then
     
     receive_facial_recognition_params
     send_facial_recognition_params
-    process_facial_recognition_params
+    localize_wireless_signal
     compare_wireless_location_with_face_location
 
     # Done!
@@ -263,7 +278,7 @@ if [ $begin_lgtm -gt 0 ]; then
     
     send_facial_recognition_params
     receive_facial_recognition_params
-    process_facial_recognition_params
+    localize_wireless_signal
     compare_wireless_location_with_face_location
     
     # Done!
