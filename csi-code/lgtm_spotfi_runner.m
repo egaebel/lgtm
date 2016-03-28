@@ -141,6 +141,8 @@ function output_top_aoas = run(data_file)
     if ~OUTPUT_SUPPRESSED
         fprintf('Considering CSI for %d packets\n', num_packets)
     end
+    %% TODO: Remove after testing
+    fprintf('num_packets: %d\n', num_packets)
     sampled_csi_trace = csi_sampling(csi_trace, num_packets);
     
     output_top_aoas = spotfi(sampled_csi_trace, frequency, sub_freq_delta, antenna_distance);
