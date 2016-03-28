@@ -1,0 +1,145 @@
+Switching wlan2 to monitor.......................................
+Bringing up firmware.............................................
+Bringing down wlan2 .............................................
+Setting wlan2 into monitor mode..................................
+Bringing up wlan2 ...............................................
+Bringing down default wireless interface wlan0...................
+Setting channel to monitor on wlan2 to 64 HT40- .................
+Fixed problem with set channel command...........................
+Monitor mode active!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Waiting for LGTM initiation......................................
+Press 'L' to initiate LGTM from this computer....................
+Other party initiated LGTM protocol..............................
+Sending 'facial recognition params'..............................
+Switching wlan2 to inject........................................
+Deleting mon0....................................................
+Bringing up firmware.............................................
+Running ip link show on wlan2, looping until success.............
+Setting wlan2 into monitor mode..................................
+Bringing up wlan2 ...............................................
+Adding monitor to wlan2 .........................................
+Bringing up mon0.................................................
+Killing default wireless interface, wlan0........................
+Setting channel on mon0 to 64 HT40- .............................
+Setting monitor_tx_rate..........................................
+0x4101
+Injection mode active!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Generating packet payload from file: .lgtm-facial-recognition-params 
+Reading file....
+Read payload, size is: 102460
+Initializing LORCON
+Sending 1025 packets of size 100 (. every thousand)
+.final packet size: 60
+Sent 'facial recognition params'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Receiving and processing 'facial recognition params'.............
+Switching wlan2 to monitor.......................................
+Bringing up firmware.............................................
+Bringing down wlan2 .............................................
+Setting wlan2 into monitor mode..................................
+Bringing up wlan2 ...............................................
+Bringing down default wireless interface wlan0...................
+Setting channel to monitor on wlan2 to 64 HT40- .................
+Fixed problem with set channel command...........................
+Monitor mode active!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Awaiting 'facial recognition params'.............................
+file size: 0
+file size: 0
+file size: 0
+file size: 0
+file size: 354610
+Extracting data from received packets............................
+[?1h=
+                                                                   < M A T L A B (R) >
+                                                         Copyright 1984-2014 The MathWorks, Inc.
+                                                           R2014a (8.3.0.532) 64-bit (glnxa64)
+                                                                    February 11, 2014
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+read_mpdu_file called: checking nargchk....
+Processing file entries....
+Field length is empty...break
+Closing files....
+[?1l>Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Received 'facial recognition params'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Localizing signal source.........................................
+[?1h=
+                                                                   < M A T L A B (R) >
+                                                         Copyright 1984-2014 The MathWorks, Inc.
+                                                           R2014a (8.3.0.532) 64-bit (glnxa64)
+                                                                    February 11, 2014
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+[H[2Jnum_packets: 1025
+[Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate.] 
+[> In linkage at 280
+  In spotfi at 144
+  In lgtm_spotfi_runner>run at 148
+  In lgtm_spotfi_runner at 48
+  In run at 63] 
+
+top_aoas =
+
+   65.9481
+   -7.0000
+  -40.0000
+   23.0000
+   65.9481
+
+[?1l>Successfully localized signal source!
+Localization ran in time: 699 seconds
+Checking for face/signal overlap.................................
+subject01/
+subject01/subject01.gif.jpg
+subject01/subject01.sad.jpg
+subject01/subject01.wink.jpg
+subject01/subject01.leftlight.jpg
+subject01/subject01.noglasses.jpg
+subject01/subject01.sleepy.jpg
+subject01/subject01.surprised.jpg
+subject01/subject01.rightlight.jpg
+subject01/subject01.normal.jpg
+facial_recognition_params_folder:  subject01/
+Using Local Binary Pattern Histograms
+Starting training...
+Done training! Took 0.0315783 seconds
+Face is at angles (from left to right): -7.82514 -3.4991
+Face is at angles (from left to right): -7.91566 -3.58894
+Face is at angles (from left to right): -8.27793 -4.03826
+Face is at angles (from left to right): -8.36855 -3.94837
+Face is at angles (from left to right): -8.54985 -3.94837
+Face is at angles (from left to right): -8.36855 -3.94837
+Face is at angles (from left to right): -8.36855 -3.8585
+Face is at angles (from left to right): -8.18733 -3.67878
+Face is at angles (from left to right): -7.82514 -3.40927
+Face is at angles (from left to right): -7.46326 -3.05004
+Face is at angles (from left to right): -7.46326 -2.87047
+Face is at angles (from left to right): -7.10169 -2.60117
+Face is at angles (from left to right): -7.10169 -2.51142
+Face is at angles (from left to right): -7.10169 -2.60117
+Face is at angles (from left to right): -7.28244 -2.69093
+Face is at angles (from left to right): -7.28244 -2.87047
+Face is at angles (from left to right): -7.37284 -2.87047
+Face is at angles (from left to right): -7.28244 -2.87047
+Face is at angles (from left to right): -7.19205 -2.7807
+Face is at angles (from left to right): -7.19205 -2.7807
+Face is at angles (from left to right): -7.19205 -2.7807
+Face is at angles (from left to right): -7.19205 -2.7807
+Face is at angles (from left to right): -7.19205 -2.7807
+Face is at angles (from left to right): -7.19205 -2.69093
+Face is at angles (from left to right): -7.19205 -2.69093
+Face is at angles (from left to right): -7.19205 -2.69093
+Face is at angles (from left to right): -7.19205 -2.69093
+Face is at angles (from left to right): -7.19205 -2.7807
+Face is at angles (from left to right): -7.28244 -2.7807
+Face is at angles (from left to right): -7.28244 -2.7807
+Face is at angles (from left to right): -7.28244 -2.87047
+Face is at angles (from left to right): -7.28244 -2.7807
+Face is at angles (from left to right): -7.28244 -2.7807
+LOOKS GOOD TO ME! PROCEEDING TO ESTABLISH ENCRYPTED COMMUNICATION!
+LGTM COMPLETE!
