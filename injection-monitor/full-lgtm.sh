@@ -236,7 +236,7 @@ echo "Waiting for LGTM initiation......................................"
 rm .lgtm-begin-monitor.dat
 ./log-to-file/log_to_file .lgtm-begin-monitor.dat &
 
-# Wait for key press or special token to appear in lgtm-monitor.dat
+# Wait for key press or special token to appear in lgtm-begin-monitor.dat
 echo "Press 'L' to initiate LGTM from this computer...................."
 begin_lgtm=0
 input='a'

@@ -78,7 +78,7 @@ function globals_init
     global DEBUG_BRIDGE_CODE_CALLING
     DEBUG_PATHS = false;
     DEBUG_PATHS_LIGHT = false;
-    NUMBER_OF_PACKETS_TO_CONSIDER = -1; % Set to -1 to ignore this variable's value
+    NUMBER_OF_PACKETS_TO_CONSIDER = 10; % Set to -1 to ignore this variable's value
     DEBUG_BRIDGE_CODE_CALLING = false;
     
     % Output controls
@@ -143,7 +143,8 @@ function output_top_aoas = run(data_file)
     end
     %% TODO: Remove after testing
     fprintf('num_packets: %d\n', num_packets)
-    sampled_csi_trace = csi_sampling(csi_trace, num_packets);
+    sampled_csi_trace = csi_sampling(csi_trace, num_packets, ...
+            (length(csi_trace) - num_packets), length(csi_trace));
     
     output_top_aoas = spotfi(sampled_csi_trace, frequency, sub_freq_delta, antenna_distance);
 end
