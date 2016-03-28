@@ -243,7 +243,7 @@ int main(int argc, const char *argv[]) {
                     putText(original, boxConfidenceText, Point(confidencePosX, confidencePosY), 
                             FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
                     if (prediction == faceId 
-                            && withinBounds(leftSideAngle, rightSideAngle, anglesOfArrival[j])) {
+                            && withinBounds(toleranceLeftSideAngle, toleranceRightSideAngle, anglesOfArrival[j])) {
                         // Present confirmation text
                         int confirmPosX = std::max(curFace.tl().x - 65, 0);
                         int confirmPosY = std::max(curFace.br().y + 10, 0);
