@@ -69,7 +69,7 @@ using namespace cv;
 using namespace std;
 
 //~Constants----------------------------------------------------------------------------------------
-static const int ANGLE_TOLERANCE = 4;
+static const int ANGLE_TOLERANCE = 10;
 static const string viewingWindow = "Viewing Window";
 static const string confirmationWindow = "Is this who you want to communicate with?";
 
@@ -217,29 +217,33 @@ int main(int argc, const char *argv[]) {
                     anglesOfArrival[j];
                     double leftSideAngle = -1;
                     double rightSideAngle = -1;
+                    double toleranceLeftSideAngle = -1;
+                    double toleranceRightSideAngle = -1;
                     findAngleBounds(capFrameWidth, capFrameHeight, curFace, 
                             leftSideAngle, rightSideAngle);
-                    leftSideAngle -= ANGLE_TOLERANCE;
-                    rightSideAngle += ANGLE_TOLERANCE;
+                    toleranceLeftSideAngle = leftSideAngle - ANGLE_TOLERANCE;
+                    toleranceRightSideAngle = rightSideAngle + ANGLE_TOLERANCE;
                     // If the prediction is the face we are looking for.
+                    //if (prediction == faceId 
+                    //        && withinBounds(leftSideAngle, rightSideAngle, anglesOfArrival[j])) {
+                    rectangle(original, curFace, CV_RGB(0, 255,0), 1);
+                    // Create the text we will annotate the box with:
+                    string boxAngleText = format("Face at angles: %.1g %.1g", leftSideAngle, rightSideAngle);
+                    string boxConfidenceText = format("With confidence: %g", confidence);
+                    // Calculate the position for annotated text (make sure we don't
+                    // put illegal values in there):
+                    // TODO: See below, 10 was the original
+                    int angleTextPosX = std::max(curFace.tl().x - 25, 0);
+                    int angleTextPosY = std::max(curFace.tl().y - 25, 0);
+                    int confidencePosX = std::max(curFace.tl().x - 25, 0);
+                    int confidencePosY = std::max(curFace.tl().y - 10, 0);
+                    // And now put it into the image:
+                    putText(original, boxAngleText, Point(angleTextPosX, angleTextPosY), 
+                            FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
+                    putText(original, boxConfidenceText, Point(confidencePosX, confidencePosY), 
+                            FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
                     if (prediction == faceId 
                             && withinBounds(leftSideAngle, rightSideAngle, anglesOfArrival[j])) {
-                        rectangle(original, curFace, CV_RGB(0, 255,0), 1);
-                        // Create the text we will annotate the box with:
-                        string boxPredictionText = format("Prediction = %d", prediction);
-                        string boxConfidenceText = format("With confidence: %g", confidence);
-                        // Calculate the position for annotated text (make sure we don't
-                        // put illegal values in there):
-                        // TODO: See below, 10 was the original
-                        int predictionPosX = std::max(curFace.tl().x - 25, 0);
-                        int predictionPosY = std::max(curFace.tl().y - 25, 0);
-                        int confidencePosX = std::max(curFace.tl().x - 25, 0);
-                        int confidencePosY = std::max(curFace.tl().y - 10, 0);
-                        // And now put it into the image:
-                        putText(original, boxPredictionText, Point(predictionPosX, predictionPosY), 
-                                FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
-                        putText(original, boxConfidenceText, Point(confidencePosX, confidencePosY), 
-                                FONT_HERSHEY_PLAIN, 1.0, CV_RGB(0, 255, 0), 2.0);
                         // Present confirmation text
                         int confirmPosX = std::max(curFace.tl().x - 65, 0);
                         int confirmPosY = std::max(curFace.br().y + 10, 0);

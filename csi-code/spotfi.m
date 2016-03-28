@@ -65,7 +65,7 @@ function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_
             smoothed_sanitized_csi, antenna_distance, frequency, sub_freq_delta, data_name);
 
     %% TODO: REMEMBER THIS IS A PARFOR LOOP, AND YOU CHANGED THE ABOVE CODE AND THE BEGIN INDEX
-    parfor (packet_index = 2:num_packets, 3)
+    parfor (packet_index = 2:num_packets, 4)
         if ~OUTPUT_SUPPRESSED && OUTPUT_PACKET_PROGRESS
             fprintf('Packet %d of %d\n', packet_index, num_packets)
         end

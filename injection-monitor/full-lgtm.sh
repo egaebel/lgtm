@@ -220,7 +220,7 @@ compare_wireless_location_with_face_location () {
     cd ../facial-recognition/lgtm-recognition/
 
     # Run facial recognition
-    ./run_lgtm_facial_recognition.sh $webcam_id $old_dir/.lgtm-facial-recognition-training-photo-paths.csv $face_id $top_aoas
+    ./run_lgtm_facial_recognition.sh $webcam_id $old_dir/.lgtm-facial-recognition-training-photo-paths.csv $face_id $top_aoas 2>/dev/null
 
     # Return to original directory
     cd $old_dir
@@ -246,6 +246,7 @@ while [[ $input != 'l' ]] && [[ $begin_lgtm -lt 1 ]]; do
     begin_lgtm=$(cat .lgtm-begin-monitor.dat | grep $LGTM_BEGIN_TOKEN | wc -l)
 done
 
+start_time=$(date +%s)
 # Key pressed to initiate LGTM
 if [[ $input == 'l' ]]; then
     echo "Initiating LGTM protocol........................................."
@@ -264,7 +265,11 @@ if [[ $input == 'l' ]]; then
     
     receive_facial_recognition_params
     send_facial_recognition_params
+    localization_start_time=$(date +%s)
     localize_wireless_signal
+    localization_end_time=$(date +%s)
+    localization_elapsed_time=$(expr $localization_end_time - $localization_start_time)
+    echo Localization ran in time: $localization_elapsed_time seconds
     compare_wireless_location_with_face_location
 
     # Done!
@@ -278,10 +283,17 @@ if [ $begin_lgtm -gt 0 ]; then
     
     send_facial_recognition_params
     receive_facial_recognition_params
+    localization_start_time=$(date +%s)
     localize_wireless_signal
+    localization_end_time=$(date +%s)
+    localization_elapsed_time=$(expr $localization_end_time - $localization_start_time)
+    echo Localization ran in time: $localization_elapsed_time seconds
     compare_wireless_location_with_face_location
     
     # Done!
     echo "LGTM COMPLETE!"
     exit
 fi
+end_time=$(date +%s)
+elapsed_time=$(expr $end_time - $start_time)
+echo LGTM ran in time: $elapsed_time seconds
