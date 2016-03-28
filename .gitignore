@@ -118,3 +118,12 @@ injection-monitor/packets-from-file/util.o
 .injection-monitor/lgtm-received-facial-recognition-params--no-header--no-footer-dir
 .injection-monitor/lgtm-top-aoas
 csi-code/csi_sampling.m~
+injection-monitor/.lgtm-begin-monitor.dat
+injection-monitor/.lgtm-begin-protocol
+injection-monitor/.lgtm-facial-recognition-params
+injection-monitor/.lgtm-facial-recognition-training-photo-paths.csv
+injection-monitor/.lgtm-facial-recognition-training-photos
+injection-monitor/.lgtm-monitor.dat
+injection-monitor/.lgtm-received-facial-recognition-params
+injection-monitor/.lgtm-received-facial-recognition-params--no-header
+injection-monitor/.lgtm-received-facial-recognition-params--no-header--no-footer
