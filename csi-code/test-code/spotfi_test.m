@@ -98,7 +98,7 @@ function globals_init
     OUTPUT_AOA_TOF_MUSIC_PEAK_GRAPH = false;
     OUTPUT_SELECTIVE_AOA_TOF_MUSIC_PEAK_GRAPH = false;
     OUTPUT_AOA_VS_TOF_PLOT = true;
-    OUTPUT_SUPPRESSED = true;
+    OUTPUT_SUPPRESSED = false;
     OUTPUT_PACKET_PROGRESS = false;
     OUTPUT_FIGURES_SUPPRESSED = false; % Set to true when running in deployment from command line
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -118,6 +118,7 @@ function run(data_files)
     antenna_distance = 0.1;
     % frequency = 5 * 10^9;
     frequency = 5.785 * 10^9;
+    % frequency = 5.32 * 10^9;
     sub_freq_delta = (40 * 10^6) / 30;
     
     % Loop over passed in data files
@@ -136,7 +137,8 @@ function run(data_files)
         end
         fprintf('Considering CSI for %d packets\n', num_packets)
         sampled_csi_trace = csi_sampling(csi_trace, num_packets);
-        output_top_aoas = spotfi(sampled_csi_trace, frequency, sub_freq_delta, antenna_distance)
+        output_top_aoas = spotfi(sampled_csi_trace, frequency, sub_freq_delta, antenna_distance, ...
+                data_files{data_file_index})
     end
 end
 

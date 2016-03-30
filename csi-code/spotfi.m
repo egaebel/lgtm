@@ -28,6 +28,9 @@
 % antenna_distance -- the distance between each antenna in the array, measured in meters
 % data_name        -- a label for the data which is included in certain outputs
 function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_distance, data_name)
+    if exist('OUTPUT_SUPPRESSED') == 0
+        globals_init()
+    end
     %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%
     % Output controls
     global OUTPUT_SUPPRESSED
@@ -35,7 +38,6 @@ function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_
     global OUTPUT_PACKET_PROGRESS
     global OUTPUT_FIGURES_SUPPRESSED
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % globals_init();
     if nargin < 5
         data_name = ' - ';
     end
@@ -234,13 +236,21 @@ function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_
     };
 
     %% TODO: Tune parameters
+    %% TODO: Tuning parameters using SVM results
     % Good base: 5, 10000, 75000, 0 (in order)
     % Likelihood parameters
+    weight_num_cluster_points = 0.0001 * 10^-3;
+    weight_aoa_variance = -0.7498 * 10^-3;
+    weight_tof_variance = 0.0441 * 10^-3;
+    weight_tof_mean = -0.0474 * 10^-3;
+    constant_offset = -1;
+    %{
     weight_num_cluster_points = 5;
     weight_aoa_variance = 50000; % prev = 10000; prev = 100000;
     weight_tof_variance = 100000;
     weight_tof_mean = 1000; % prev = 50; % prev = 10;
-    constant_offset = 300;
+    %}
+    %constant_offset = 300;
     % Compute likelihoods
     likelihood = zeros(length(clusters), 1);
     cluster_aoa = zeros(length(clusters), 1);
@@ -272,11 +282,19 @@ function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_
         aoa_variance = aoa_variance / (num_cluster_points - 1);
         tof_variance = tof_variance / (num_cluster_points - 1);
         % Compute Likelihood
+        %% TODO: Trying result from SVM
+        %{
         exp_body = weight_num_cluster_points * num_cluster_points ...
                 - weight_aoa_variance * aoa_variance ...
                 - weight_tof_variance * tof_variance ...
                 - weight_tof_mean * tof_mean ...
                 - constant_offset;
+        %}
+        exp_body = weight_num_cluster_points * num_cluster_points ...
+                + weight_aoa_variance * aoa_variance ...
+                + weight_tof_variance * tof_variance ...
+                + weight_tof_mean * tof_mean ...
+                + constant_offset;
         likelihood(ii, 1) = exp_body;%exp(exp_body);
         % Compute Cluster Average AoA
         for jj = 1:size(clusters{ii}, 1)
@@ -292,7 +310,7 @@ function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_
                     aoa_variance, (weight_aoa_variance * aoa_variance))
             fprintf('ToF Variance: %.9f, Weighted ToF Variance: %.9f\n', ...
                     tof_variance, (weight_tof_variance * tof_variance))
-            fprintf('AoA Mean %.9f\n', aoa_mean)
+            fprintf('AoA Mean %.9f\n', cluster_aoa(ii, 1))
             fprintf('ToF Mean: %.9f, Weighted ToF Mean: %.9f\n', ...
                     tof_mean, (weight_tof_mean * tof_mean))
             fprintf('Exponential Body: %.9f\n', exp_body)
@@ -362,7 +380,7 @@ function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_
 
     % Plot AoA & ToF
     if OUTPUT_AOA_VS_TOF_PLOT && ~OUTPUT_SUPPRESSED && ~OUTPUT_FIGURES_SUPPRESSED
-        figure_name_string = sprintf('%s: AoA vs ToF Plot', 'data_file_index');
+        figure_name_string = sprintf('%s: AoA vs ToF Plot', data_name);
         figure('Name', figure_name_string, 'NumberTitle', 'off')
         hold on
         % Plot the data from each cluster and draw a circle around each cluster 
@@ -409,7 +427,7 @@ function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_
     max_likelihood_average_aoa = cluster_aoa(max_likelihood_index, 1);
     if ~OUTPUT_SUPPRESSED
         fprintf('The Estimated Angle of Arrival for data set %s is %f\n', ...
-                'data_file_index', max_likelihood_average_aoa)
+                data_name, max_likelihood_average_aoa)
     end
     % Profit
     output_top_aoas = cluster_aoa(top_likelihood_indices);
@@ -457,16 +475,17 @@ function [ellipse_x, ellipse_y] = compute_ellipse(x, y)
     ellipse_y = radius_y * sin(t) + centroid_y;
 end
 
-%{
 %% This function must be used in a calling function to initialize globals
 function globals_init
     %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%
     % Debug Controls
     global DEBUG_PATHS
     global DEBUG_PATHS_LIGHT
+    global NUMBER_OF_PACKETS_TO_CONSIDER
     global DEBUG_BRIDGE_CODE_CALLING
     DEBUG_PATHS = false;
     DEBUG_PATHS_LIGHT = false;
+    NUMBER_OF_PACKETS_TO_CONSIDER = -1; % Set to -1 to ignore this variable's value
     DEBUG_BRIDGE_CODE_CALLING = false;
     
     % Output controls
@@ -487,12 +506,11 @@ function globals_init
     OUTPUT_AOA_TOF_MUSIC_PEAK_GRAPH = false;
     OUTPUT_SELECTIVE_AOA_TOF_MUSIC_PEAK_GRAPH = false;
     OUTPUT_AOA_VS_TOF_PLOT = false;
-    OUTPUT_SUPPRESSED = false;
+    OUTPUT_SUPPRESSED = true;
     OUTPUT_PACKET_PROGRESS = false;
-    OUTPUT_FIGURES_SUPPRESSED = true; % Set to true when running in deployment from command line
+    OUTPUT_FIGURES_SUPPRESSED = false; % Set to true when running in deployment from command line
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end
-%}
 
 %% Run MUSIC algorithm with SpotFi method including ToF and AoA
 % x                -- the signal matrix
@@ -510,8 +528,11 @@ end
 %                           estimated_tofs
 function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
         antenna_distance, frequency, sub_freq_delta, data_name)
+    % If OUTPUT_SUPPRESSED does not exist then initialize all the globals.
+    if exist('OUTPUT_SUPPRESSED') == 0
+        globals_init()
+    end
     %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%
-    % globals_init();
     % Debug Variables
     global DEBUG_PATHS
     global DEBUG_PATHS_LIGHT
@@ -541,7 +562,7 @@ function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
             max_eigenvalue = eigenvalue_matrix(ii, ii);
         end
     end
-    
+
     if DEBUG_PATHS && ~OUTPUT_SUPPRESSED
         fprintf('Normalized Eigenvalues of Covariance Matrix\n')
     end

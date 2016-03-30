@@ -119,7 +119,8 @@ function output_top_aoas = run(data_file)
     % Set physical layer parameters (frequency, subfrequency spacing, and antenna spacing
     antenna_distance = 0.1;
     % frequency = 5 * 10^9;
-    frequency = 5.785 * 10^9;
+    % frequency = 5.785 * 10^9;
+    frequency = 5.32 * 10^9;
     sub_freq_delta = (40 * 10^6) / 30;
 
     % Read data file in
