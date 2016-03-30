@@ -1,0 +1,1163 @@
+
+
+Running on data file: los-test-heater.dat
+Have CSI for 212 packets
+Considering CSI for 212 packets
+Full Measurement Matrix Size: 3616
+
+Cluster Properties for cluster 1
+Num Cluster Points: 212
+AoA Variance: 0.000143775
+ToF Variance: 0.000429314
+AoA Mean 58.476415094
+ToF Mean: 0.382749326
+Exponential Body: 327.130514989
+Cluster 1 has formatting: bo, AoA: 58.476415, and likelihood: 327.130515
+
+Cluster Properties for cluster 2
+Num Cluster Points: 226
+AoA Variance: 0.000126292
+ToF Variance: 0.000634921
+AoA Mean 19.610619469
+ToF Mean: 0.642857143
+Exponential Body: 117.336211951
+Cluster 2 has formatting: go, AoA: 19.610619, and likelihood: 117.336212
+
+Cluster Properties for cluster 3
+Num Cluster Points: 226
+AoA Variance: 0.000117799
+ToF Variance: 0.000634921
+AoA Mean -44.747787611
+ToF Mean: 0.642857143
+Exponential Body: 117.760865985
+Cluster 3 has formatting: ro, AoA: -44.747788, and likelihood: 117.760866
+
+Cluster Properties for cluster 4
+Num Cluster Points: 216
+AoA Variance: 0.000021660
+ToF Variance: 0.000427148
+AoA Mean -10.912037037
+ToF Mean: 0.642857143
+Exponential Body: 93.345073145
+Cluster 4 has formatting: ko, AoA: -10.912037, and likelihood: 93.345073
+
+Cluster Properties for cluster 5
+Num Cluster Points: 226
+AoA Variance: 0.000117799
+ToF Variance: 0.000634921
+AoA Mean -44.747787611
+ToF Mean: 0.107142857
+Exponential Body: 653.475151699
+Cluster 5 has formatting: bs, AoA: -44.747788, and likelihood: 653.475152
+
+Cluster Properties for cluster 6
+Num Cluster Points: 216
+AoA Variance: 0.000021660
+ToF Variance: 0.000427148
+AoA Mean -10.912037037
+ToF Mean: 0.107142857
+Exponential Body: 629.059358860
+Cluster 6 has formatting: gs, AoA: -10.912037, and likelihood: 629.059359
+
+Cluster Properties for cluster 7
+Num Cluster Points: 226
+AoA Variance: 0.000207771
+ToF Variance: 0.000790641
+AoA Mean 58.606194690
+ToF Mean: 0.923514539
+Exponential Body: -182.967177613
+Cluster 7 has formatting: rs, AoA: 58.606195, and likelihood: -182.967178
+
+Cluster Properties for cluster 8
+Num Cluster Points: 226
+AoA Variance: 0.000126292
+ToF Variance: 0.000786552
+AoA Mean 19.610619469
+ToF Mean: 0.923672566
+Exponential Body: -178.642356468
+Cluster 8 has formatting: ks, AoA: 19.610619, and likelihood: -178.642356
+
+Cluster Properties for cluster 9
+Num Cluster Points: 216
+AoA Variance: 0.000021660
+ToF Variance: 0.000597106
+AoA Mean -10.912037037
+ToF Mean: 0.922949735
+Exponential Body: -203.743335862
+Cluster 9 has formatting: b^, AoA: -10.912037, and likelihood: -203.743336
+
+Cluster Properties for cluster 10
+Num Cluster Points: 226
+AoA Variance: 0.000126292
+ToF Variance: 0.000634921
+AoA Mean 19.610619469
+ToF Mean: 0.107142857
+Exponential Body: 653.050497665
+Cluster 10 has formatting: g^, AoA: 19.610619, and likelihood: 653.050498
+
+Cluster Properties for cluster 11
+Num Cluster Points: 240
+AoA Variance: 0.000256709
+ToF Variance: 0.002356670
+AoA Mean 58.720833333
+ToF Mean: 0.632440476
+Exponential Body: 19.057128397
+Cluster 11 has formatting: r^, AoA: 58.720833, and likelihood: 19.057128
+
+Cluster Properties for cluster 12
+Num Cluster Points: 226
+AoA Variance: 0.000126292
+ToF Variance: 0.000786552
+AoA Mean 19.610619469
+ToF Mean: 0.387958281
+Exponential Body: 357.071929247
+Cluster 12 has formatting: k^, AoA: 19.610619, and likelihood: 357.071929
+
+Cluster Properties for cluster 13
+Num Cluster Points: 226
+AoA Variance: 0.000117799
+ToF Variance: 0.000798668
+AoA Mean -44.747787611
+ToF Mean: 0.387484197
+Exponential Body: 356.759120154
+Cluster 13 has formatting: bp, AoA: -44.747788, and likelihood: 356.759120
+
+Cluster Properties for cluster 14
+Num Cluster Points: 216
+AoA Variance: 0.000021660
+ToF Variance: 0.000597106
+AoA Mean -10.912037037
+ToF Mean: 0.387235450
+Exponential Body: 331.970949853
+Cluster 14 has formatting: gp, AoA: -10.912037, and likelihood: 331.970950
+
+Cluster Properties for cluster 15
+Num Cluster Points: 226
+AoA Variance: 0.000117799
+ToF Variance: 0.000798668
+AoA Mean -44.747787611
+ToF Mean: 0.923198483
+Exponential Body: -178.955165561
+Cluster 15 has formatting: rp, AoA: -44.747788, and likelihood: -178.955166
+
+Cluster Properties for cluster 16
+Num Cluster Points: 226
+AoA Variance: 0.000207771
+ToF Variance: 0.000634921
+AoA Mean 58.606194690
+ToF Mean: 0.107142857
+Exponential Body: 648.976514318
+Cluster 16 has formatting: kp, AoA: 58.606195, and likelihood: 648.976514
+
+The cluster with the maximum likelihood is cluster 5
+The top clusters are: 5, 10, 16, 6, 12, 
+The clusters have AoAs: -44.7478, 19.6106, 58.6062, -10.912, 19.6106, 
+The clusters have plot point designations: bs, g^, kp, gs, k^, 
+The clusters have likelihoods: 653.475, 653.05, 648.977, 629.059, 357.072, 
+The Estimated Angle of Arrival for data set los-test-heater.dat is -44.747788
+
+output_top_aoas =
+
+  -44.7478
+   19.6106
+   58.6062
+  -10.9120
+   19.6106
+
+
+
+Running on data file: los-test-desk-left.dat
+Have CSI for 238 packets
+Considering CSI for 238 packets
+Full Measurement Matrix Size: 3912
+
+Cluster Properties for cluster 1
+Num Cluster Points: 236
+AoA Variance: 0.000000000
+ToF Variance: 0.000000000
+AoA Mean -5.000000000
+ToF Mean: 0.640000000
+Exponential Body: 240.000000000
+Cluster 1 has formatting: bo, AoA: -5.000000, and likelihood: 240.000000
+
+Cluster Properties for cluster 2
+Num Cluster Points: 242
+AoA Variance: 0.000000000
+ToF Variance: 0.000172614
+AoA Mean 71.000000000
+ToF Mean: 0.360000000
+Exponential Body: 532.738589212
+Cluster 2 has formatting: go, AoA: 71.000000, and likelihood: 532.738589
+
+Cluster Properties for cluster 3
+Num Cluster Points: 251
+AoA Variance: 0.000000000
+ToF Variance: 0.000166400
+AoA Mean 25.000000000
+ToF Mean: 0.360000000
+Exponential Body: 578.360000000
+Cluster 3 has formatting: ro, AoA: 25.000000, and likelihood: 578.360000
+
+Cluster Properties for cluster 4
+Num Cluster Points: 251
+AoA Variance: 0.000000000
+ToF Variance: 0.000166400
+AoA Mean -38.000000000
+ToF Mean: 0.360000000
+Exponential Body: 578.360000000
+Cluster 4 has formatting: ko, AoA: -38.000000, and likelihood: 578.360000
+
+Cluster Properties for cluster 5
+Num Cluster Points: 251
+AoA Variance: 0.000000000
+ToF Variance: 0.000166400
+AoA Mean -38.000000000
+ToF Mean: 0.960000000
+Exponential Body: -21.640000000
+Cluster 5 has formatting: bs, AoA: -38.000000, and likelihood: -21.640000
+
+Cluster Properties for cluster 6
+Num Cluster Points: 236
+AoA Variance: 0.000000000
+ToF Variance: 0.000000000
+AoA Mean -5.000000000
+ToF Mean: 0.040000000
+Exponential Body: 840.000000000
+Cluster 6 has formatting: gs, AoA: -5.000000, and likelihood: 840.000000
+
+Cluster Properties for cluster 7
+Num Cluster Points: 251
+AoA Variance: 0.000000000
+ToF Variance: 0.000166400
+AoA Mean 25.000000000
+ToF Mean: 0.960000000
+Exponential Body: -21.640000000
+Cluster 7 has formatting: rs, AoA: 25.000000, and likelihood: -21.640000
+
+Cluster Properties for cluster 8
+Num Cluster Points: 229
+AoA Variance: 0.000000000
+ToF Variance: 0.000116387
+AoA Mean 71.000000000
+ToF Mean: 0.043144105
+Exponential Body: 790.217191450
+Cluster 8 has formatting: ks, AoA: 71.000000, and likelihood: 790.217191
+
+Cluster Properties for cluster 9
+Num Cluster Points: 242
+AoA Variance: 0.000000000
+ToF Variance: 0.000172614
+AoA Mean 71.000000000
+ToF Mean: 0.960000000
+Exponential Body: -67.261410788
+Cluster 9 has formatting: b^, AoA: 71.000000, and likelihood: -67.261411
+
+Cluster Properties for cluster 10
+Num Cluster Points: 249
+AoA Variance: 0.000000000
+ToF Variance: 0.000167742
+AoA Mean -5.000000000
+ToF Mean: 0.360000000
+Exponential Body: 568.225806452
+Cluster 10 has formatting: g^, AoA: -5.000000, and likelihood: 568.225806
+
+Cluster Properties for cluster 11
+Num Cluster Points: 229
+AoA Variance: 0.000000000
+ToF Variance: 0.000116387
+AoA Mean 71.000000000
+ToF Mean: 0.643144105
+Exponential Body: 190.217191450
+Cluster 11 has formatting: r^, AoA: 71.000000, and likelihood: 190.217191
+
+Cluster Properties for cluster 12
+Num Cluster Points: 238
+AoA Variance: 0.000000000
+ToF Variance: 0.000399390
+AoA Mean 25.000000000
+ToF Mean: 0.658487395
+Exponential Body: 191.573591462
+Cluster 12 has formatting: k^, AoA: 25.000000, and likelihood: 191.573591
+
+Cluster Properties for cluster 13
+Num Cluster Points: 238
+AoA Variance: 0.000000000
+ToF Variance: 0.000400667
+AoA Mean -38.000000000
+ToF Mean: 0.061008403
+Exponential Body: 788.924937063
+Cluster 13 has formatting: bp, AoA: -38.000000, and likelihood: 788.924937
+
+Cluster Properties for cluster 14
+Num Cluster Points: 238
+AoA Variance: 0.000000000
+ToF Variance: 0.000400667
+AoA Mean -38.000000000
+ToF Mean: 0.661008403
+Exponential Body: 188.924937063
+Cluster 14 has formatting: gp, AoA: -38.000000, and likelihood: 188.924937
+
+Cluster Properties for cluster 15
+Num Cluster Points: 238
+AoA Variance: 0.000000000
+ToF Variance: 0.000399390
+AoA Mean 25.000000000
+ToF Mean: 0.058487395
+Exponential Body: 791.573591462
+Cluster 15 has formatting: rp, AoA: 25.000000, and likelihood: 791.573591
+
+Cluster Properties for cluster 16
+Num Cluster Points: 249
+AoA Variance: 0.000000000
+ToF Variance: 0.000167742
+AoA Mean -5.000000000
+ToF Mean: 0.960000000
+Exponential Body: -31.774193548
+Cluster 16 has formatting: kp, AoA: -5.000000, and likelihood: -31.774194
+
+The cluster with the maximum likelihood is cluster 6
+The top clusters are: 6, 15, 8, 13, 3, 
+The clusters have AoAs: -5, 25, 71, -38, 25, 
+The clusters have plot point designations: gs, rp, ks, bp, ro, 
+The clusters have likelihoods: 840, 791.574, 790.217, 788.925, 578.36, 
+The Estimated Angle of Arrival for data set los-test-desk-left.dat is -5.000000
+
+output_top_aoas =
+
+    -5
+    25
+    71
+   -38
+    25
+
+
+
+Running on data file: los-test-desk-right.dat
+Have CSI for 231 packets
+Considering CSI for 231 packets
+Full Measurement Matrix Size: 2950
+
+Cluster Properties for cluster 1
+Num Cluster Points: 14
+AoA Variance: 0.000000000
+ToF Variance: 0.000000000
+AoA Mean -10.000000000
+ToF Mean: 1.000000000
+Exponential Body: -1230.000000000
+Cluster 1 has formatting: bo, AoA: -10.000000, and likelihood: -1230.000000
+
+Cluster Properties for cluster 2
+Num Cluster Points: 14
+AoA Variance: 0.000000000
+ToF Variance: 0.000000000
+AoA Mean 59.000000000
+ToF Mean: 1.000000000
+Exponential Body: -1230.000000000
+Cluster 2 has formatting: go, AoA: 59.000000, and likelihood: -1230.000000
+
+Cluster Properties for cluster 3
+Num Cluster Points: 14
+AoA Variance: 0.000000000
+ToF Variance: 0.000000000
+AoA Mean -44.000000000
+ToF Mean: 1.000000000
+Exponential Body: -1230.000000000
+Cluster 3 has formatting: ro, AoA: -44.000000, and likelihood: -1230.000000
+
+Cluster Properties for cluster 4
+Num Cluster Points: 14
+AoA Variance: 0.000000000
+ToF Variance: 0.000000000
+AoA Mean 20.000000000
+ToF Mean: 1.000000000
+Exponential Body: -1230.000000000
+Cluster 4 has formatting: ko, AoA: 20.000000, and likelihood: -1230.000000
+
+Cluster Properties for cluster 5
+Num Cluster Points: 14
+AoA Variance: 0.000000000
+ToF Variance: 0.000000000
+AoA Mean -44.000000000
+ToF Mean: 0.034482759
+Exponential Body: -264.482758621
+Cluster 5 has formatting: bs, AoA: -44.000000, and likelihood: -264.482759
+
+Cluster Properties for cluster 6
+Num Cluster Points: 14
+AoA Variance: 0.000000000
+ToF Variance: 0.000000000
+AoA Mean 20.000000000
+ToF Mean: 0.034482759
+Exponential Body: -264.482758621
+Cluster 6 has formatting: gs, AoA: 20.000000, and likelihood: -264.482759
+
+Cluster Properties for cluster 7
+Num Cluster Points: 14
+AoA Variance: 0.000000000
+ToF Variance: 0.000000000
+AoA Mean 59.000000000
+ToF Mean: 0.034482759
+Exponential Body: -264.482758621
+Cluster 7 has formatting: rs, AoA: 59.000000, and likelihood: -264.482759
+
+Cluster Properties for cluster 8
+Num Cluster Points: 14
+AoA Variance: 0.000000000
+ToF Variance: 0.000000000
+AoA Mean -10.000000000
+ToF Mean: 0.034482759
+Exponential Body: -264.482758621
+Cluster 8 has formatting: ks, AoA: -10.000000, and likelihood: -264.482759
+
+Cluster Properties for cluster 9
+Num Cluster Points: 245
+AoA Variance: 0.000000000
+ToF Variance: 0.000136450
+AoA Mean -10.000000000
+ToF Mean: 0.517241379
+Exponential Body: 394.113662502
+Cluster 9 has formatting: b^, AoA: -10.000000, and likelihood: 394.113663
+
+Cluster Properties for cluster 10
+Num Cluster Points: 245
+AoA Variance: 0.000000000
+ToF Variance: 0.000136450
+AoA Mean 59.000000000
+ToF Mean: 0.517241379
+Exponential Body: 394.113662502
+Cluster 10 has formatting: g^, AoA: 59.000000, and likelihood: 394.113663
+
+Cluster Properties for cluster 11
+Num Cluster Points: 245
+AoA Variance: 0.000000000
+ToF Variance: 0.000136450
+AoA Mean -44.000000000
+ToF Mean: 0.517241379
+Exponential Body: 394.113662502
+Cluster 11 has formatting: r^, AoA: -44.000000, and likelihood: 394.113663
+
+Cluster Properties for cluster 12
+Num Cluster Points: 245
+AoA Variance: 0.000000000
+ToF Variance: 0.000136450
+AoA Mean 20.000000000
+ToF Mean: 0.517241379
+Exponential Body: 394.113662502
+Cluster 12 has formatting: k^, AoA: 20.000000, and likelihood: 394.113663
+
+Cluster Properties for cluster 13
+Num Cluster Points: 236
+AoA Variance: 0.000000000
+ToF Variance: 0.000295529
+AoA Mean -10.000000000
+ToF Mean: 0.783167738
+Exponential Body: 67.279409526
+Cluster 13 has formatting: bp, AoA: -10.000000, and likelihood: 67.279410
+
+Cluster Properties for cluster 14
+Num Cluster Points: 231
+AoA Variance: 0.000000000
+ToF Variance: 0.000263639
+AoA Mean 59.000000000
+ToF Mean: 0.781758471
+Exponential Body: 46.877639326
+Cluster 14 has formatting: gp, AoA: 59.000000, and likelihood: 46.877639
+
+Cluster Properties for cluster 15
+Num Cluster Points: 231
+AoA Variance: 0.000000000
+ToF Variance: 0.000267085
+AoA Mean -44.000000000
+ToF Mean: 0.781459919
+Exponential Body: 46.831536090
+Cluster 15 has formatting: rp, AoA: -44.000000, and likelihood: 46.831536
+
+Cluster Properties for cluster 16
+Num Cluster Points: 231
+AoA Variance: 0.000000000
+ToF Variance: 0.000267085
+AoA Mean 20.000000000
+ToF Mean: 0.781459919
+Exponential Body: 46.831536090
+Cluster 16 has formatting: kp, AoA: 20.000000, and likelihood: 46.831536
+
+Cluster Properties for cluster 17
+Num Cluster Points: 231
+AoA Variance: 0.000000000
+ToF Variance: 0.000267085
+AoA Mean -44.000000000
+ToF Mean: 0.264218540
+Exponential Body: 564.072915401
+Cluster 17 has formatting: b*, AoA: -44.000000, and likelihood: 564.072915
+
+Cluster Properties for cluster 18
+Num Cluster Points: 231
+AoA Variance: 0.000000000
+ToF Variance: 0.000267085
+AoA Mean 20.000000000
+ToF Mean: 0.264218540
+Exponential Body: 564.072915401
+Cluster 18 has formatting: g*, AoA: 20.000000, and likelihood: 564.072915
+
+Cluster Properties for cluster 19
+Num Cluster Points: 231
+AoA Variance: 0.000000000
+ToF Variance: 0.000263639
+AoA Mean 59.000000000
+ToF Mean: 0.264517092
+Exponential Body: 564.119018637
+Cluster 19 has formatting: r*, AoA: 59.000000, and likelihood: 564.119019
+
+Cluster Properties for cluster 20
+Num Cluster Points: 236
+AoA Variance: 0.000000000
+ToF Variance: 0.000295529
+AoA Mean -10.000000000
+ToF Mean: 0.265926359
+Exponential Body: 584.520788836
+Cluster 20 has formatting: k*, AoA: -10.000000, and likelihood: 584.520789
+
+The cluster with the maximum likelihood is cluster 20
+The top clusters are: 20, 19, 17, 18, 9, 
+The clusters have AoAs: -10, 59, -44, 20, -10, 
+The clusters have plot point designations: k*, r*, b*, g*, b^, 
+The clusters have likelihoods: 584.521, 564.119, 564.073, 564.073, 394.114, 
+The Estimated Angle of Arrival for data set los-test-desk-right.dat is -10.000000
+
+output_top_aoas =
+
+   -10
+    59
+   -44
+    20
+   -10
+
+
+
+Running on data file: los-test-printer.dat
+Have CSI for 215 packets
+Considering CSI for 215 packets
+Full Measurement Matrix Size: 3494
+
+Cluster Properties for cluster 1
+Num Cluster Points: 182
+AoA Variance: 0.000049212
+ToF Variance: 0.000000000
+AoA Mean 86.335164835
+ToF Mean: 0.482758621
+Exponential Body: 124.780791466
+Cluster 1 has formatting: bo, AoA: 86.335165, and likelihood: 124.780791
+
+Cluster Properties for cluster 2
+Num Cluster Points: 201
+AoA Variance: 0.000002475
+ToF Variance: 0.000000000
+AoA Mean -33.980099502
+ToF Mean: 0.724137931
+Exponential Body: -19.261665349
+Cluster 2 has formatting: go, AoA: -33.980100, and likelihood: -19.261665
+
+Cluster Properties for cluster 3
+Num Cluster Points: 201
+AoA Variance: 0.000000000
+ToF Variance: 0.000000000
+AoA Mean -2.000000000
+ToF Mean: 0.724137931
+Exponential Body: -19.137931034
+Cluster 3 has formatting: ro, AoA: -2.000000, and likelihood: -19.137931
+
+Cluster Properties for cluster 4
+Num Cluster Points: 201
+AoA Variance: 0.000000628
+ToF Variance: 0.000000000
+AoA Mean 28.995024876
+ToF Mean: 0.724137931
+Exponential Body: -19.169335683
+Cluster 4 has formatting: ko, AoA: 28.995025, and likelihood: -19.169336
+
+Cluster Properties for cluster 5
+Num Cluster Points: 200
+AoA Variance: 0.000000000
+ToF Variance: 0.000087955
+AoA Mean 29.000000000
+ToF Mean: 0.997241379
+Exponential Body: -306.036842954
+Cluster 5 has formatting: bs, AoA: 29.000000, and likelihood: -306.036843
+
+Cluster Properties for cluster 6
+Num Cluster Points: 201
+AoA Variance: 0.000000628
+ToF Variance: 0.000000000
+AoA Mean 28.995024876
+ToF Mean: 0.206896552
+Exponential Body: 498.072043628
+Cluster 6 has formatting: gs, AoA: 28.995025, and likelihood: 498.072044
+
+Cluster Properties for cluster 7
+Num Cluster Points: 182
+AoA Variance: 0.000049212
+ToF Variance: 0.000000000
+AoA Mean 86.335164835
+ToF Mean: 1.000000000
+Exponential Body: -392.460587844
+Cluster 7 has formatting: rs, AoA: 86.335165, and likelihood: -392.460588
+
+Cluster Properties for cluster 8
+Num Cluster Points: 185
+AoA Variance: 0.000000000
+ToF Variance: 0.000000000
+AoA Mean -34.000000000
+ToF Mean: 1.000000000
+Exponential Body: -375.000000000
+Cluster 8 has formatting: ks, AoA: -34.000000, and likelihood: -375.000000
+
+Cluster Properties for cluster 9
+Num Cluster Points: 183
+AoA Variance: 0.000053840
+ToF Variance: 0.000000000
+AoA Mean 86.349726776
+ToF Mean: 0.206896552
+Exponential Body: 405.411428928
+Cluster 9 has formatting: b^, AoA: 86.349727, and likelihood: 405.411429
+
+Cluster Properties for cluster 10
+Num Cluster Points: 201
+AoA Variance: 0.000002475
+ToF Variance: 0.000000000
+AoA Mean -33.980099502
+ToF Mean: 0.206896552
+Exponential Body: 497.979713962
+Cluster 10 has formatting: g^, AoA: -33.980100, and likelihood: 497.979714
+
+Cluster Properties for cluster 11
+Num Cluster Points: 183
+AoA Variance: 0.000053840
+ToF Variance: 0.000000000
+AoA Mean 86.349726776
+ToF Mean: 0.724137931
+Exponential Body: -111.829950383
+Cluster 11 has formatting: r^, AoA: 86.349727, and likelihood: -111.829950
+
+Cluster Properties for cluster 12
+Num Cluster Points: 227
+AoA Variance: 0.000008308
+ToF Variance: 0.000727269
+AoA Mean -33.929515419
+ToF Mean: 0.476378551
+Exponential Body: 285.479175526
+Cluster 12 has formatting: k^, AoA: -33.929515, and likelihood: 285.479176
+
+Cluster Properties for cluster 13
+Num Cluster Points: 229
+AoA Variance: 0.000008240
+ToF Variance: 0.000769478
+AoA Mean -2.069868996
+ToF Mean: 0.476133112
+Exponential Body: 291.507074968
+Cluster 13 has formatting: bp, AoA: -2.069869, and likelihood: 291.507075
+
+Cluster Properties for cluster 14
+Num Cluster Points: 229
+AoA Variance: 0.000008714
+ToF Variance: 0.000769478
+AoA Mean 28.925764192
+ToF Mean: 0.476133112
+Exponential Body: 291.483378930
+Cluster 14 has formatting: gp, AoA: 28.925764, and likelihood: 291.483379
+
+Cluster Properties for cluster 15
+Num Cluster Points: 201
+AoA Variance: 0.000000000
+ToF Variance: 0.000087553
+AoA Mean -2.000000000
+ToF Mean: 0.997255104
+Exponential Body: -301.010376181
+Cluster 15 has formatting: rp, AoA: -2.000000, and likelihood: -301.010376
+
+Cluster Properties for cluster 16
+Num Cluster Points: 201
+AoA Variance: 0.000000000
+ToF Variance: 0.000000000
+AoA Mean -2.000000000
+ToF Mean: 0.206896552
+Exponential Body: 498.103448276
+Cluster 16 has formatting: kp, AoA: -2.000000, and likelihood: 498.103448
+
+The cluster with the maximum likelihood is cluster 16
+The top clusters are: 16, 6, 10, 9, 13, 
+The clusters have AoAs: -2, 28.995, -33.9801, 86.3497, -2.06987, 
+The clusters have plot point designations: kp, gs, g^, b^, bp, 
+The clusters have likelihoods: 498.103, 498.072, 497.98, 405.411, 291.507, 
+The Estimated Angle of Arrival for data set los-test-printer.dat is -2.000000
+
+output_top_aoas =
+
+   -2.0000
+   28.9950
+  -33.9801
+   86.3497
+   -2.0699
+
+
+
+Running on data file: los-test-nearby-long-bookshelf.dat
+Have CSI for 248 packets
+Considering CSI for 248 packets
+Full Measurement Matrix Size: 2955
+
+Cluster Properties for cluster 1
+Num Cluster Points: 241
+AoA Variance: 0.000599621
+ToF Variance: 0.000000000
+AoA Mean 58.941908714
+ToF Mean: 0.347826087
+Exponential Body: 527.192842870
+Cluster 1 has formatting: bo, AoA: 58.941909, and likelihood: 527.192843
+
+Cluster Properties for cluster 2
+Num Cluster Points: 241
+AoA Variance: 0.000451567
+ToF Variance: 0.000000000
+AoA Mean -44.186721992
+ToF Mean: 0.652173913
+Exponential Body: 230.247744606
+Cluster 2 has formatting: go, AoA: -44.186722, and likelihood: 230.247745
+
+Cluster Properties for cluster 3
+Num Cluster Points: 241
+AoA Variance: 0.000156330
+ToF Variance: 0.000000000
+AoA Mean -10.510373444
+ToF Mean: 0.652173913
+Exponential Body: 245.009572779
+Cluster 3 has formatting: ro, AoA: -10.510373, and likelihood: 245.009573
+
+Cluster Properties for cluster 4
+Num Cluster Points: 241
+AoA Variance: 0.000211103
+ToF Variance: 0.000000000
+AoA Mean 19.676348548
+ToF Mean: 0.652173913
+Exponential Body: 242.270936792
+Cluster 4 has formatting: ko, AoA: 19.676349, and likelihood: 242.270937
+
+Cluster Properties for cluster 5
+Num Cluster Points: 241
+AoA Variance: 0.000156330
+ToF Variance: 0.000000000
+AoA Mean -10.510373444
+ToF Mean: 1.000000000
+Exponential Body: -102.816514177
+Cluster 5 has formatting: bs, AoA: -10.510373, and likelihood: -102.816514
+
+Cluster Properties for cluster 6
+Num Cluster Points: 241
+AoA Variance: 0.000599621
+ToF Variance: 0.000000000
+AoA Mean 58.941908714
+ToF Mean: 1.000000000
+Exponential Body: -124.981070174
+Cluster 6 has formatting: gs, AoA: 58.941909, and likelihood: -124.981070
+
+Cluster Properties for cluster 7
+Num Cluster Points: 241
+AoA Variance: 0.000451567
+ToF Variance: 0.000000000
+AoA Mean -44.186721992
+ToF Mean: 1.000000000
+Exponential Body: -117.578342350
+Cluster 7 has formatting: rs, AoA: -44.186722, and likelihood: -117.578342
+
+Cluster Properties for cluster 8
+Num Cluster Points: 241
+AoA Variance: 0.000599621
+ToF Variance: 0.000000000
+AoA Mean 58.941908714
+ToF Mean: 0.652173913
+Exponential Body: 222.845016783
+Cluster 8 has formatting: ks, AoA: 58.941909, and likelihood: 222.845017
+
+Cluster Properties for cluster 9
+Num Cluster Points: 241
+AoA Variance: 0.000451567
+ToF Variance: 0.000000000
+AoA Mean -44.186721992
+ToF Mean: 0.347826087
+Exponential Body: 534.595570693
+Cluster 9 has formatting: b^, AoA: -44.186722, and likelihood: 534.595571
+
+Cluster Properties for cluster 10
+Num Cluster Points: 241
+AoA Variance: 0.000156330
+ToF Variance: 0.000000000
+AoA Mean -10.510373444
+ToF Mean: 0.347826087
+Exponential Body: 549.357398866
+Cluster 10 has formatting: g^, AoA: -10.510373, and likelihood: 549.357399
+
+Cluster Properties for cluster 11
+Num Cluster Points: 241
+AoA Variance: 0.000211103
+ToF Variance: 0.000000000
+AoA Mean 19.676348548
+ToF Mean: 0.347826087
+Exponential Body: 546.618762879
+Cluster 11 has formatting: r^, AoA: 19.676349, and likelihood: 546.618763
+
+Cluster Properties for cluster 12
+Num Cluster Points: 241
+AoA Variance: 0.000211103
+ToF Variance: 0.000000000
+AoA Mean 19.676348548
+ToF Mean: 1.000000000
+Exponential Body: -105.555150165
+Cluster 12 has formatting: k^, AoA: 19.676349, and likelihood: -105.555150
+
+The cluster with the maximum likelihood is cluster 10
+The top clusters are: 10, 11, 9, 1, 3, 
+The clusters have AoAs: -10.5104, 19.6763, -44.1867, 58.9419, -10.5104, 
+The clusters have plot point designations: g^, r^, b^, bo, ro, 
+The clusters have likelihoods: 549.357, 546.619, 534.596, 527.193, 245.01, 
+The Estimated Angle of Arrival for data set los-test-nearby-long-bookshelf.dat is -10.510373
+
+output_top_aoas =
+
+  -10.5104
+   19.6763
+  -44.1867
+   58.9419
+  -10.5104
+
+
+
+Running on data file: los-test-tall-bookshelf.dat
+Have CSI for 219 packets
+Considering CSI for 219 packets
+Full Measurement Matrix Size: 3728
+
+Cluster Properties for cluster 1
+Num Cluster Points: 231
+AoA Variance: 0.000000000
+ToF Variance: 0.000584481
+AoA Mean -16.000000000
+ToF Mean: 0.666666667
+Exponential Body: 129.885191149
+Cluster 1 has formatting: bo, AoA: -16.000000, and likelihood: 129.885191
+
+Cluster Properties for cluster 2
+Num Cluster Points: 227
+AoA Variance: 0.000000000
+ToF Variance: 0.000497712
+AoA Mean 14.000000000
+ToF Mean: 0.666666667
+Exponential Body: 118.562159341
+Cluster 2 has formatting: go, AoA: 14.000000, and likelihood: 118.562159
+
+Cluster Properties for cluster 3
+Num Cluster Points: 230
+AoA Variance: 0.000000000
+ToF Variance: 0.000634955
+AoA Mean -52.000000000
+ToF Mean: 0.666666667
+Exponential Body: 119.837846904
+Cluster 3 has formatting: ro, AoA: -52.000000, and likelihood: 119.837847
+
+Cluster Properties for cluster 4
+Num Cluster Points: 233
+AoA Variance: 0.000000000
+ToF Variance: 0.000626744
+AoA Mean 50.000000000
+ToF Mean: 0.666666667
+Exponential Body: 135.658909229
+Cluster 4 has formatting: ko, AoA: 50.000000, and likelihood: 135.658909
+
+Cluster Properties for cluster 5
+Num Cluster Points: 230
+AoA Variance: 0.000000000
+ToF Variance: 0.000615161
+AoA Mean -52.000000000
+ToF Mean: 0.951690821
+Exponential Body: -163.206957001
+Cluster 5 has formatting: bs, AoA: -52.000000, and likelihood: -163.206957
+
+Cluster Properties for cluster 6
+Num Cluster Points: 233
+AoA Variance: 0.000000000
+ToF Variance: 0.000626744
+AoA Mean 50.000000000
+ToF Mean: 0.111111111
+Exponential Body: 691.214464784
+Cluster 6 has formatting: gs, AoA: 50.000000, and likelihood: 691.214465
+
+Cluster Properties for cluster 7
+Num Cluster Points: 231
+AoA Variance: 0.000000000
+ToF Variance: 0.000584378
+AoA Mean -16.000000000
+ToF Mean: 0.952060285
+Exponential Body: -155.498100138
+Cluster 7 has formatting: rs, AoA: -16.000000, and likelihood: -155.498100
+
+Cluster Properties for cluster 8
+Num Cluster Points: 227
+AoA Variance: 0.000000000
+ToF Variance: 0.000539050
+AoA Mean 14.000000000
+ToF Mean: 0.952194485
+Exponential Body: -171.099442132
+Cluster 8 has formatting: ks, AoA: 14.000000, and likelihood: -171.099442
+
+Cluster Properties for cluster 9
+Num Cluster Points: 231
+AoA Variance: 0.000000000
+ToF Variance: 0.000584481
+AoA Mean -16.000000000
+ToF Mean: 0.111111111
+Exponential Body: 685.440746705
+Cluster 9 has formatting: b^, AoA: -16.000000, and likelihood: 685.440747
+
+Cluster Properties for cluster 10
+Num Cluster Points: 230
+AoA Variance: 0.000000000
+ToF Variance: 0.000634955
+AoA Mean -52.000000000
+ToF Mean: 0.111111111
+Exponential Body: 675.393402460
+Cluster 10 has formatting: g^, AoA: -52.000000, and likelihood: 675.393402
+
+Cluster Properties for cluster 11
+Num Cluster Points: 233
+AoA Variance: 0.000000000
+ToF Variance: 0.000608829
+AoA Mean 50.000000000
+ToF Mean: 0.951835956
+Exponential Body: -147.718812356
+Cluster 11 has formatting: r^, AoA: 50.000000, and likelihood: -147.718812
+
+Cluster Properties for cluster 12
+Num Cluster Points: 231
+AoA Variance: 0.000000000
+ToF Variance: 0.000584378
+AoA Mean -16.000000000
+ToF Mean: 0.396504730
+Exponential Body: 400.057455417
+Cluster 12 has formatting: k^, AoA: -16.000000, and likelihood: 400.057455
+
+Cluster Properties for cluster 13
+Num Cluster Points: 227
+AoA Variance: 0.000000000
+ToF Variance: 0.000539050
+AoA Mean 14.000000000
+ToF Mean: 0.396638930
+Exponential Body: 384.456113424
+Cluster 13 has formatting: bp, AoA: 14.000000, and likelihood: 384.456113
+
+Cluster Properties for cluster 14
+Num Cluster Points: 230
+AoA Variance: 0.000000000
+ToF Variance: 0.000615161
+AoA Mean -52.000000000
+ToF Mean: 0.396135266
+Exponential Body: 392.348598555
+Cluster 14 has formatting: gp, AoA: -52.000000, and likelihood: 392.348599
+
+Cluster Properties for cluster 15
+Num Cluster Points: 233
+AoA Variance: 0.000000000
+ToF Variance: 0.000608829
+AoA Mean 50.000000000
+ToF Mean: 0.396280401
+Exponential Body: 407.836743200
+Cluster 15 has formatting: rp, AoA: 50.000000, and likelihood: 407.836743
+
+Cluster Properties for cluster 16
+Num Cluster Points: 227
+AoA Variance: 0.000000000
+ToF Variance: 0.000497712
+AoA Mean 14.000000000
+ToF Mean: 0.111111111
+Exponential Body: 674.117714896
+Cluster 16 has formatting: kp, AoA: 14.000000, and likelihood: 674.117715
+
+The cluster with the maximum likelihood is cluster 6
+The top clusters are: 6, 9, 10, 16, 15, 
+The clusters have AoAs: 50, -16, -52, 14, 50, 
+The clusters have plot point designations: gs, b^, g^, kp, rp, 
+The clusters have likelihoods: 691.214, 685.441, 675.393, 674.118, 407.837, 
+The Estimated Angle of Arrival for data set los-test-tall-bookshelf.dat is 50.000000
+
+output_top_aoas =
+
+    50
+   -16
+   -52
+    14
+    50
+
+
+
+Running on data file: los-test-jennys-table.dat
+Have CSI for 214 packets
+Considering CSI for 214 packets
+Full Measurement Matrix Size: 3494
+
+Cluster Properties for cluster 1
+Num Cluster Points: 198
+AoA Variance: 0.000000000
+ToF Variance: 0.000000000
+AoA Mean -11.000000000
+ToF Mean: 0.360000000
+Exponential Body: 330.000000000
+Cluster 1 has formatting: bo, AoA: -11.000000, and likelihood: 330.000000
+
+Cluster Properties for cluster 2
+Num Cluster Points: 198
+AoA Variance: 0.000005526
+ToF Variance: 0.000000000
+AoA Mean 58.020202020
+ToF Mean: 0.360000000
+Exponential Body: 329.723689233
+Cluster 2 has formatting: go, AoA: 58.020202, and likelihood: 329.723689
+
+Cluster Properties for cluster 3
+Num Cluster Points: 200
+AoA Variance: 0.000000000
+ToF Variance: 0.000000000
+AoA Mean -45.000000000
+ToF Mean: 0.640000000
+Exponential Body: 60.000000000
+Cluster 3 has formatting: ro, AoA: -45.000000, and likelihood: 60.000000
+
+Cluster Properties for cluster 4
+Num Cluster Points: 201
+AoA Variance: 0.000009384
+ToF Variance: 0.000000000
+AoA Mean 19.034825871
+ToF Mean: 0.360000000
+Exponential Body: 344.530818132
+Cluster 4 has formatting: ko, AoA: 19.034826, and likelihood: 344.530818
+
+Cluster Properties for cluster 5
+Num Cluster Points: 198
+AoA Variance: 0.000000000
+ToF Variance: 0.000000000
+AoA Mean -11.000000000
+ToF Mean: 0.040000000
+Exponential Body: 650.000000000
+Cluster 5 has formatting: bs, AoA: -11.000000, and likelihood: 650.000000
+
+Cluster Properties for cluster 6
+Num Cluster Points: 201
+AoA Variance: 0.000009384
+ToF Variance: 0.000000000
+AoA Mean 19.034825871
+ToF Mean: 0.960000000
+Exponential Body: -255.469181868
+Cluster 6 has formatting: gs, AoA: 19.034826, and likelihood: -255.469182
+
+Cluster Properties for cluster 7
+Num Cluster Points: 198
+AoA Variance: 0.000005526
+ToF Variance: 0.000000000
+AoA Mean 58.020202020
+ToF Mean: 0.960000000
+Exponential Body: -270.276310767
+Cluster 7 has formatting: rs, AoA: 58.020202, and likelihood: -270.276311
+
+Cluster Properties for cluster 8
+Num Cluster Points: 200
+AoA Variance: 0.000000000
+ToF Variance: 0.000000000
+AoA Mean -45.000000000
+ToF Mean: 0.040000000
+Exponential Body: 660.000000000
+Cluster 8 has formatting: ks, AoA: -45.000000, and likelihood: 660.000000
+
+Cluster Properties for cluster 9
+Num Cluster Points: 211
+AoA Variance: 0.000020675
+ToF Variance: 0.000106161
+AoA Mean 58.080568720
+ToF Mean: 0.042843602
+Exponential Body: 700.506532260
+Cluster 9 has formatting: b^, AoA: 58.080569, and likelihood: 700.506532
+
+Cluster Properties for cluster 10
+Num Cluster Points: 197
+AoA Variance: 0.000000000
+ToF Variance: 0.000000000
+AoA Mean -45.000000000
+ToF Mean: 0.960000000
+Exponential Body: -275.000000000
+Cluster 10 has formatting: g^, AoA: -45.000000, and likelihood: -275.000000
+
+Cluster Properties for cluster 11
+Num Cluster Points: 198
+AoA Variance: 0.000000000
+ToF Variance: 0.000000000
+AoA Mean -11.000000000
+ToF Mean: 0.640000000
+Exponential Body: 50.000000000
+Cluster 11 has formatting: r^, AoA: -11.000000, and likelihood: 50.000000
+
+Cluster Properties for cluster 12
+Num Cluster Points: 224
+AoA Variance: 0.000032364
+ToF Variance: 0.000200769
+AoA Mean 58.133928571
+ToF Mean: 0.640357143
+Exponential Body: 157.947763186
+Cluster 12 has formatting: k^, AoA: 58.133929, and likelihood: 157.947763
+
+Cluster Properties for cluster 13
+Num Cluster Points: 197
+AoA Variance: 0.000000000
+ToF Variance: 0.000000000
+AoA Mean -45.000000000
+ToF Mean: 0.360000000
+Exponential Body: 325.000000000
+Cluster 13 has formatting: bp, AoA: -45.000000, and likelihood: 325.000000
+
+Cluster Properties for cluster 14
+Num Cluster Points: 227
+AoA Variance: 0.000034664
+ToF Variance: 0.000347059
+AoA Mean 19.145374449
+ToF Mean: 0.644581498
+Exponential Body: 153.979441997
+Cluster 14 has formatting: gp, AoA: 19.145374, and likelihood: 153.979442
+
+Cluster Properties for cluster 15
+Num Cluster Points: 214
+AoA Variance: 0.000023645
+ToF Variance: 0.000239568
+AoA Mean 19.093457944
+ToF Mean: 0.047289720
+Exponential Body: 697.571214758
+Cluster 15 has formatting: rp, AoA: 19.093458, and likelihood: 697.571215
+
+Cluster Properties for cluster 16
+Num Cluster Points: 198
+AoA Variance: 0.000000000
+ToF Variance: 0.000000000
+AoA Mean -11.000000000
+ToF Mean: 0.960000000
+Exponential Body: -270.000000000
+Cluster 16 has formatting: kp, AoA: -11.000000, and likelihood: -270.000000
+
+The cluster with the maximum likelihood is cluster 9
+The top clusters are: 9, 15, 8, 5, 4, 
+The clusters have AoAs: 58.0806, 19.0935, -45, -11, 19.0348, 
+The clusters have plot point designations: b^, rp, ks, bs, ko, 
+The clusters have likelihoods: 700.507, 697.571, 660, 650, 344.531, 
+The Estimated Angle of Arrival for data set los-test-jennys-table.dat is 58.080569
+
+output_top_aoas =
+
+   58.0806
+   19.0935
+  -45.0000
+  -11.0000
+   19.0348
+
+Done Running!
