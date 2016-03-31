@@ -69,7 +69,6 @@ function sampling_value_tests
         %       Last N packets
         sampling_options = {
                 [length(csi_trace); 1; length(csi_trace);], ...
-                %{
                 [750; 1; length(csi_trace);], ...
                 [500; 1; length(csi_trace);], ...
                 [250; 1; length(csi_trace);], ...
@@ -89,7 +88,6 @@ function sampling_value_tests
                 [50; 1; 50;], ...
                 [25; 1; 25;], ...
                 [10; 1; 10;], ...
-                %}
         };
         % Sample packets and compute
         for ii = 1:length(sampling_options)
@@ -113,12 +111,6 @@ function sampling_value_tests
             fprintf('\n\n')
         end
 
-        
-        
-        continue
-        
-        
-        
         fprintf('Chunk and vote results: \n')
         chunking_options = {
                 200, ...
