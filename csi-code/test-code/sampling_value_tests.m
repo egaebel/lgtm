@@ -21,7 +21,7 @@
 % DEALINGS IN THE SOFTWARE.
 %
 
-function sampling_value_tests
+function sampling_value_tests(file_chunk)
     clc
     % Get the full path to the currently executing file and change the
     % pwd to the folder this file is contained in...
@@ -247,6 +247,16 @@ function sampling_value_tests
         'lgtm-monitor.dat--2m-neg-20-degrees--laptop-2--test-8', ...
         'lgtm-monitor.dat--2m-neg-20-degrees--laptop-2--test-9', ...
     };
+    if nargin > 0
+        data_files = data_files(((file_chunk - 1) * 20 + 1):((file_chunk - 1) * 20 + 20));
+        fprintf('file_chunk %d\n', file_chunk)
+        for ii = 1:length(data_files)
+            fprintf('%s\n', data_files{ii})
+        end
+    else
+        fprintf('No arguments passed...\n')
+    end
+
     
     % Set physical layer parameters (frequency, subfrequency spacing, and antenna spacing
     antenna_distance = 0.1;
@@ -316,7 +326,8 @@ function sampling_value_tests
             output_top_aoas
             fprintf('\n\n')
         end
-
+        
+        %% TODO: As always, remove this later...
         continue;
         
         fprintf('Chunk and vote results: \n')

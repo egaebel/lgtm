@@ -33,6 +33,7 @@ function spotfi_test
     cd(current_directory);
     pwd
     % Path to data used in this test
+    path('..', path);
     path('../../csi-code/test-data/localization-tests--in-room', path);
     path('../../csi-code/test-data/line-of-sight-localization-tests--in-room', path);
     % Paths for the csitool functions provided
