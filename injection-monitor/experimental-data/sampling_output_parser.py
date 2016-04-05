@@ -35,6 +35,7 @@ def parse_spotfi_sampling_output(folder_name):
 
     # Iterate over all files in the passed directory
     # Don't stick anything you don't want touched in there....
+    print("top-level Parsing for loop")
     for sample_file_name in os.listdir(folder_name):
         sample_file_name = os.path.join(folder_name, sample_file_name)
         if not os.path.isdir(sample_file_name):
@@ -86,6 +87,16 @@ def parse_spotfi_sampling_output(folder_name):
                             top_aoas.append(cur_top_aoa)
                         except:
                             cur_top_aoa_status = False
+
+    # Check if we have top_aoas from the final iteration
+    if len(top_aoas) > 0:
+        sampling_key = cur_data_file + ' ' + cur_num_packets + ' '\
+                + cur_begin_index + ' ' + cur_end_index
+        sampling_parameters_data[sampling_key] = top_aoas
+        top_aoas = list()
+    # Check if we have sampling_parameters data from the final iteration
+    if len(sampling_parameters_data) > 0:
+        data_files_data[cur_data_file] = sampling_parameters_data
 
     return data_files_data
 
@@ -309,7 +320,7 @@ if __name__ == '__main__':
     data_files_data = parse_spotfi_sampling_output('fully-parsed-lgtm-monitors')
     aoa_experiment_comparison_data = list()
     # Loop over data files
-    for data_file_key in data_files_data:
+    for data_file_key in sorted(data_files_data):
         # Parse the data file name to extract data from the file-name like aoa, distance, etc
         file_name_data = parse_file_name(data_file_key)
         # Loop over different sampling parameters
