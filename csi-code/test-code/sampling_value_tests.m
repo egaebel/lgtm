@@ -248,7 +248,7 @@ function sampling_value_tests(file_chunk)
         'lgtm-monitor.dat--2m-neg-20-degrees--laptop-2--test-9', ...
     };
     if nargin > 0
-        data_files = data_files(((file_chunk - 1) * 20 + 1):((file_chunk - 1) * 20 + 20));
+        data_files = data_files(((file_chunk - 1) * 10 + 1):((file_chunk - 1) * 10 + 10));
         fprintf('file_chunk %d\n', file_chunk)
         for ii = 1:length(data_files)
             fprintf('%s\n', data_files{ii})
