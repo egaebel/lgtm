@@ -58,6 +58,9 @@ static const string RECEIVED_FACIAL_RECOGNITION_FILE_NAME = ".lgtm-received-faci
 static const string DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME = ".lgtm-facial-recognition-params--decrypted";
 
 //~Functions----------------------------------------------------------------------------------------
+/**
+ *
+ */
 void firstMessage() {
     // Prepare Diffie-Hellman parameters
     SecByteBlock publicKey;
@@ -69,6 +72,9 @@ void firstMessage() {
     writeToFile(PUBLIC_KEY_FILE_NAME, publicKey);
 }
 
+/**
+ *
+ */
 void replyToFirstMessage() {
     // Read in received Diffie-Hellman public key from file
     SecByteBlock otherPublicKey;
@@ -92,6 +98,9 @@ void replyToFirstMessage() {
     writeToFile(COMPUTED_KEY_FILE_NAME, key);
 }
 
+/**
+ *
+ */
 void secondMessage() {
     // Read from file
     SecByteBlock privateKey;
@@ -117,6 +126,9 @@ void secondMessage() {
     writeToFile(VERIFICATION_MAC_FILE_NAME, mac);
 }
 
+/**
+ *
+ */
 void replyToSecondMessage() {
     // Read from file
     SecByteBlock key;
@@ -134,6 +146,9 @@ void replyToSecondMessage() {
     writeToFile(VERIFICATION_MAC_FILE_NAME, mac);
 }
 
+/**
+ *
+ */
 void thirdMessage() {
     // Read session key from file
     SecByteBlock key;
@@ -154,6 +169,9 @@ void thirdMessage() {
             key, curIv);
 }
 
+/**
+ *
+ */
 void thirdMessageReply() {
     // Read session key from file
     SecByteBlock key;
@@ -174,6 +192,9 @@ void thirdMessageReply() {
             key, curIv);
 }
 
+/**
+ *
+ */
 void thirdMessageDecryptReply() {
     // Read session key from file
     SecByteBlock key;

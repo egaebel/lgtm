@@ -42,6 +42,9 @@ void generateDiffieHellmanParameters(SecByteBlock &publicKey, SecByteBlock &priv
     diffieHellman.GenerateKeyPair(rng, privateKey, publicKey);
 }
 
+/**
+ * Derive the shared secret from a private key and another party's public key.
+ */
 void diffieHellmanSharedSecretAgreement(SecByteBlock &sharedSecret, SecByteBlock &otherPublicKey, 
         SecByteBlock &privateKey) {
     OID CURVE = secp256r1();
@@ -52,11 +55,22 @@ void diffieHellmanSharedSecretAgreement(SecByteBlock &sharedSecret, SecByteBlock
     }
 }
 
+/**
+ * Take some shared secret and compute a 256 bit hash over it to generate a key.
+ */
 void generateSymmetricKeyFromSharedSecret(SecByteBlock &key, SecByteBlock &sharedSecret) {
     key.CleanNew(SHA256::DIGESTSIZE);
     SHA256().CalculateDigest(key, sharedSecret.BytePtr(), sharedSecret.SizeInBytes());
 }
 
+/**
+ * Take an inputFileName and encrypt it, placing the results in the outputFileName.
+ * The encryption process is authenticated and takes secondary authentication information
+ * from the authInputFileName.
+ *
+ * The encryption algorithm uses key and ivBytes to perform GCM<AES> encryption.
+ * ivBytes is 256 bits (the size of AES::BLOCKSIZE).
+ */
 void encryptFile(const string &inputFileName, const string &authInputFileName, 
         const string &outputFileName, /*const string &authOutputFileName, (Add back later?)*/
         SecByteBlock &key, byte *ivBytes) {
@@ -108,6 +122,14 @@ void encryptFile(const string &inputFileName, const string &authInputFileName,
     //        new StreamTransformationFilter(encrypt, new FileSink(outputFileName)));
 }
 
+/**
+ * Take an inputFileName and decrypts it, placing the results in the outputFileName.
+ * The encryption process is authenticated and takes secondary authentication information
+ * from the authInputFileName.
+ *
+ * The encryption algorithm uses key and ivBytes to perform GCM<AES> encryption.
+ * ivBytes is 256 bits (the size of AES::BLOCKSIZE).
+ */
 void decryptFile(const string &inputFileName, const string &outputFileName, 
         const string &authInputFileName, SecByteBlock &key, byte *ivBytes) {
     GCM<AES>::Decryption decrypt;
@@ -174,6 +196,9 @@ void decryptFile(const string &inputFileName, const string &outputFileName,
     //        new StreamTransformationFilter(decrypt, new FileSink(outputFileName)));
 }
 
+/**
+ * Generates a HMAC from inputFileName and places the result in outputFileName.
+ */
 void createMacForFile(const string &inputFileName, const string &outputFileName) {
     try {
         HMAC<SHA512> hmac;
@@ -188,6 +213,9 @@ void createMacForFile(const string &inputFileName, const string &outputFileName)
     }
 }
 
+/**
+ * Verifies a HMAC from macInputFileName by comparing it to a HMAC over the data in fileName.
+ */
 void verifyMacForFile(const string &fileName, const string &macInputFileName) {
     
 }
