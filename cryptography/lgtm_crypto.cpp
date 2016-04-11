@@ -47,10 +47,18 @@ void generateDiffieHellmanParameters(SecByteBlock &publicKey, SecByteBlock &priv
  */
 void diffieHellmanSharedSecretAgreement(SecByteBlock &sharedSecret, SecByteBlock &otherPublicKey, 
         SecByteBlock &privateKey) {
+    if (otherPublicKey.SizeInBytes() == 0) {
+        throw runtime_error("Other user's public key is empty!!!");
+    }
+    if (privateKey.SizeInBytes() == 0) {
+        throw runtime_error("Private key is empty!!!");
+    }
     OID CURVE = secp256r1();
 
     ECDH<ECP>::Domain diffieHellman(CURVE);
+    sharedSecret.CleanNew(diffieHellman.AgreedValueLength());
     if (!diffieHellman.Agree(sharedSecret, privateKey, otherPublicKey)) {
+        // TODO:
         // Do something bad, maybe return false
     }
 }
@@ -59,11 +67,16 @@ void diffieHellmanSharedSecretAgreement(SecByteBlock &sharedSecret, SecByteBlock
  * Take some shared secret and compute a 256 bit hash over it to generate a key.
  */
 void generateSymmetricKeyFromSharedSecret(SecByteBlock &key, SecByteBlock &sharedSecret) {
+    if (sharedSecret.SizeInBytes() == 0) {
+        throw runtime_error("Shared secret is empty!!!");
+    }
     key.CleanNew(SHA256::DIGESTSIZE);
     SHA256().CalculateDigest(key, sharedSecret.BytePtr(), sharedSecret.SizeInBytes());
 }
 
 /**
+ * Encrypt with ADDITIONALLY authenticated (but unencrypted) data.
+ *
  * Take an inputFileName and encrypt it, placing the results in the outputFileName.
  * The encryption process is authenticated and takes secondary authentication information
  * from the authInputFileName.
@@ -100,6 +113,10 @@ void encryptFile(const string &inputFileName, const string &authInputFileName,
         encryptionFilter.ChannelMessageEnd(AAD_CHANNEL);
 
         delete[] authData;
+    } else {
+        cerr << "Error opening authentication file: " << authInputFileName 
+                << " in decryptFile in lgtm_crypto.cpp." << endl
+                << "Continuing on....." << endl;
     }
     
     // Authenticated data *must* be pushed before
@@ -125,13 +142,11 @@ void encryptFile(const string &inputFileName, const string &authInputFileName,
                 << " in encryptFile in lgtm_crypto.cpp" << endl;
         exit(1);
     }
-
-    // Read from file and write back to file
-    //FileSource fileSource(inputFileName, true, 
-    //        new StreamTransformationFilter(encrypt, new FileSink(outputFileName)));
 }
 
 /**
+ * Decrypt with ADDITIONALLY authenticated (but unencrypted) data.
+ *
  * Take an inputFileName and decrypts it, placing the results in the outputFileName.
  * The encryption process is authenticated and takes secondary authentication information
  * from the authInputFileName.
@@ -144,22 +159,43 @@ void decryptFile(const string &inputFileName, const string &authInputFileName,
         SecByteBlock &key, byte *ivBytes) {
     GCM<AES>::Decryption decrypt;
     decrypt.SetKeyWithIV(key, key.size(), ivBytes, AES::BLOCKSIZE);
-    cout << "outputFileName is: " << outputFileName << endl;
     AuthenticatedDecryptionFilter decryptionFilter(decrypt, 
-            new FileSink(outputFileName.c_str()), 
+            NULL, /*new FileSink(outputFileName.c_str()), */
             AuthenticatedDecryptionFilter::MAC_AT_BEGIN | 
             AuthenticatedDecryptionFilter::THROW_EXCEPTION, MAC_SIZE);
 
     // Read cipher text from inputFileName
     ifstream inputStream(inputFileName, ios::in | ios::binary);
     if (inputStream.is_open()) {
-        // Get file length and read it all into one byte buffer
+        // Get length of the encrypted data and read the data into two different buffers
+        // one for encrypted data, one for the mac data
         inputStream.seekg(0, inputStream.end);
-        int inputDataLength = inputStream.tellg();
+        int fileLength = inputStream.tellg();
+        int encryptedDataLength = (fileLength - MAC_SIZE);
         inputStream.seekg(0, inputStream.beg);
-        byte *inputData = new byte[inputDataLength];
-        inputStream.read((char*) inputData, inputDataLength);
+        if (encryptedDataLength < 1) {
+            cerr << "Cannot allocate a negative number of bytes: " << encryptedDataLength
+                    << " in decryptFile in lgtm_crypto.cpp" << endl
+                    << "Actual file length was: " << fileLength << endl;
+            exit(1);
+        }
+        byte *encryptedData = new byte[encryptedDataLength];
+        if (!encryptedData) {
+            cerr << "Error allocating bytes for inputData in decryptFile in lgtm_crypto.cpp" 
+                    << endl;
+            exit(1);
+        }
+        // Allocate memory for the MAC
+        byte macData[MAC_SIZE];
+        // Read the encrypted data
+        inputStream.read((char*) encryptedData, encryptedDataLength);
+        // Read the MAC bytes
+        inputStream.read((char*) macData, MAC_SIZE);
         inputStream.close();
+
+        // The order of the "ChannelPut" calls is important!!! 
+        // (MAC -> AUTHENTICATED DATA -> ENCRYPTED DATA)
+        decryptionFilter.ChannelPut(DEFAULT_CHANNEL, macData, MAC_SIZE);
 
         // Read authentication bytes from authInputFileName
         ifstream authInputStream(authInputFileName, ios::in | ios::binary);
@@ -169,25 +205,28 @@ void decryptFile(const string &inputFileName, const string &authInputFileName,
             int authInputDataLength = authInputStream.tellg();
             authInputStream.seekg(0, authInputStream.beg);
             byte *authInputData = new byte[authInputDataLength];
+            if (!authInputData) {
+                cerr << "Error allocating bytes for authInputData in decryptFile in lgtm_crypto.cpp" 
+                        << endl;
+                exit(1);
+            }
             inputStream.read((char*) authInputData, authInputDataLength);
             inputStream.close();
 
-            byte macBytes[MAC_SIZE];
-            // The order of the following calls are important
-            decryptionFilter.ChannelPut(DEFAULT_CHANNEL, macBytes, MAC_SIZE);
+            // Read out the additional authenticated data
             decryptionFilter.ChannelPut(AAD_CHANNEL, authInputData, authInputDataLength); 
-            decryptionFilter.ChannelPut(DEFAULT_CHANNEL, inputData, inputDataLength);   
-
+            decryptionFilter.ChannelMessageEnd(AAD_CHANNEL);
             delete[] authInputData;
 
         } else {
             cerr << "Error opening authentication file: " << authInputFileName 
-                    << " in decryptFile in lgtm_crypto.cpp" << endl;
-            delete[] inputData;
-            exit(1);
+                    << " in decryptFile in lgtm_crypto.cpp" << endl
+                    << "Continuing on....." << endl;
         }
 
-        delete[] inputData;
+        // Read out the encryptedData
+        decryptionFilter.ChannelPut(DEFAULT_CHANNEL, encryptedData, encryptedDataLength);   
+        delete[] encryptedData;
 
     } else {
         cerr << "Error opening file: " << inputFileName 
@@ -212,15 +251,13 @@ void decryptFile(const string &inputFileName, const string &authInputFileName,
         decryptionFilter.Get(retrievedData, numBytesToRetrieve);
     }
 
+    cout << "decryptFile, writing " << numBytesToRetrieve << " bytes to file: " 
+            << outputFileName << endl;
     ofstream outputStream(outputFileName, ios::out | ios::binary);
     outputStream.write((char*) retrievedData, numBytesToRetrieve);
     outputStream.close();
 
     delete[] retrievedData;
-
-    // Read from file and write back to file
-    //FileSource fileSource(inputFileName, true, 
-    //        new StreamTransformationFilter(decrypt, new FileSink(outputFileName)));
 }
 
 /**

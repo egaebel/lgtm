@@ -136,3 +136,5 @@ cryptography/.lgtm-facial-recognition-params--decrypted
 cryptography/.lgtm-facial-recognition-params--encrypted
 cryptography/.lgtm-received-facial-recognition-params
 cryptography/lgtm_crypto_runner_test
+cryptography/.lgtm-received-facial-recognition-params--decrypted
+cryptography/.lgtm-test-unencrypted-received-facial-recognition-params

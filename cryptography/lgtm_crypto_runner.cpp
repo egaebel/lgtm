@@ -55,7 +55,7 @@ static const string THIRD_MESSAGE_REPLY_FILE_NAME = LGTM_CRYPTO_PREFIX + "third-
 static const string FACIAL_RECOGNITION_FILE_NAME = ".lgtm-facial-recognition-params";
 static const string ENCRYPTED_FACIAL_RECOGNITION_FILE_NAME = ".lgtm-facial-recognition-params--encrypted";
 static const string RECEIVED_FACIAL_RECOGNITION_FILE_NAME = ".lgtm-received-facial-recognition-params";
-static const string DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME = ".lgtm-facial-recognition-params--decrypted";
+static const string DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME = ".lgtm-received-facial-recognition-params--decrypted";
 
 //~Functions----------------------------------------------------------------------------------------
 /**
@@ -157,6 +157,8 @@ void thirdMessage() {
     // Read in the current initialization vector from file
     byte curIv[AES::BLOCKSIZE];
     // TODO: actually read it in
+    // Set to 0 for now
+    memset(curIv, 0, AES::BLOCKSIZE);
 
     // Verify received MAC
     // TODO:
@@ -165,6 +167,7 @@ void thirdMessage() {
     // TODO: (must reconsider too....)
 
     // Encrypt (facial recognition params + MAC)
+    // TODO: Additionally authenticated information file?
     encryptFile(FACIAL_RECOGNITION_FILE_NAME, "", ENCRYPTED_FACIAL_RECOGNITION_FILE_NAME, 
             key, curIv);
 }
@@ -180,6 +183,13 @@ void replyToThirdMessage() {
     // Read in the current initialization vector from file
     byte curIv[AES::BLOCKSIZE];
     // TODO: actually read it in
+    // Set to 0 for now
+    memset(curIv, 0, AES::BLOCKSIZE);
+
+    // Decrypt received facial recognition params
+    decryptFile(RECEIVED_FACIAL_RECOGNITION_FILE_NAME, "", 
+            DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME, 
+            key, curIv);
 
     // Verify received MAC
     // TODO:
@@ -203,12 +213,15 @@ void decryptThirdMessageReply() {
     // Read in the current initialization vector from file
     byte curIv[AES::BLOCKSIZE];
     // TODO: actually read it in
+    // Set to 0 for now
+    memset(curIv, 0, AES::BLOCKSIZE);
 
     // Verify received MAC
     // TODO:
 
-    decryptFile(RECEIVED_FACIAL_RECOGNITION_FILE_NAME, "", DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME, 
-        key, curIv);
+    decryptFile(RECEIVED_FACIAL_RECOGNITION_FILE_NAME, "", 
+            DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME, 
+            key, curIv);
 }
 
 /**
@@ -216,20 +229,35 @@ void decryptThirdMessageReply() {
  */
 static void readFromFile(const string &fileName, SecByteBlock &input) {
     ifstream inputStream(fileName, ios::in | ios::binary);
-    // Get file length
-    inputStream.seekg(0, inputStream.end);
-    int fileLength = inputStream.tellg();
-    inputStream.seekg(0, inputStream.beg);
-    input.CleanNew(fileLength);
-    inputStream.read((char*) input.BytePtr(), input.SizeInBytes());
-    inputStream.close();
+    if (inputStream.is_open()) {
+        // Get file length
+        inputStream.seekg(0, inputStream.end);
+        int fileLength = inputStream.tellg();
+        inputStream.seekg(0, inputStream.beg);
+        // Check if the file has anything in it.
+        if (fileLength > 0) {
+            input.CleanNew(fileLength);
+            inputStream.read((char*) input.BytePtr(), input.SizeInBytes());
+        } else {
+            cerr << "Error, file length is: " << fileLength << " for file: " << fileName << endl
+                    << "Disregarding and continuing...." << endl;
+        }
+        inputStream.close();
+    } else {
+        cerr << "Error in readFromFile" << endl << "file: " << fileName 
+                << " could not be opened in readFromFile in lgtm_crypto_runner.cpp "<< endl 
+                << "Disregarding and continuing...." << endl;
+    }
+    cout << "Read from file, read " << input.SizeInBytes() 
+            << " bytes from file: " << fileName << endl;
 }
 
 /**
  * Writes a SecByteBlock to a file specified by fileName.
  */
 static void writeToFile(const string &fileName, SecByteBlock &output) {
-    cout << "Write to file, writing " << output.SizeInBytes() << " bytes to file: " << fileName << endl;
+    cout << "Write to file, writing " << output.SizeInBytes() 
+            << " bytes to file: " << fileName << endl;
     ofstream outputStream(fileName, ios::out | ios::binary);
     outputStream.write((char*) output.BytePtr(), output.SizeInBytes());
     outputStream.close();

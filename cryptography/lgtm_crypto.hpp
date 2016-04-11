@@ -39,6 +39,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 
 using namespace CryptoPP::ASN1;
@@ -69,6 +70,7 @@ using std::endl;
 using std::ifstream;
 using std::ios;
 using std::ofstream;
+using std::runtime_error;
 using std::string;
 
 //~Function Headers---------------------------------------------------------------------------------
