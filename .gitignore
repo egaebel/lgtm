@@ -124,3 +124,4 @@ injection-monitor/.lgtm-monitor.dat
 injection-monitor/.lgtm-received-facial-recognition-params
 injection-monitor/.lgtm-received-facial-recognition-params--no-header
 injection-monitor/.lgtm-received-facial-recognition-params--no-header--no-footer
+cryptography/lgtm_crypto_runner
