@@ -21,7 +21,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-// g++ -std=c++11 -g3 -ggdb -O0 -DDEBUG lgtm-crypto.cpp -o lgtm-crypto -lcryptopp -lpthread
+// g++ -std=c++11 -g3 -ggdb -O0 -I . lgtm_crypto.cpp ../../cryptopp/libcryptopp.a -o lgtm_crypto -lcryptopp -static -lpthread
 
 #include "lgtm_crypto.hpp"
 
@@ -86,36 +86,45 @@ void encryptFile(const string &inputFileName, const string &authInputFileName,
     //   AAD_CHANNEL is authenticated
     // Read auth data from passed file name
     ifstream authInputStream(authInputFileName, ios::in | ios::binary);
-    // Get file length and read it all into one byte buffer
-    authInputStream.seekg(0, authInputStream.end);
-    int authDataLength = authInputStream.tellg();
-    authInputStream.seekg(0, authInputStream.beg);
-    byte *authData = new byte[authDataLength];
-    authInputStream.read((char*) authData, authDataLength);
-    authInputStream.close();
+    // Check if we succeeded in opening the file....
+    if (authInputStream.is_open()) {
+        // Get file length and read it all into one byte buffer
+        authInputStream.seekg(0, authInputStream.end);
+        int authDataLength = authInputStream.tellg();
+        authInputStream.seekg(0, authInputStream.beg);
+        byte *authData = new byte[authDataLength];
+        authInputStream.read((char*) authData, authDataLength);
+        authInputStream.close();
 
-    encryptionFilter.ChannelPut(AAD_CHANNEL, authData, authDataLength);
-    encryptionFilter.ChannelMessageEnd(AAD_CHANNEL);
+        encryptionFilter.ChannelPut(AAD_CHANNEL, authData, authDataLength);
+        encryptionFilter.ChannelMessageEnd(AAD_CHANNEL);
+
+        delete[] authData;
+    }
     
     // Authenticated data *must* be pushed before
     //  Confidential/Authenticated data. Otherwise
     //  we must catch the BadState exception
     // Read input data from passed file name
     ifstream inputStream(inputFileName, ios::in | ios::binary);
-    // Get file length and read it all into one byte buffer
-    inputStream.seekg(0, inputStream.end);
-    int inputDataLength = inputStream.tellg();
-    inputStream.seekg(0, inputStream.beg);
-    byte *inputData = new byte[inputDataLength];
-    inputStream.read((char*) inputData, inputDataLength);
-    inputStream.close();
+    if (inputStream.is_open()) {
+        // Get file length and read it all into one byte buffer
+        inputStream.seekg(0, inputStream.end);
+        int inputDataLength = inputStream.tellg();
+        inputStream.seekg(0, inputStream.beg);
+        byte *inputData = new byte[inputDataLength];
+        inputStream.read((char*) inputData, inputDataLength);
+        inputStream.close();
 
-    encryptionFilter.ChannelPut(DEFAULT_CHANNEL, inputData, inputDataLength);
-    encryptionFilter.ChannelMessageEnd(DEFAULT_CHANNEL);
+        encryptionFilter.ChannelPut(DEFAULT_CHANNEL, inputData, inputDataLength);
+        encryptionFilter.ChannelMessageEnd(DEFAULT_CHANNEL);
 
-
-    delete[] authData;
-    delete[] inputData;
+        delete[] inputData;
+    } else {
+        cerr << "Error opening file: " << inputFileName 
+                << " in encryptFile in lgtm_crypto.cpp" << endl;
+        exit(1);
+    }
 
     // Read from file and write back to file
     //FileSource fileSource(inputFileName, true, 
@@ -130,11 +139,12 @@ void encryptFile(const string &inputFileName, const string &authInputFileName,
  * The encryption algorithm uses key and ivBytes to perform GCM<AES> encryption.
  * ivBytes is 256 bits (the size of AES::BLOCKSIZE).
  */
-void decryptFile(const string &inputFileName, const string &outputFileName, 
-        const string &authInputFileName, SecByteBlock &key, byte *ivBytes) {
+void decryptFile(const string &inputFileName, const string &authInputFileName, 
+        const string &outputFileName, 
+        SecByteBlock &key, byte *ivBytes) {
     GCM<AES>::Decryption decrypt;
     decrypt.SetKeyWithIV(key, key.size(), ivBytes, AES::BLOCKSIZE);
-
+    cout << "outputFileName is: " << outputFileName << endl;
     AuthenticatedDecryptionFilter decryptionFilter(decrypt, 
             new FileSink(outputFileName.c_str()), 
             AuthenticatedDecryptionFilter::MAC_AT_BEGIN | 
@@ -142,29 +152,48 @@ void decryptFile(const string &inputFileName, const string &outputFileName,
 
     // Read cipher text from inputFileName
     ifstream inputStream(inputFileName, ios::in | ios::binary);
-    // Get file length and read it all into one byte buffer
-    inputStream.seekg(0, inputStream.end);
-    int inputDataLength = inputStream.tellg();
-    inputStream.seekg(0, inputStream.beg);
-    byte *inputData = new byte[inputDataLength];
-    inputStream.read((char*) inputData, inputDataLength);
-    inputStream.close();
+    if (inputStream.is_open()) {
+        // Get file length and read it all into one byte buffer
+        inputStream.seekg(0, inputStream.end);
+        int inputDataLength = inputStream.tellg();
+        inputStream.seekg(0, inputStream.beg);
+        byte *inputData = new byte[inputDataLength];
+        inputStream.read((char*) inputData, inputDataLength);
+        inputStream.close();
 
-    // Read authentication bytes from authInputFileName
-    ifstream authInputStream(authInputFileName, ios::in | ios::binary);
-    // Get file length and read it all into one byte buffer
-    authInputStream.seekg(0, authInputStream.end);
-    int authInputDataLength = authInputStream.tellg();
-    authInputStream.seekg(0, authInputStream.beg);
-    byte *authInputData = new byte[authInputDataLength];
-    inputStream.read((char*) authInputData, authInputDataLength);
-    inputStream.close();
+        // Read authentication bytes from authInputFileName
+        ifstream authInputStream(authInputFileName, ios::in | ios::binary);
+        if (authInputStream.is_open()) {
+            // Get file length and read it all into one byte buffer
+            authInputStream.seekg(0, authInputStream.end);
+            int authInputDataLength = authInputStream.tellg();
+            authInputStream.seekg(0, authInputStream.beg);
+            byte *authInputData = new byte[authInputDataLength];
+            inputStream.read((char*) authInputData, authInputDataLength);
+            inputStream.close();
 
-    byte macBytes[MAC_SIZE];
-    // The order of the following calls are important
-    decryptionFilter.ChannelPut(DEFAULT_CHANNEL, macBytes, MAC_SIZE);
-    decryptionFilter.ChannelPut(AAD_CHANNEL, authInputData, authInputDataLength); 
-    decryptionFilter.ChannelPut(DEFAULT_CHANNEL, inputData, inputDataLength);   
+            byte macBytes[MAC_SIZE];
+            // The order of the following calls are important
+            decryptionFilter.ChannelPut(DEFAULT_CHANNEL, macBytes, MAC_SIZE);
+            decryptionFilter.ChannelPut(AAD_CHANNEL, authInputData, authInputDataLength); 
+            decryptionFilter.ChannelPut(DEFAULT_CHANNEL, inputData, inputDataLength);   
+
+            delete[] authInputData;
+
+        } else {
+            cerr << "Error opening authentication file: " << authInputFileName 
+                    << " in decryptFile in lgtm_crypto.cpp" << endl;
+            delete[] inputData;
+            exit(1);
+        }
+
+        delete[] inputData;
+
+    } else {
+        cerr << "Error opening file: " << inputFileName 
+                << " in decryptFile in lgtm_crypto.cpp" << endl;
+        exit(1);
+    }
 
     // If the object throws, it will most likely occur
     //   during ChannelMessageEnd()
@@ -183,12 +212,10 @@ void decryptFile(const string &inputFileName, const string &outputFileName,
         decryptionFilter.Get(retrievedData, numBytesToRetrieve);
     }
 
-    ofstream outputStream(outputFileName, ios::in | ios::binary);
+    ofstream outputStream(outputFileName, ios::out | ios::binary);
     outputStream.write((char*) retrievedData, numBytesToRetrieve);
     outputStream.close();
 
-    delete[] inputData;
-    delete[] authInputData;
     delete[] retrievedData;
 
     // Read from file and write back to file

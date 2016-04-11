@@ -21,13 +21,13 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-// g++ -std=c++11 lgtm_crypto.cpp lgtm_crypto_runner.cpp -o lgtm_crypto_runner -lcryptopp -lpthread
+// g++ -std=c++11 -g3 -ggdb -O0 -I . lgtm_crypto.cpp lgtm_crypto_runner.cpp ../../cryptopp/libcryptopp.a -o lgtm_crypto_runner -lcryptopp -static -lpthread
 
-#include "lgtm_crypto.hpp"
+#include "lgtm_crypto_runner.hpp"
 
 //~Function Headers---------------------------------------------------------------------------------
-void readFromFile(const string &fileName, SecByteBlock &input);
-void writeToFile(const string &fileName, SecByteBlock &output);
+static void readFromFile(const string &fileName, SecByteBlock &input);
+static void writeToFile(const string &fileName, SecByteBlock &output);
 
 //~Constants----------------------------------------------------------------------------------------
 static const string LGTM_CRYPTO_PREFIX = ".lgtm-crypto-params-";
@@ -172,7 +172,7 @@ void thirdMessage() {
 /**
  *
  */
-void thirdMessageReply() {
+void replyToThirdMessage() {
     // Read session key from file
     SecByteBlock key;
     readFromFile(COMPUTED_KEY_FILE_NAME, key);
@@ -195,7 +195,7 @@ void thirdMessageReply() {
 /**
  *
  */
-void thirdMessageDecryptReply() {
+void decryptThirdMessageReply() {
     // Read session key from file
     SecByteBlock key;
     readFromFile(COMPUTED_KEY_FILE_NAME, key);
@@ -214,7 +214,7 @@ void thirdMessageDecryptReply() {
 /**
  * Reads into a SecByteBlock from a file specified by fileName.
  */
-void readFromFile(const string &fileName, SecByteBlock &input) {
+static void readFromFile(const string &fileName, SecByteBlock &input) {
     ifstream inputStream(fileName, ios::in | ios::binary);
     // Get file length
     inputStream.seekg(0, inputStream.end);
@@ -228,18 +228,19 @@ void readFromFile(const string &fileName, SecByteBlock &input) {
 /**
  * Writes a SecByteBlock to a file specified by fileName.
  */
-void writeToFile(const string &fileName, SecByteBlock &output) {
-    ofstream outputStream(fileName, ios::in | ios::binary);
+static void writeToFile(const string &fileName, SecByteBlock &output) {
+    cout << "Write to file, writing " << output.SizeInBytes() << " bytes to file: " << fileName << endl;
+    ofstream outputStream(fileName, ios::out | ios::binary);
     outputStream.write((char*) output.BytePtr(), output.SizeInBytes());
     outputStream.close();
 }
 
 //~Main function------------------------------------------------------------------------------------
+/*
 int main(int argc, char *argv[]) {
 
     if (argc != 2) {
-        return 1;
-    }
+        return 1; }
 
     if (strncmp(argv[0], "first-message", 13)) {
         firstMessage();
@@ -251,6 +252,10 @@ int main(int argc, char *argv[]) {
         replyToSecondMessage();
     } else if (strncmp(argv[0], "third-message", 13)) {
         thirdMessage();
+    } else if (strncmp(argv[0], "third-message-reply", 19)) {
+        replyToThirdMessage();
+    } else if (strncmp(argv[0], "decrypt-third-message-reply", 27)) {
+        decryptThirdMessageReply();
     }
     // First message
     // Reply to first message
@@ -259,3 +264,4 @@ int main(int argc, char *argv[]) {
     // Encrypt
     return 0;
 }
+*/

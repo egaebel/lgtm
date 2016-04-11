@@ -125,3 +125,14 @@ injection-monitor/.lgtm-received-facial-recognition-params
 injection-monitor/.lgtm-received-facial-recognition-params--no-header
 injection-monitor/.lgtm-received-facial-recognition-params--no-header--no-footer
 cryptography/lgtm_crypto_runner
+cryptography/.lgtm-crypto-params-computed-key
+cryptography/.lgtm-crypto-params-other-public-key
+cryptography/.lgtm-crypto-params-private-key
+cryptography/.lgtm-crypto-params-public-key
+cryptography/.lgtm-crypto-params-shared-secret
+cryptography/.lgtm-crypto-params-verification-mac
+cryptography/.lgtm-facial-recognition-params
+cryptography/.lgtm-facial-recognition-params--decrypted
+cryptography/.lgtm-facial-recognition-params--encrypted
+cryptography/.lgtm-received-facial-recognition-params
+cryptography/lgtm_crypto_runner_test
