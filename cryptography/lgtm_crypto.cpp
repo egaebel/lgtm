@@ -75,6 +75,21 @@ void generateSymmetricKeyFromSharedSecret(SecByteBlock &key, SecByteBlock &share
 }
 
 /**
+ * DO NOT encrypt with any additionally authenticated (but unencrypted) data.
+
+ * Take an inputFileName and encrypt it, placing the results in the outputFileName.
+ * The encryption process is authenticated and takes secondary authentication information
+ * from the authInputFileName.
+ *
+ * The encryption algorithm uses key and ivBytes to perform GCM<AES> encryption.
+ * ivBytes is 256 bits (the size of AES::BLOCKSIZE).
+ */
+void encryptFile(const string &inputFileName, const string &outputFileName, 
+        SecByteBlock &key, byte *ivBytes) {
+    encryptFile(inputFileName, "", outputFileName, key, ivBytes);
+}
+
+/**
  * Encrypt with ADDITIONALLY authenticated (but unencrypted) data.
  *
  * Take an inputFileName and encrypt it, placing the results in the outputFileName.
@@ -85,8 +100,7 @@ void generateSymmetricKeyFromSharedSecret(SecByteBlock &key, SecByteBlock &share
  * ivBytes is 256 bits (the size of AES::BLOCKSIZE).
  */
 void encryptFile(const string &inputFileName, const string &authInputFileName, 
-        const string &outputFileName, /*const string &authOutputFileName, (Add back later?)*/
-        SecByteBlock &key, byte *ivBytes) {
+        const string &outputFileName, SecByteBlock &key, byte *ivBytes) {
     GCM<AES>::Encryption encrypt;
     encrypt.SetKeyWithIV(key, key.size(), ivBytes, AES::BLOCKSIZE);
 
@@ -145,6 +159,21 @@ void encryptFile(const string &inputFileName, const string &authInputFileName,
 }
 
 /**
+ * DO NOT decrypt with ADDITIONALLY authenticated (but unencrypted) data.
+ *
+ * Take an inputFileName and decrypts it, placing the results in the outputFileName.
+ * The encryption process is authenticated and takes secondary authentication information
+ * from the authInputFileName.
+ *
+ * The encryption algorithm uses key and ivBytes to perform GCM<AES> encryption.
+ * ivBytes is 256 bits (the size of AES::BLOCKSIZE).
+ */
+void decryptFile(const string &inputFileName, const string &outputFileName, 
+        SecByteBlock &key, byte *ivBytes) {
+    decryptFile(inputFileName, "", outputFileName, key, ivBytes);
+}
+
+/**
  * Decrypt with ADDITIONALLY authenticated (but unencrypted) data.
  *
  * Take an inputFileName and decrypts it, placing the results in the outputFileName.
@@ -155,8 +184,7 @@ void encryptFile(const string &inputFileName, const string &authInputFileName,
  * ivBytes is 256 bits (the size of AES::BLOCKSIZE).
  */
 void decryptFile(const string &inputFileName, const string &authInputFileName, 
-        const string &outputFileName, 
-        SecByteBlock &key, byte *ivBytes) {
+        const string &outputFileName, SecByteBlock &key, byte *ivBytes) {
     GCM<AES>::Decryption decrypt;
     decrypt.SetKeyWithIV(key, key.size(), ivBytes, AES::BLOCKSIZE);
     AuthenticatedDecryptionFilter decryptionFilter(decrypt, 
@@ -251,8 +279,6 @@ void decryptFile(const string &inputFileName, const string &authInputFileName,
         decryptionFilter.Get(retrievedData, numBytesToRetrieve);
     }
 
-    cout << "decryptFile, writing " << numBytesToRetrieve << " bytes to file: " 
-            << outputFileName << endl;
     ofstream outputStream(outputFileName, ios::out | ios::binary);
     outputStream.write((char*) retrievedData, numBytesToRetrieve);
     outputStream.close();
@@ -263,15 +289,15 @@ void decryptFile(const string &inputFileName, const string &authInputFileName,
 /**
  * Generates a HMAC from inputFileName and places the result in outputFileName.
  */
-void createMacForFile(const string &inputFileName, const string &outputFileName) {
+void createHashFromFile(const string &inputFileName, const string &outputFileName) {
     try {
-        HMAC<SHA512> hmac;
+        SHA512 hash;
         // Read from file and write back to file
         FileSource fileSource(inputFileName.c_str(), true, 
-                new HashFilter(hmac, 
+                new HashFilter(hash, 
                     new FileSink(outputFileName.c_str())));
     } catch (const CryptoPP::Exception &e) {
-        cout << "Issue in creatMac." << endl;
+        cerr << "Issue in creatMacFromFile" << endl;
         cerr << e.what() << endl;
         exit(1);
     }
@@ -280,6 +306,116 @@ void createMacForFile(const string &inputFileName, const string &outputFileName)
 /**
  * Verifies a HMAC from macInputFileName by comparing it to a HMAC over the data in fileName.
  */
-void verifyMacForFile(const string &fileName, const string &macInputFileName) {
+bool verifyHashFromFile(const string &inputFileName, const string &macInputFileName) {
+    // Read directly from file to verify hash
+    try {
+        SHA512 hash;
+        const int flags = HashVerificationFilter::THROW_EXCEPTION 
+                | HashVerificationFilter::HASH_AT_END;
+        // Read from file and write back to file
+        FileSource fileSource(macInputFileName.c_str(), true, 
+                new HashVerificationFilter(hash, NULL, flags));
+
+        return true;
+
+    } catch (const CryptoPP::Exception &e) {
+        cerr << "Issue in createHashFromFiles" << endl;
+        cerr << e.what() << endl;
+        exit(1);
+
+        return false;
+    }
+}
+
+void createHashFromFiles(const vector<string> &inputFileNames, const string &outputFileName) {
+    vector<byte> inputBytes(0);
+
+    // Grab data from all the inputFileNames-------
+    // Add data from files to inputBytes
+    for (int i = 0; i < inputFileNames.size(); i++) {
+        // Get file size so inputBytes can be sized appropriately
+        ifstream inputStream(inputFileNames[i], ios::in | ios::binary);
+        inputStream.seekg(0, inputStream.end);
+        int fileLength = inputStream.tellg();
+        inputStream.seekg(0, inputStream.beg);
+        inputStream.close();
+        
+        // Resize inputBytes
+        int priorLength = inputBytes.size();
+        inputBytes.resize(inputBytes.size() + fileLength);
+        // Read from file into ArraySink
+        FileSource fileSource(inputFileNames[i].c_str(), true, 
+                new ArraySink(&inputBytes[priorLength], fileLength));
+    }
+
+    // Read from ArraySink into hash into file
+    try {
+        SHA512 hash;
+        // Read from file and write back to file
+        ArraySource arraySource(&inputBytes[0], inputBytes.size(), true, 
+                new HashFilter(hash, 
+                    new FileSink(outputFileName.c_str())));
+    } catch (const CryptoPP::Exception &e) {
+        cerr << "Issue in createHashFromFiles" << endl;
+        cerr << e.what() << endl;
+        exit(1);
+    }
+}
+
+bool verifyHashFromFiles(const vector<string> &inputFileNames, const string &macInputFileName) {
+    vector<byte> inputBytes(0);
+
+    // Grab data from all the inputFileNames-------
+    // Add data from files to inputBytes
+    for (int i = 0; i < inputFileNames.size(); i++) {
+        // Get file size so inputBytes can be sized appropriately
+        ifstream inputStream(inputFileNames[i], ios::in | ios::binary);
+        inputStream.seekg(0, inputStream.end);
+        int fileLength = inputStream.tellg();
+        inputStream.seekg(0, inputStream.beg);
+        inputStream.close();
+        
+        // Resize inputBytes
+        int priorLength = inputBytes.size();
+        inputBytes.resize(inputBytes.size() + fileLength);
+
+        // Read from file into ArraySink
+        FileSource fileSource(inputFileNames[i].c_str(), true, 
+                new ArraySink(&inputBytes[priorLength], fileLength));
+    }
+
+    // Grab macInputFileName data-----
+    // Get file size of macInputFileName so inputBytes can be sized appropriately
+    ifstream inputStream(macInputFileName, ios::in | ios::binary);
+    inputStream.seekg(0, inputStream.end);
+    int fileLength = inputStream.tellg();
+    inputStream.seekg(0, inputStream.beg);
+    inputStream.close();
     
+    // Resize inputBytes
+    int priorLength = inputBytes.size();
+    inputBytes.resize(inputBytes.size() + fileLength);
+
+    // Read from file into ArraySink
+    FileSource fileSource(macInputFileName.c_str(), true, 
+                new ArraySink(&inputBytes[priorLength], fileLength));
+
+    // Read from ArraySink into hash into another ArraySink
+    try {
+        SHA512 hash;
+        const int flags = HashVerificationFilter::THROW_EXCEPTION 
+                | HashVerificationFilter::HASH_AT_END;
+        // Read from file and write back to file
+        ArraySource arraySource(&inputBytes[0], inputBytes.size(), true, 
+                new HashVerificationFilter(hash, NULL, flags));
+
+        return true;
+
+    } catch (const CryptoPP::Exception &e) {
+        cerr << "Issue in createHashFromFiles" << endl;
+        cerr << e.what() << endl;
+        exit(1);
+
+        return false;
+    }
 }

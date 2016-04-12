@@ -39,6 +39,8 @@ static const string SHARED_SECRET_FILE_NAME = LGTM_CRYPTO_PREFIX + "shared-secre
 static const string COMPUTED_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "computed-key";
 static const string VERIFICATION_MAC_FILE_NAME = LGTM_CRYPTO_PREFIX + "verification-mac";
 static const string OTHER_VERIFICATION_MAC_FILE_NAME = LGTM_CRYPTO_PREFIX + "other-verification-mac";
+static const string FACIAL_RECOGNITION_VERIFICATION_MAC_FILE_NAME = LGTM_CRYPTO_PREFIX + "facial-recognition-verification-mac";
+static const string OTHER_FACIAL_RECOGNITION_VERIFICATION_MAC_FILE_NAME = LGTM_CRYPTO_PREFIX + "facial-recognition-other-verification-mac";
 static const string CURRENT_IV = LGTM_CRYPTO_PREFIX + "initialization-vector";
 
 // Message file names
@@ -59,9 +61,10 @@ static const string DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME = ".lgtm-rec
 
 //~Functions----------------------------------------------------------------------------------------
 /**
- *
+ * Create Diffie-Hellman parameters and save them to files.
  */
 void firstMessage() {
+    cout << "First Message" << endl;
     // Prepare Diffie-Hellman parameters
     SecByteBlock publicKey;
     SecByteBlock privateKey;
@@ -73,9 +76,12 @@ void firstMessage() {
 }
 
 /**
- *
+ * Create Diffie-Hellman parameters and save them to files.
+ * Compute the shared secret and computed key from the received other public key.
+ * Save shared secret and computed key to file.
  */
 void replyToFirstMessage() {
+    cout << "Reply To First Message" << endl;
     // Read in received Diffie-Hellman public key from file
     SecByteBlock otherPublicKey;
     readFromFile(OTHER_PUBLIC_KEY_FILE_NAME, otherPublicKey);
@@ -99,9 +105,12 @@ void replyToFirstMessage() {
 }
 
 /**
- *
+ * Compute shared secret and computed key using the received other's public key.
+ * Compute mac over all prior messages + a random number which is also saved. TODO: (the last bit)
+ * Save hash and random number to file.
  */
 void secondMessage() {
+    cout << "Second Message" << endl;
     // Read from file
     SecByteBlock privateKey;
     SecByteBlock otherPublicKey;
@@ -116,40 +125,63 @@ void secondMessage() {
     SecByteBlock key;
     generateSymmetricKeyFromSharedSecret(key, sharedSecret);
 
-    // Compute mac over all prior messages
-    SecByteBlock mac;
+    // Generate random number to be included in body of message
+    // SecByteBlock randomNumber;
     // TODO: 
+
+    // Compute mac over all prior messages + this (Other public key + my public key)
+    vector<string> hashFiles;
+    hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
+    hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
+    createHashFromFiles(hashFiles, VERIFICATION_MAC_FILE_NAME);
 
     // Write to file
     writeToFile(SHARED_SECRET_FILE_NAME, sharedSecret);
     writeToFile(COMPUTED_KEY_FILE_NAME, key);
-    writeToFile(VERIFICATION_MAC_FILE_NAME, mac);
+    // TODO:
+    // writeToFile(SECOND_MESSAGE_RANDOM_NUMBER, randomNumber);
 }
 
 /**
  *
  */
 void replyToSecondMessage() {
+    cout << "Reply To Second Message" << endl;
     // Read from file
     SecByteBlock key;
-    SecByteBlock receivedMac;
     readFromFile(COMPUTED_KEY_FILE_NAME, key);
-    readFromFile(OTHER_VERIFICATION_MAC_FILE_NAME, receivedMac);
+    // TODO:
+    // SecByteBlock otherRandomNumber
+    // readFromFile(OTHER_SECOND_MESSAGE_RANDOM_NUMBER, otherRandomNumber)
 
     // Verify received Mac
+    vector<string> verifyhashFiles;
+    verifyhashFiles.push_back(PUBLIC_KEY_FILE_NAME);
+    verifyhashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
+    if (!verifyHashFromFiles(verifyhashFiles, OTHER_VERIFICATION_MAC_FILE_NAME)) {
+        throw runtime_error("FAILED TO VERIFY MAC! INTRUDER ALERT!");
+    }
+
+    // Generate random number to be included in body of message
+    // SecByteBlock randomNumber;
     // TODO: 
 
-    // Encrypt hash of all prior messages + this
-    SecByteBlock mac;
+    // Compute MAC of all prior messages + this
+    vector<string> hashFiles;
+    hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
+    hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
+    hashFiles.push_back(OTHER_VERIFICATION_MAC_FILE_NAME);
+    createHashFromFiles(hashFiles, VERIFICATION_MAC_FILE_NAME);
 
-    // Write to file
-    writeToFile(VERIFICATION_MAC_FILE_NAME, mac);
+    // TODO:
+    // writeToFile(SECOND_MESSAGE_RANDOM_NUMBER, randomNumber);
 }
 
 /**
  *
  */
 void thirdMessage() {
+    cout << "Third Message" << endl;
     // Read session key from file
     SecByteBlock key;
     readFromFile(COMPUTED_KEY_FILE_NAME, key);
@@ -161,14 +193,28 @@ void thirdMessage() {
     memset(curIv, 0, AES::BLOCKSIZE);
 
     // Verify received MAC
-    // TODO:
+    // TODO: add some randomness to the messages + mac
+    vector<string> verifyhashFiles;
+    verifyhashFiles.push_back(PUBLIC_KEY_FILE_NAME);
+    verifyhashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
+    verifyhashFiles.push_back(VERIFICATION_MAC_FILE_NAME);
+    if (!verifyHashFromFiles(verifyhashFiles, OTHER_VERIFICATION_MAC_FILE_NAME)) {
+        throw runtime_error("FAILED TO VERIFY MAC! INTRUDER ALERT!");
+    }
 
     // Compute MAC of all prior messages + this
-    // TODO: (must reconsider too....)
+    // TODO: add some randomness to the messages + mac
+    vector<string> hashFiles;
+    hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
+    hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
+    hashFiles.push_back(OTHER_VERIFICATION_MAC_FILE_NAME);
+    hashFiles.push_back(VERIFICATION_MAC_FILE_NAME);
+    hashFiles.push_back(FACIAL_RECOGNITION_FILE_NAME);
+    createHashFromFiles(hashFiles, FACIAL_RECOGNITION_VERIFICATION_MAC_FILE_NAME);
 
     // Encrypt (facial recognition params + MAC)
-    // TODO: Additionally authenticated information file?
-    encryptFile(FACIAL_RECOGNITION_FILE_NAME, "", ENCRYPTED_FACIAL_RECOGNITION_FILE_NAME, 
+    encryptFile(FACIAL_RECOGNITION_FILE_NAME, "", 
+            ENCRYPTED_FACIAL_RECOGNITION_FILE_NAME, 
             key, curIv);
 }
 
@@ -176,6 +222,7 @@ void thirdMessage() {
  *
  */
 void replyToThirdMessage() {
+    cout << "Reply To Third Message" << endl;
     // Read session key from file
     SecByteBlock key;
     readFromFile(COMPUTED_KEY_FILE_NAME, key);
@@ -192,10 +239,24 @@ void replyToThirdMessage() {
             key, curIv);
 
     // Verify received MAC
-    // TODO:
+    vector<string> verifyHashFiles;
+    verifyHashFiles.push_back(PUBLIC_KEY_FILE_NAME);
+    verifyHashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
+    verifyHashFiles.push_back(VERIFICATION_MAC_FILE_NAME);
+    verifyHashFiles.push_back(OTHER_VERIFICATION_MAC_FILE_NAME);
+    verifyHashFiles.push_back(DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
+    verifyHashFromFiles(verifyHashFiles, OTHER_FACIAL_RECOGNITION_VERIFICATION_MAC_FILE_NAME);
 
     // Compute MAC of all prior messages + this
-    // TODO:
+    vector<string> hashFiles;
+    hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
+    hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
+    hashFiles.push_back(OTHER_VERIFICATION_MAC_FILE_NAME);
+    hashFiles.push_back(VERIFICATION_MAC_FILE_NAME);
+    hashFiles.push_back(DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
+    hashFiles.push_back(FACIAL_RECOGNITION_FILE_NAME);
+    hashFiles.push_back(OTHER_FACIAL_RECOGNITION_VERIFICATION_MAC_FILE_NAME);
+    createHashFromFiles(hashFiles, FACIAL_RECOGNITION_VERIFICATION_MAC_FILE_NAME);
 
     // Encrypt (facial recognition params + MAC)
     encryptFile(FACIAL_RECOGNITION_FILE_NAME, "", ENCRYPTED_FACIAL_RECOGNITION_FILE_NAME, 
@@ -203,9 +264,10 @@ void replyToThirdMessage() {
 }
 
 /**
- *
+ * 
  */
 void decryptThirdMessageReply() {
+    cout << "Decrypt Reply To Third Message" << endl;
     // Read session key from file
     SecByteBlock key;
     readFromFile(COMPUTED_KEY_FILE_NAME, key);
@@ -216,12 +278,21 @@ void decryptThirdMessageReply() {
     // Set to 0 for now
     memset(curIv, 0, AES::BLOCKSIZE);
 
-    // Verify received MAC
-    // TODO:
-
+    // Decrypt (facial recognition params + MAC)
     decryptFile(RECEIVED_FACIAL_RECOGNITION_FILE_NAME, "", 
             DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME, 
             key, curIv);
+
+    // Verify received MAC
+    vector<string> verifyHashFiles;
+    verifyHashFiles.push_back(PUBLIC_KEY_FILE_NAME);
+    verifyHashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
+    verifyHashFiles.push_back(VERIFICATION_MAC_FILE_NAME);
+    verifyHashFiles.push_back(OTHER_VERIFICATION_MAC_FILE_NAME);
+    verifyHashFiles.push_back(FACIAL_RECOGNITION_FILE_NAME);
+    verifyHashFiles.push_back(DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
+    verifyHashFiles.push_back(FACIAL_RECOGNITION_VERIFICATION_MAC_FILE_NAME);
+    verifyHashFromFiles(verifyHashFiles, OTHER_FACIAL_RECOGNITION_VERIFICATION_MAC_FILE_NAME);
 }
 
 /**

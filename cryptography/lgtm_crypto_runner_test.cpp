@@ -9,7 +9,6 @@
 #include <fstream>
 #include <string>
 
-// using CryptoPP::HashVerificationFilter;
 using CryptoPP::SecByteBlock;
 
 using std::ios;
@@ -23,10 +22,16 @@ static const string RECEIVED_FACIAL_RECOGNITION_PARAMS_STRING = "RECEIVED-FACIAL
 // Common prefix
 static const string LGTM_CRYPTO_PREFIX = ".lgtm-crypto-params-";
 
+// Crypto params
+static const string PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "public-key";
+static const string VERIFICATION_MAC_FILE_NAME = LGTM_CRYPTO_PREFIX + "verification-mac";
+static const string FACIAL_RECOGNITION_VERIFICATION_MAC_FILE_NAME = LGTM_CRYPTO_PREFIX + "facial-recognition-verification-mac";
+
 // "Other" Crypto params
 static const string OTHER_PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "other-public-key";
-static const string OTHER_VERIFICATION_MAC_FILE_NAME = LGTM_CRYPTO_PREFIX + "other-verification-mac";
 static const string COMPUTED_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "computed-key";
+static const string OTHER_VERIFICATION_MAC_FILE_NAME = LGTM_CRYPTO_PREFIX + "other-verification-mac";
+static const string OTHER_FACIAL_RECOGNITION_VERIFICATION_MAC_FILE_NAME = LGTM_CRYPTO_PREFIX + "facial-recognition-other-verification-mac";
 
 // Facial recognition files
 static const string FACIAL_RECOGNITION_FILE_NAME = ".lgtm-facial-recognition-params";
@@ -37,6 +42,7 @@ static const string DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME = ".lgtm-rec
 // Test Files
 static const string TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME = ".lgtm-test-unencrypted-received-facial-recognition-params";
 
+//~File IO Functions--------------------------------------------------------------------------------
 /**
  * Reads into a SecByteBlock from a file specified by fileName.
  */
@@ -64,6 +70,7 @@ static void writeToFile(const string &fileName, SecByteBlock &output) {
     outputStream.close();
 }
 
+//~Simulated Reply Functions------------------------------------------------------------------------
 /**
  * Simulate a reply to the first message by creating a file holding another public key.
  */
@@ -72,8 +79,31 @@ void simulateFirstMessageReply() {
     SecByteBlock publicKey;
     SecByteBlock privateKey;
     generateDiffieHellmanParameters(publicKey, privateKey);
-    // Write public key and private key to files
+    // Write other public key to file
     writeToFile(OTHER_PUBLIC_KEY_FILE_NAME, publicKey);
+}
+
+/**
+ * Simulate a reply to the second message with a verification hash.
+ */
+void simulateOneWayFirstVerification() {
+    // Compute MAC of all prior messages + this
+    vector<string> macFiles;
+    macFiles.push_back(PUBLIC_KEY_FILE_NAME);
+    macFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
+    macFiles.push_back(VERIFICATION_MAC_FILE_NAME);
+    createHashFromFiles(macFiles, OTHER_VERIFICATION_MAC_FILE_NAME);
+}
+
+/**
+ * Simulate a reply to the second message with a verification hash.
+ */
+void simulateOtherWayFirstVerification() {
+    // Compute MAC of all prior messages + this
+    vector<string> macFiles;
+    macFiles.push_back(PUBLIC_KEY_FILE_NAME);
+    macFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
+    createHashFromFiles(macFiles, OTHER_VERIFICATION_MAC_FILE_NAME);
 }
 
 /**
@@ -99,6 +129,40 @@ void simulateThirdMessageReply() {
             RECEIVED_FACIAL_RECOGNITION_FILE_NAME, symmetricKey, iv);
 }
 
+/**
+ *
+ */
+void simulateFacialOneWayVerification() {
+    // Generate simulated hash verification code for "other" sender
+    vector<string> hashFiles;
+    hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
+    hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
+    hashFiles.push_back(VERIFICATION_MAC_FILE_NAME);
+    hashFiles.push_back(OTHER_VERIFICATION_MAC_FILE_NAME);
+    hashFiles.push_back(FACIAL_RECOGNITION_FILE_NAME);
+    hashFiles.push_back(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
+    hashFiles.push_back(FACIAL_RECOGNITION_VERIFICATION_MAC_FILE_NAME);
+    createHashFromFiles(hashFiles, OTHER_FACIAL_RECOGNITION_VERIFICATION_MAC_FILE_NAME);
+}
+
+/**
+ *
+ */
+void simulateFacialOtherWayVerification() {
+    // Generate hash for other person's verification
+    vector<string> hashFiles;
+    hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
+    hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
+    hashFiles.push_back(VERIFICATION_MAC_FILE_NAME);
+    hashFiles.push_back(OTHER_VERIFICATION_MAC_FILE_NAME);
+    hashFiles.push_back(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
+    createHashFromFiles(hashFiles, OTHER_FACIAL_RECOGNITION_VERIFICATION_MAC_FILE_NAME);
+}
+
+//~Corruption Testing Function----------------------------------------------------------------------
+/**
+ * Corrupts three bytes of the "received" facial recognition file.
+ */
 void corruptThirdMessageReply() {
     byte corruption[] = {0x4, 0x4, 0x4};
     ofstream outputStream(RECEIVED_FACIAL_RECOGNITION_FILE_NAME, ios::in | ios::out | ios::binary);
@@ -107,6 +171,7 @@ void corruptThirdMessageReply() {
     outputStream.close();
 }
 
+//~Final Testing Check Function---------------------------------------------------------------------
 /**
  * Check if the string in the decrypted facial recognition file matches the string written to it.
  */
@@ -140,6 +205,7 @@ bool checkFacialRecognitionFile() {
     return equalityCheck;
 }
 
+//~Each Type of Testing Function--------------------------------------------------------------------
 /**
  * Run a full test from the first sender's point of view.
  */ 
@@ -150,12 +216,15 @@ bool testOneWay() {
     // Simulate reception of unencrypted Diffie-Hellman public key
     simulateFirstMessageReply();
     // Generate symmetric key and save
-    // TODO: Add Verification
     secondMessage();
+    // Simulate reception of a hash for verification
+    simulateOneWayFirstVerification();
     // Encrypt facial recognition file
     thirdMessage();
     // Simulate reception of facial recognition params (just a dummy file)
     simulateThirdMessageReply();
+    //
+    simulateFacialOneWayVerification();
     // Decrypt and verify the third message
     decryptThirdMessageReply();
     if(checkFacialRecognitionFile()) {
@@ -174,14 +243,17 @@ bool testOneWayCorruption() {
     // Simulate reception of unencrypted Diffie-Hellman public key
     simulateFirstMessageReply();
     // Generate symmetric key and save
-    // TODO: Add Verification
     secondMessage();
+    // Simulate reception of a hash for verification
+    simulateOneWayFirstVerification();
     // Encrypt facial recognition file
     thirdMessage();
     // Simulate reception of facial recognition params (just a dummy file)
     simulateThirdMessageReply();
     // Corrupt the third message reply!!!!
     corruptThirdMessageReply();
+    //
+    simulateFacialOneWayVerification();
     // Catch the error that should be thrown due to the corruption above
     try {
         // Decrypt and verify the third message
@@ -203,9 +275,12 @@ bool testOtherWay() {
     simulateFirstMessageReply();
     // Generate and save Diffie-Hellman parameters
     replyToFirstMessage();
+    // Simulate reception of a hash for verification
+    simulateOtherWayFirstVerification();
     // Perform verification on received mac
-    // TODO: Add verification
     replyToSecondMessage();
+    //
+    simulateFacialOtherWayVerification();
     // Simulate reception of facial recognition params (just a dummy file)
     simulateThirdMessageReply();
     // Decrypt and verify the third message
@@ -228,8 +303,9 @@ bool testOtherWayCorruption() {
     simulateFirstMessageReply();
     // Generate and save Diffie-Hellman parameters
     replyToFirstMessage();
+    // Simulate reception of a hash for verification
+    simulateOtherWayFirstVerification();
     // Perform verification on received mac
-    // TODO: Add verification
     replyToSecondMessage();
     // Simulate reception of facial recognition params (just a dummy file)
     simulateThirdMessageReply();
@@ -247,6 +323,7 @@ bool testOtherWayCorruption() {
     }
 }
 
+//~Main Runner Function-----------------------------------------------------------------------------
 /**
  * Run tests.
  */

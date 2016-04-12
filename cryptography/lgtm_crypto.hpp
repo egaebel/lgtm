@@ -41,11 +41,14 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 using namespace CryptoPP::ASN1;
 
 using CryptoPP::AAD_CHANNEL;
 using CryptoPP::AES;
+using CryptoPP::ArraySink;
+using CryptoPP::ArraySource;
 using CryptoPP::AuthenticatedDecryptionFilter;
 using CryptoPP::AuthenticatedEncryptionFilter;
 using CryptoPP::AutoSeededRandomPool;
@@ -58,6 +61,7 @@ using CryptoPP::FileSource;
 using CryptoPP::GCM;
 using CryptoPP::GCM_TablesOption;
 using CryptoPP::HashFilter;
+using CryptoPP::HashVerificationFilter;
 using CryptoPP::HMAC;
 using CryptoPP::OID;
 using CryptoPP::SecByteBlock;
@@ -72,21 +76,30 @@ using std::ios;
 using std::ofstream;
 using std::runtime_error;
 using std::string;
+using std::vector;
 
 //~Function Headers---------------------------------------------------------------------------------
-// Diffie-Hellman
+// Diffie-Hellman------------------------------------------------------------
 void generateDiffieHellmanParameters(SecByteBlock &publicKey, SecByteBlock &privateKey);
 void diffieHellmanSharedSecretAgreement(SecByteBlock &sharedSecret, SecByteBlock &otherPublicKey, 
         SecByteBlock &privateKey);
 void generateSymmetricKeyFromSharedSecret(SecByteBlock &key, SecByteBlock &sharedSecret);
-// Encryption
-void encryptFile(const string &inputFileName, const string &authInputFileName, 
-        const string &outputFileName, /*const string &authOutputFileName, (Add back later?)*/
-        SecByteBlock &key, byte *ivBytes);
+
+// Encryption/Decryption-----------------------------------------------------
 void decryptFile(const string &inputFileName, const string &outputFileName, 
-        const string &authInputFileName, SecByteBlock &key, byte *ivBytes);
-// Message Authentication Codes
-void createMacForFile(const string &inputFileName, const string &outputFileName);
-void verifyMacForFile(const string &macFileName, const string &macInputFileName);
+        SecByteBlock &key, byte *ivBytes);
+// Additional authenticated data
+void encryptFile(const string &inputFileName, const string &authInputFileName, 
+        const string &outputFileName, SecByteBlock &key, byte *ivBytes);
+void decryptFile(const string &inputFileName, const string &authInputFileName, 
+        const string &outputFileName, SecByteBlock &key, byte *ivBytes);
+
+// Message Authentication Codes----------------------------------------------
+// Compute MACs from a single file
+void createHashFromFile(const string &inputFileName, const string &outputFileName);
+bool verifyHashFromFile(const string &inputFileName, const string &macInputFileName);
+// Compute MACs from multiple files
+void createHashFromFiles(const vector<string> &inputFileNames, const string &outputFileName);
+bool verifyHashFromFiles(const vector<string> &inputFileNames, const string &macInputFileName);
 
 #endif
