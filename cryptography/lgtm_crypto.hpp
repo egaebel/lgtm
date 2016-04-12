@@ -81,7 +81,7 @@ using std::vector;
 //~Function Headers---------------------------------------------------------------------------------
 // Diffie-Hellman------------------------------------------------------------
 void generateDiffieHellmanParameters(SecByteBlock &publicKey, SecByteBlock &privateKey);
-void diffieHellmanSharedSecretAgreement(SecByteBlock &sharedSecret, SecByteBlock &otherPublicKey, 
+bool diffieHellmanSharedSecretAgreement(SecByteBlock &sharedSecret, SecByteBlock &otherPublicKey, 
         SecByteBlock &privateKey);
 void generateSymmetricKeyFromSharedSecret(SecByteBlock &key, SecByteBlock &sharedSecret);
 
@@ -97,9 +97,9 @@ void decryptFile(const string &inputFileName, const string &authInputFileName,
 // Message Authentication Codes----------------------------------------------
 // Compute MACs from a single file
 void createHashFromFile(const string &inputFileName, const string &outputFileName);
-bool verifyHashFromFile(const string &inputFileName, const string &macInputFileName);
+bool verifyHashFromFile(const string &inputFileName, const string &hashInputFileName);
 // Compute MACs from multiple files
 void createHashFromFiles(const vector<string> &inputFileNames, const string &outputFileName);
-bool verifyHashFromFiles(const vector<string> &inputFileNames, const string &macInputFileName);
+bool verifyHashFromFiles(const vector<string> &inputFileNames, const string &hashInputFileName);
 
 #endif

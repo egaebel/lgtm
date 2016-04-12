@@ -47,14 +47,14 @@ static const string LGTM_CRYPTO_PREFIX = ".lgtm-crypto-params-";
 
 // Crypto params
 static const string PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "public-key";
-static const string VERIFICATION_MAC_FILE_NAME = LGTM_CRYPTO_PREFIX + "verification-mac";
-static const string FACIAL_RECOGNITION_VERIFICATION_MAC_FILE_NAME = LGTM_CRYPTO_PREFIX + "facial-recognition-verification-mac";
+static const string VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX + "verification-hash";
+static const string FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX + "facial-recognition-verification-hash";
 
 // "Other" Crypto params
 static const string OTHER_PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "other-public-key";
 static const string COMPUTED_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "computed-key";
-static const string OTHER_VERIFICATION_MAC_FILE_NAME = LGTM_CRYPTO_PREFIX + "other-verification-mac";
-static const string OTHER_FACIAL_RECOGNITION_VERIFICATION_MAC_FILE_NAME = LGTM_CRYPTO_PREFIX + "facial-recognition-other-verification-mac";
+static const string OTHER_VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX + "other-verification-hash";
+static const string OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX + "facial-recognition-other-verification-hash";
 
 // Facial recognition files
 static const string FACIAL_RECOGNITION_FILE_NAME = ".lgtm-facial-recognition-params";
@@ -110,23 +110,23 @@ void simulateFirstMessageReply() {
  * Simulate a reply to the second message with a verification hash.
  */
 void simulateOneWayFirstVerification() {
-    // Compute MAC of all prior messages + this
-    vector<string> macFiles;
-    macFiles.push_back(PUBLIC_KEY_FILE_NAME);
-    macFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
-    macFiles.push_back(VERIFICATION_MAC_FILE_NAME);
-    createHashFromFiles(macFiles, OTHER_VERIFICATION_MAC_FILE_NAME);
+    // Compute HASH of all prior messages + this
+    vector<string> hashFiles;
+    hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
+    hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
+    hashFiles.push_back(VERIFICATION_HASH_FILE_NAME);
+    createHashFromFiles(hashFiles, OTHER_VERIFICATION_HASH_FILE_NAME);
 }
 
 /**
  * Simulate a reply to the second message with a verification hash.
  */
 void simulateOtherWayFirstVerification() {
-    // Compute MAC of all prior messages + this
-    vector<string> macFiles;
-    macFiles.push_back(PUBLIC_KEY_FILE_NAME);
-    macFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
-    createHashFromFiles(macFiles, OTHER_VERIFICATION_MAC_FILE_NAME);
+    // Compute HASH of all prior messages + this
+    vector<string> hashFiles;
+    hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
+    hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
+    createHashFromFiles(hashFiles, OTHER_VERIFICATION_HASH_FILE_NAME);
 }
 
 /**
@@ -160,12 +160,12 @@ void simulateFacialOneWayVerification() {
     vector<string> hashFiles;
     hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
     hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
-    hashFiles.push_back(VERIFICATION_MAC_FILE_NAME);
-    hashFiles.push_back(OTHER_VERIFICATION_MAC_FILE_NAME);
+    hashFiles.push_back(VERIFICATION_HASH_FILE_NAME);
+    hashFiles.push_back(OTHER_VERIFICATION_HASH_FILE_NAME);
     hashFiles.push_back(FACIAL_RECOGNITION_FILE_NAME);
     hashFiles.push_back(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
-    hashFiles.push_back(FACIAL_RECOGNITION_VERIFICATION_MAC_FILE_NAME);
-    createHashFromFiles(hashFiles, OTHER_FACIAL_RECOGNITION_VERIFICATION_MAC_FILE_NAME);
+    hashFiles.push_back(FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
+    createHashFromFiles(hashFiles, OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
 }
 
 /**
@@ -176,10 +176,10 @@ void simulateFacialOtherWayVerification() {
     vector<string> hashFiles;
     hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
     hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
-    hashFiles.push_back(VERIFICATION_MAC_FILE_NAME);
-    hashFiles.push_back(OTHER_VERIFICATION_MAC_FILE_NAME);
+    hashFiles.push_back(VERIFICATION_HASH_FILE_NAME);
+    hashFiles.push_back(OTHER_VERIFICATION_HASH_FILE_NAME);
     hashFiles.push_back(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
-    createHashFromFiles(hashFiles, OTHER_FACIAL_RECOGNITION_VERIFICATION_MAC_FILE_NAME);
+    createHashFromFiles(hashFiles, OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
 }
 
 //~Corruption Testing Function----------------------------------------------------------------------
@@ -300,7 +300,7 @@ bool testOtherWay() {
     replyToFirstMessage();
     // Simulate reception of a hash for verification
     simulateOtherWayFirstVerification();
-    // Perform verification on received mac
+    // Perform verification on received hash
     replyToSecondMessage();
     //
     simulateFacialOtherWayVerification();
@@ -328,7 +328,7 @@ bool testOtherWayCorruption() {
     replyToFirstMessage();
     // Simulate reception of a hash for verification
     simulateOtherWayFirstVerification();
-    // Perform verification on received mac
+    // Perform verification on received hash
     replyToSecondMessage();
     // Simulate reception of facial recognition params (just a dummy file)
     simulateThirdMessageReply();

@@ -45,7 +45,7 @@ void generateDiffieHellmanParameters(SecByteBlock &publicKey, SecByteBlock &priv
 /**
  * Derive the shared secret from a private key and another party's public key.
  */
-void diffieHellmanSharedSecretAgreement(SecByteBlock &sharedSecret, SecByteBlock &otherPublicKey, 
+bool diffieHellmanSharedSecretAgreement(SecByteBlock &sharedSecret, SecByteBlock &otherPublicKey, 
         SecByteBlock &privateKey) {
     if (otherPublicKey.SizeInBytes() == 0) {
         throw runtime_error("Other user's public key is empty!!!");
@@ -58,9 +58,10 @@ void diffieHellmanSharedSecretAgreement(SecByteBlock &sharedSecret, SecByteBlock
     ECDH<ECP>::Domain diffieHellman(CURVE);
     sharedSecret.CleanNew(diffieHellman.AgreedValueLength());
     if (!diffieHellman.Agree(sharedSecret, privateKey, otherPublicKey)) {
-        // TODO:
-        // Do something bad, maybe return false
+        return false;
     }
+    
+    return true;
 }
 
 /**
@@ -287,7 +288,7 @@ void decryptFile(const string &inputFileName, const string &authInputFileName,
 }
 
 /**
- * Generates a HMAC from inputFileName and places the result in outputFileName.
+ * Generates a SHA512 hash from inputFileName and places the result in outputFileName.
  */
 void createHashFromFile(const string &inputFileName, const string &outputFileName) {
     try {
@@ -304,16 +305,18 @@ void createHashFromFile(const string &inputFileName, const string &outputFileNam
 }
 
 /**
- * Verifies a HMAC from macInputFileName by comparing it to a HMAC over the data in fileName.
+ * Verifies a SHA512 hash from hashInputFileName by comparing it 
+ * to a hash over the data in fileName.
+ * Returns true if verification is successful, false if it fails.
  */
-bool verifyHashFromFile(const string &inputFileName, const string &macInputFileName) {
+bool verifyHashFromFile(const string &inputFileName, const string &hashInputFileName) {
     // Read directly from file to verify hash
     try {
         SHA512 hash;
         const int flags = HashVerificationFilter::THROW_EXCEPTION 
                 | HashVerificationFilter::HASH_AT_END;
         // Read from file and write back to file
-        FileSource fileSource(macInputFileName.c_str(), true, 
+        FileSource fileSource(hashInputFileName.c_str(), true, 
                 new HashVerificationFilter(hash, NULL, flags));
 
         return true;
@@ -327,6 +330,11 @@ bool verifyHashFromFile(const string &inputFileName, const string &macInputFileN
     }
 }
 
+/**
+ * Generates a SHA512 hash from the data in all of the file names contained in the vector<string>
+ * inputFileNames.
+ * Outputs the value of the hash into outputFileName.
+ */
 void createHashFromFiles(const vector<string> &inputFileNames, const string &outputFileName) {
     vector<byte> inputBytes(0);
 
@@ -362,7 +370,12 @@ void createHashFromFiles(const vector<string> &inputFileNames, const string &out
     }
 }
 
-bool verifyHashFromFiles(const vector<string> &inputFileNames, const string &macInputFileName) {
+/**
+ * Verifies a SHA512 hash from hashInputFileName by comparing it 
+ * to a hash over the data contained in all of the files in the vector<string> inputFileNames.
+ * Returns true if verification is successful, false if it fails.
+ */
+bool verifyHashFromFiles(const vector<string> &inputFileNames, const string &hashInputFileName) {
     vector<byte> inputBytes(0);
 
     // Grab data from all the inputFileNames-------
@@ -384,9 +397,9 @@ bool verifyHashFromFiles(const vector<string> &inputFileNames, const string &mac
                 new ArraySink(&inputBytes[priorLength], fileLength));
     }
 
-    // Grab macInputFileName data-----
-    // Get file size of macInputFileName so inputBytes can be sized appropriately
-    ifstream inputStream(macInputFileName, ios::in | ios::binary);
+    // Grab hashInputFileName data-----
+    // Get file size of hashInputFileName so inputBytes can be sized appropriately
+    ifstream inputStream(hashInputFileName, ios::in | ios::binary);
     inputStream.seekg(0, inputStream.end);
     int fileLength = inputStream.tellg();
     inputStream.seekg(0, inputStream.beg);
@@ -397,7 +410,7 @@ bool verifyHashFromFiles(const vector<string> &inputFileNames, const string &mac
     inputBytes.resize(inputBytes.size() + fileLength);
 
     // Read from file into ArraySink
-    FileSource fileSource(macInputFileName.c_str(), true, 
+    FileSource fileSource(hashInputFileName.c_str(), true, 
                 new ArraySink(&inputBytes[priorLength], fileLength));
 
     // Read from ArraySink into hash into another ArraySink
