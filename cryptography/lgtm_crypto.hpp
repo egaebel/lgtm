@@ -86,12 +86,14 @@ bool diffieHellmanSharedSecretAgreement(SecByteBlock &sharedSecret, SecByteBlock
 void generateSymmetricKeyFromSharedSecret(SecByteBlock &key, SecByteBlock &sharedSecret);
 
 // Encryption/Decryption-----------------------------------------------------
-void decryptFile(const string &inputFileName, const string &outputFileName, 
+void encryptFile(const string &inputFileName, const string &outputFileName, 
+        SecByteBlock &key, byte *ivBytes);
+bool decryptFile(const string &inputFileName, const string &outputFileName, 
         SecByteBlock &key, byte *ivBytes);
 // Additional authenticated data
 void encryptFile(const string &inputFileName, const string &authInputFileName, 
         const string &outputFileName, SecByteBlock &key, byte *ivBytes);
-void decryptFile(const string &inputFileName, const string &authInputFileName, 
+bool decryptFile(const string &inputFileName, const string &authInputFileName, 
         const string &outputFileName, SecByteBlock &key, byte *ivBytes);
 
 // Message Authentication Codes----------------------------------------------

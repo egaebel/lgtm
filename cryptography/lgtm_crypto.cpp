@@ -128,7 +128,7 @@ void encryptFile(const string &inputFileName, const string &authInputFileName,
         encryptionFilter.ChannelMessageEnd(AAD_CHANNEL);
 
         delete[] authData;
-    } else {
+    } else if (authInputFileName != "") {
         cerr << "Error opening authentication file: " << authInputFileName 
                 << " in decryptFile in lgtm_crypto.cpp." << endl
                 << "Continuing on....." << endl;
@@ -155,7 +155,8 @@ void encryptFile(const string &inputFileName, const string &authInputFileName,
     } else {
         cerr << "Error opening file: " << inputFileName 
                 << " in encryptFile in lgtm_crypto.cpp" << endl;
-        exit(1);
+        throw runtime_error("Error opening file: " + inputFileName 
+                + " in encryptFile in lgtm_crypto.cpp");
     }
 }
 
@@ -169,9 +170,9 @@ void encryptFile(const string &inputFileName, const string &authInputFileName,
  * The encryption algorithm uses key and ivBytes to perform GCM<AES> encryption.
  * ivBytes is 256 bits (the size of AES::BLOCKSIZE).
  */
-void decryptFile(const string &inputFileName, const string &outputFileName, 
+bool decryptFile(const string &inputFileName, const string &outputFileName, 
         SecByteBlock &key, byte *ivBytes) {
-    decryptFile(inputFileName, "", outputFileName, key, ivBytes);
+    return decryptFile(inputFileName, "", outputFileName, key, ivBytes);
 }
 
 /**
@@ -184,12 +185,12 @@ void decryptFile(const string &inputFileName, const string &outputFileName,
  * The encryption algorithm uses key and ivBytes to perform GCM<AES> encryption.
  * ivBytes is 256 bits (the size of AES::BLOCKSIZE).
  */
-void decryptFile(const string &inputFileName, const string &authInputFileName, 
+bool decryptFile(const string &inputFileName, const string &authInputFileName, 
         const string &outputFileName, SecByteBlock &key, byte *ivBytes) {
     GCM<AES>::Decryption decrypt;
     decrypt.SetKeyWithIV(key, key.size(), ivBytes, AES::BLOCKSIZE);
     AuthenticatedDecryptionFilter decryptionFilter(decrypt, 
-            NULL, /*new FileSink(outputFileName.c_str()), */
+            NULL,
             AuthenticatedDecryptionFilter::MAC_AT_BEGIN | 
             AuthenticatedDecryptionFilter::THROW_EXCEPTION, MAC_SIZE);
 
@@ -205,15 +206,11 @@ void decryptFile(const string &inputFileName, const string &authInputFileName,
         if (encryptedDataLength < 1) {
             cerr << "Cannot allocate a negative number of bytes: " << encryptedDataLength
                     << " in decryptFile in lgtm_crypto.cpp" << endl
-                    << "Actual file length was: " << fileLength << endl;
-            exit(1);
+                    << "Actual file length was: " << fileLength 
+                    << " for file: " << inputFileName << endl;
+            throw runtime_error("Error, cannot allocate a negative number of bytes in decryptFile.");
         }
         byte *encryptedData = new byte[encryptedDataLength];
-        if (!encryptedData) {
-            cerr << "Error allocating bytes for inputData in decryptFile in lgtm_crypto.cpp" 
-                    << endl;
-            exit(1);
-        }
         // Allocate memory for the MAC
         byte macData[MAC_SIZE];
         // Read the encrypted data
@@ -237,7 +234,7 @@ void decryptFile(const string &inputFileName, const string &authInputFileName,
             if (!authInputData) {
                 cerr << "Error allocating bytes for authInputData in decryptFile in lgtm_crypto.cpp" 
                         << endl;
-                exit(1);
+                throw runtime_error("Error allocating bytes for authInputData in decryptFile in lgtm_crypto.cpp");
             }
             inputStream.read((char*) authInputData, authInputDataLength);
             inputStream.close();
@@ -247,7 +244,7 @@ void decryptFile(const string &inputFileName, const string &authInputFileName,
             decryptionFilter.ChannelMessageEnd(AAD_CHANNEL);
             delete[] authInputData;
 
-        } else {
+        } else if (authInputFileName != "") {
             cerr << "Error opening authentication file: " << authInputFileName 
                     << " in decryptFile in lgtm_crypto.cpp" << endl
                     << "Continuing on....." << endl;
@@ -260,17 +257,25 @@ void decryptFile(const string &inputFileName, const string &authInputFileName,
     } else {
         cerr << "Error opening file: " << inputFileName 
                 << " in decryptFile in lgtm_crypto.cpp" << endl;
-        exit(1);
+        throw runtime_error("Error opening file: " + inputFileName 
+                + " in decryptFile in lgtm_crypto.cpp");
     }
 
-    // If the object throws, it will most likely occur
-    //   during ChannelMessageEnd()
-    decryptionFilter.ChannelMessageEnd(AAD_CHANNEL);
-    decryptionFilter.ChannelMessageEnd(DEFAULT_CHANNEL);
+    // Check data authenticity here...
+    try {
+        // If the object throws, it will most likely occur
+        //   during ChannelMessageEnd()
+        decryptionFilter.ChannelMessageEnd(AAD_CHANNEL);
+        decryptionFilter.ChannelMessageEnd(DEFAULT_CHANNEL);
+    } catch (const CryptoPP::Exception &e) {
+        cerr << "DATA FOUND TO BE TAMPERED WITH IN decryptFile on first check" << endl;
+        return false;
+    }
 
-    // Verify authentication
+    // Check data authenticity again
     if (!decryptionFilter.GetLastResult()) {
-        // do something with verification
+        cerr << "DATA FOUND TO BE TAMPERED WITH IN decryptFile on second check" << endl;
+        return false;
     }
 
     decryptionFilter.SetRetrievalChannel(DEFAULT_CHANNEL);
@@ -285,6 +290,8 @@ void decryptFile(const string &inputFileName, const string &authInputFileName,
     outputStream.close();
 
     delete[] retrievedData;
+
+    return true;
 }
 
 /**
@@ -298,9 +305,9 @@ void createHashFromFile(const string &inputFileName, const string &outputFileNam
                 new HashFilter(hash, 
                     new FileSink(outputFileName.c_str())));
     } catch (const CryptoPP::Exception &e) {
-        cerr << "Issue in creatMacFromFile" << endl;
+        cerr << "Issue in creatHashFromFile" << endl;
         cerr << e.what() << endl;
-        exit(1);
+        throw runtime_error("Issue in createHashFromFile");
     }
 }
 
@@ -318,14 +325,11 @@ bool verifyHashFromFile(const string &inputFileName, const string &hashInputFile
         // Read from file and write back to file
         FileSource fileSource(hashInputFileName.c_str(), true, 
                 new HashVerificationFilter(hash, NULL, flags));
-
         return true;
 
     } catch (const CryptoPP::Exception &e) {
-        cerr << "Issue in createHashFromFiles" << endl;
+        cerr << "Issue in verifyHashFromFile" << endl;
         cerr << e.what() << endl;
-        exit(1);
-
         return false;
     }
 }
@@ -337,7 +341,8 @@ bool verifyHashFromFile(const string &inputFileName, const string &hashInputFile
  */
 void createHashFromFiles(const vector<string> &inputFileNames, const string &outputFileName) {
     vector<byte> inputBytes(0);
-
+    // TODO: clean up
+    cout << "createHashFromFiles" << endl;
     // Grab data from all the inputFileNames-------
     // Add data from files to inputBytes
     for (int i = 0; i < inputFileNames.size(); i++) {
@@ -354,8 +359,11 @@ void createHashFromFiles(const vector<string> &inputFileNames, const string &out
         // Read from file into ArraySink
         FileSource fileSource(inputFileNames[i].c_str(), true, 
                 new ArraySink(&inputBytes[priorLength], fileLength));
+        // TODO: clean up
+        cout << "inputFileNames[i]: " << inputFileNames[i] << endl;
     }
-
+    // TODO: clean up
+    cout << "outputFile: " << outputFileName << endl;
     // Read from ArraySink into hash into file
     try {
         SHA512 hash;
@@ -366,7 +374,7 @@ void createHashFromFiles(const vector<string> &inputFileNames, const string &out
     } catch (const CryptoPP::Exception &e) {
         cerr << "Issue in createHashFromFiles" << endl;
         cerr << e.what() << endl;
-        exit(1);
+        throw runtime_error("Issue in createHashFromFiles");
     }
 }
 
@@ -377,7 +385,8 @@ void createHashFromFiles(const vector<string> &inputFileNames, const string &out
  */
 bool verifyHashFromFiles(const vector<string> &inputFileNames, const string &hashInputFileName) {
     vector<byte> inputBytes(0);
-
+    // TODO: clean up
+    cout << "verifyHashFromFiles" << endl;
     // Grab data from all the inputFileNames-------
     // Add data from files to inputBytes
     for (int i = 0; i < inputFileNames.size(); i++) {
@@ -395,8 +404,11 @@ bool verifyHashFromFiles(const vector<string> &inputFileNames, const string &has
         // Read from file into ArraySink
         FileSource fileSource(inputFileNames[i].c_str(), true, 
                 new ArraySink(&inputBytes[priorLength], fileLength));
+        // TODO: clean up
+        cout << "inputFileNames[i]: " << inputFileNames[i] << endl;
     }
-
+    // TODO: clean up
+    cout << "hashInputFileName: " << hashInputFileName << endl;
     // Grab hashInputFileName data-----
     // Get file size of hashInputFileName so inputBytes can be sized appropriately
     ifstream inputStream(hashInputFileName, ios::in | ios::binary);
@@ -421,14 +433,11 @@ bool verifyHashFromFiles(const vector<string> &inputFileNames, const string &has
         // Read from file and write back to file
         ArraySource arraySource(&inputBytes[0], inputBytes.size(), true, 
                 new HashVerificationFilter(hash, NULL, flags));
-
         return true;
 
     } catch (const CryptoPP::Exception &e) {
-        cerr << "Issue in createHashFromFiles" << endl;
+        cerr << "Issue in verifyHashFromFiles" << endl;
         cerr << e.what() << endl;
-        exit(1);
-
         return false;
     }
 }

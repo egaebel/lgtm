@@ -2,6 +2,7 @@
 #define LGTM_CRYPTO_RUNNER_H_
 
 #include "lgtm_crypto.hpp"
+#include "lgtm_file_utils.hpp"
 
 #include "../../cryptopp/filters.h"
 
@@ -12,17 +13,18 @@
 
 using CryptoPP::FileSink;
 using CryptoPP::FileSource;
+using CryptoPP::SecByteBlock;
 
 using std::ofstream;
 using std::runtime_error;
 using std::vector;
 
 void firstMessage();
-void replyToFirstMessage();
-void secondMessage();
-void replyToSecondMessage();
-void thirdMessage();
-void replyToThirdMessage();
-void decryptThirdMessageReply();
+bool replyToFirstMessage();
+bool secondMessage();
+bool replyToSecondMessage();
+bool thirdMessage();
+bool replyToThirdMessage();
+bool decryptThirdMessageReply();
 
 #endif

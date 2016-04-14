@@ -25,6 +25,7 @@
 
 #include "lgtm_crypto.hpp"
 #include "lgtm_crypto_runner.hpp"
+#include "lgtm_file_utils.hpp"
 
 #include "../../cryptopp/filters.h"
 #include "../../cryptopp/secblock.h"
@@ -46,58 +47,52 @@ static const string RECEIVED_FACIAL_RECOGNITION_PARAMS_STRING = "RECEIVED-FACIAL
 static const string LGTM_CRYPTO_PREFIX = ".lgtm-crypto-params-";
 
 // Crypto params
-static const string PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "public-key";
-static const string VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX + "verification-hash";
-static const string FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX + "facial-recognition-verification-hash";
+static const string PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX 
+        + "public-key";
+static const string VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX 
+        + "verification-hash";
+static const string FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX 
+        + "facial-recognition-verification-hash";
 
 // "Other" Crypto params
-static const string OTHER_PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "other-public-key";
-static const string COMPUTED_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "computed-key";
-static const string OTHER_VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX + "other-verification-hash";
-static const string OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX + "facial-recognition-other-verification-hash";
+static const string OTHER_PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX 
+        + "other-public-key";
+static const string COMPUTED_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX 
+        + "computed-key";
+static const string ENCRYPTED_OTHER_VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX 
+        + "encrypted-other-verification-hash";
+static const string OTHER_VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX 
+        + "other-verification-hash";
+static const string OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX 
+        + "facial-recognition-other-verification-hash";
 
 // Facial recognition files
-static const string FACIAL_RECOGNITION_FILE_NAME = ".lgtm-facial-recognition-params";
-static const string ENCRYPTED_FACIAL_RECOGNITION_FILE_NAME = ".lgtm-facial-recognition-params--encrypted";
-static const string RECEIVED_FACIAL_RECOGNITION_FILE_NAME = ".lgtm-received-facial-recognition-params";
-static const string DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME = ".lgtm-received-facial-recognition-params--decrypted";
+static const string FACIAL_RECOGNITION_FILE_NAME 
+        = ".lgtm-facial-recognition-params";
+static const string VERIFIED_FACIAL_RECOGNITION_FILE_NAME 
+        = ".lgtm-facial-recognition-params-with-hash";
+static const string ENCRYPTED_FACIAL_RECOGNITION_FILE_NAME 
+        = ".lgtm-facial-recognition-params--encrypted";
+static const string RECEIVED_FACIAL_RECOGNITION_FILE_NAME 
+        = ".lgtm-received-facial-recognition-params";
+static const string DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME 
+        = ".lgtm-received-facial-recognition-params--decrypted";
 
 // Test Files
-static const string TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME = ".lgtm-test-unencrypted-received-facial-recognition-params";
-
-//~File IO Functions--------------------------------------------------------------------------------
-/**
- * Reads into a SecByteBlock from a file specified by fileName.
- */
-static void readFromFile(const string &fileName, SecByteBlock &input) {
-    cout << "TEST read from file, reading " << input.SizeInBytes() 
-            << " bytes from file: " << fileName << endl;
-    ifstream inputStream(fileName, ios::in | ios::binary);
-    // Get file length
-    inputStream.seekg(0, inputStream.end);
-    int fileLength = inputStream.tellg();
-    inputStream.seekg(0, inputStream.beg);
-    input.CleanNew(fileLength);
-    inputStream.read((char*) input.BytePtr(), input.SizeInBytes());
-    inputStream.close();
-}
-
-/**
- * Writes a SecByteBlock to a file specified by fileName.
- */
-static void writeToFile(const string &fileName, SecByteBlock &output) {
-    cout << "TEST write to file, writing " << output.SizeInBytes() 
-            << " bytes to file: " << fileName << endl;
-    ofstream outputStream(fileName, ios::out | ios::binary);
-    outputStream.write((char*) output.BytePtr(), output.SizeInBytes());
-    outputStream.close();
-}
-
+static const string TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME 
+        = ".lgtm-test-unencrypted-received-facial-recognition-params";
+static const string TEST_OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME 
+        = ".lgtm-test-facial-recognition-other-verification-hash";
+static const string TEST_VERIFIED_FACIAL_RECOGNITION_FILE_NAME
+        = ".lgtm-test-facial-recognition-params-with-hash";
+static const string TEST_OTHER_VERIFICATION_HASH_FILE_NAME
+        = ".lgtm-test-other-verification-hash";
 //~Simulated Reply Functions------------------------------------------------------------------------
 /**
  * Simulate a reply to the first message by creating a file holding another public key.
  */
 void simulateFirstMessageReply() {
+    cout << "Simulate First Message Reply" << endl;
     // Prepare Diffie-Hellman parameters
     SecByteBlock publicKey;
     SecByteBlock privateKey;
@@ -110,32 +105,60 @@ void simulateFirstMessageReply() {
  * Simulate a reply to the second message with a verification hash.
  */
 void simulateOneWayFirstVerification() {
+    cout << "Simulate One Way First Verification" << endl;
     // Compute HASH of all prior messages + this
     vector<string> hashFiles;
     hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
     hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
     hashFiles.push_back(VERIFICATION_HASH_FILE_NAME);
-    createHashFromFiles(hashFiles, OTHER_VERIFICATION_HASH_FILE_NAME);
+    createHashFromFiles(hashFiles, TEST_OTHER_VERIFICATION_HASH_FILE_NAME);
+
+    // Read symmetric key from file
+    SecByteBlock key;
+    readFromFile(COMPUTED_KEY_FILE_NAME, key);
+    // Read in the current initialization vector from file
+    byte curIv[AES::BLOCKSIZE];
+    // TODO: actually read it in
+    // Set to 0 for now
+    memset(curIv, 0, AES::BLOCKSIZE);
+
+    encryptFile(TEST_OTHER_VERIFICATION_HASH_FILE_NAME, 
+            ENCRYPTED_OTHER_VERIFICATION_HASH_FILE_NAME,
+            key, curIv);
 }
 
 /**
  * Simulate a reply to the second message with a verification hash.
  */
 void simulateOtherWayFirstVerification() {
+    cout << "Simulate Other Way First Verification" << endl;
     // Compute HASH of all prior messages + this
     vector<string> hashFiles;
     hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
     hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
-    createHashFromFiles(hashFiles, OTHER_VERIFICATION_HASH_FILE_NAME);
+    createHashFromFiles(hashFiles, TEST_OTHER_VERIFICATION_HASH_FILE_NAME);
+
+    // Read symmetric key from file
+    SecByteBlock key;
+    readFromFile(COMPUTED_KEY_FILE_NAME, key);
+    // Read in the current initialization vector from file
+    byte curIv[AES::BLOCKSIZE];
+    // TODO: actually read it in
+    // Set to 0 for now
+    memset(curIv, 0, AES::BLOCKSIZE);
+    encryptFile(TEST_OTHER_VERIFICATION_HASH_FILE_NAME, 
+            ENCRYPTED_OTHER_VERIFICATION_HASH_FILE_NAME,
+            key, curIv);
 }
 
 /**
  * Simulate a reply to the third message by creating a dummy file for received, encrypted 
  * facial recognition parameters.
  */
-void simulateThirdMessageReply() {
-    SecByteBlock symmetricKey;
-    readFromFile(COMPUTED_KEY_FILE_NAME, symmetricKey);
+void simulateOneWayThirdMessageReply() {
+    cout << "Simulate One Way Third Message Reply" << endl;
+    SecByteBlock key;
+    readFromFile(COMPUTED_KEY_FILE_NAME, key);
 
     // Write test string to unencrypted received facial recognition params
     ofstream plainTextOutputStream(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME, 
@@ -144,24 +167,98 @@ void simulateThirdMessageReply() {
             RECEIVED_FACIAL_RECOGNITION_PARAMS_STRING.length());
     plainTextOutputStream.close();
 
+    // Compute HASH of all prior messages + this
+    vector<string> hashFiles;
+    // Remember, the order isn't inverted because this test is run on the same machine....
+    hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
+    hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
+    hashFiles.push_back(VERIFICATION_HASH_FILE_NAME);
+    hashFiles.push_back(TEST_OTHER_VERIFICATION_HASH_FILE_NAME);
+    hashFiles.push_back(FACIAL_RECOGNITION_FILE_NAME);
+    hashFiles.push_back(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
+    hashFiles.push_back(FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
+    createHashFromFiles(hashFiles, TEST_OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
+
+    // Combine facial recognition params + Hash
+    vector<string> fileNames;
+    fileNames.push_back(TEST_OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
+    fileNames.push_back(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
+    combineFiles(fileNames, TEST_VERIFIED_FACIAL_RECOGNITION_FILE_NAME);
+
     // Encrypt received facial recognition params
     // TODO: This test will need to get more sophisticated when the IV is set differently.
     byte iv[AES::BLOCKSIZE];
     memset(iv, 0, AES::BLOCKSIZE);
-    encryptFile(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME, "", 
-            RECEIVED_FACIAL_RECOGNITION_FILE_NAME, symmetricKey, iv);
+    encryptFile(TEST_VERIFIED_FACIAL_RECOGNITION_FILE_NAME, 
+            RECEIVED_FACIAL_RECOGNITION_FILE_NAME, 
+            key, iv);
 }
 
 /**
- *
+ * Simulate a reply to the third message by creating a dummy file for received, encrypted 
+ * facial recognition parameters.
+ */
+void simulateOtherWayThirdMessageReply() {
+    cout << "Simulate Other Way Third Message Reply" << endl;
+    SecByteBlock key;
+    readFromFile(COMPUTED_KEY_FILE_NAME, key);
+
+    // Write test string to unencrypted received facial recognition params
+    ofstream plainTextOutputStream(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME, 
+            ios::out | ios::binary);
+    plainTextOutputStream.write(RECEIVED_FACIAL_RECOGNITION_PARAMS_STRING.data(), 
+            RECEIVED_FACIAL_RECOGNITION_PARAMS_STRING.length());
+    plainTextOutputStream.close();
+
+    // Compute HASH of all prior messages + this
+    vector<string> hashFiles;
+    // Remember, the order isn't inverted because this test is run on the same machine....
+    hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
+    hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
+    hashFiles.push_back(VERIFICATION_HASH_FILE_NAME);
+    hashFiles.push_back(TEST_OTHER_VERIFICATION_HASH_FILE_NAME);
+    hashFiles.push_back(FACIAL_RECOGNITION_FILE_NAME);
+    hashFiles.push_back(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
+    hashFiles.push_back(FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
+
+    // TODO: clean up...
+    /*
+    cout << "Printing all files in hash in simulateOtherWayThirdMessageReply: " << endl;
+    for (int i = 0; i < hashFiles.size(); i++) {
+        cout << "File Name: " << hashFiles[i] << endl;
+        printFile(hashFiles[i]);
+    }
+    cout << "*****DONE PRINTING ALL FILES IN HASH IN simulateOtherWayThirdMessageReply" << endl;
+    */
+    createHashFromFiles(hashFiles, TEST_OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
+
+    // Combine facial recognition params + Hash
+    vector<string> fileNames;
+    fileNames.push_back(TEST_OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
+    fileNames.push_back(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
+    combineFiles(fileNames, TEST_VERIFIED_FACIAL_RECOGNITION_FILE_NAME);
+
+    // Encrypt received facial recognition params
+    // TODO: This test will need to get more sophisticated when the IV is set differently.
+    byte iv[AES::BLOCKSIZE];
+    memset(iv, 0, AES::BLOCKSIZE);
+    encryptFile(TEST_VERIFIED_FACIAL_RECOGNITION_FILE_NAME,
+            RECEIVED_FACIAL_RECOGNITION_FILE_NAME, 
+            key, iv);
+}
+
+/**
+ * Generate the "other" sender's verification hash by generating it from the requisite files.
+ * The verification file is for the "OneWay" direction and includes facial recognition params.
  */
 void simulateFacialOneWayVerification() {
+    cout << "Simulate Facial One Way Verification" << endl;
     // Generate simulated hash verification code for "other" sender
     vector<string> hashFiles;
     hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
     hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
     hashFiles.push_back(VERIFICATION_HASH_FILE_NAME);
-    hashFiles.push_back(OTHER_VERIFICATION_HASH_FILE_NAME);
+    hashFiles.push_back(TEST_OTHER_VERIFICATION_HASH_FILE_NAME);
     hashFiles.push_back(FACIAL_RECOGNITION_FILE_NAME);
     hashFiles.push_back(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
     hashFiles.push_back(FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
@@ -169,15 +266,17 @@ void simulateFacialOneWayVerification() {
 }
 
 /**
- *
+ * Generate the "other" sender's verification hash by generating it from the requisite files.
+ * The verification file is for the "OtherWay" direction and includes facial recognition params.
  */
 void simulateFacialOtherWayVerification() {
+    cout << "Simulate Facial Other Way Verification" << endl;
     // Generate hash for other person's verification
     vector<string> hashFiles;
     hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
     hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
     hashFiles.push_back(VERIFICATION_HASH_FILE_NAME);
-    hashFiles.push_back(OTHER_VERIFICATION_HASH_FILE_NAME);
+    hashFiles.push_back(TEST_OTHER_VERIFICATION_HASH_FILE_NAME);
     hashFiles.push_back(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
     createHashFromFiles(hashFiles, OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
 }
@@ -187,6 +286,7 @@ void simulateFacialOtherWayVerification() {
  * Corrupts three bytes of the "received" facial recognition file.
  */
 void corruptThirdMessageReply() {
+    cout << "Corrupt Third Message Reply" << endl;
     byte corruption[] = {0x4, 0x4, 0x4};
     ofstream outputStream(RECEIVED_FACIAL_RECOGNITION_FILE_NAME, ios::in | ios::out | ios::binary);
     outputStream.seekp(4);
@@ -239,17 +339,24 @@ bool testOneWay() {
     // Simulate reception of unencrypted Diffie-Hellman public key
     simulateFirstMessageReply();
     // Generate symmetric key and save
-    secondMessage();
+    if (!secondMessage()) {
+        cout << endl << "Test One Way FAILED!!!!" << endl << endl;
+        return false;
+    }
     // Simulate reception of a hash for verification
     simulateOneWayFirstVerification();
     // Encrypt facial recognition file
-    thirdMessage();
-    // Simulate reception of facial recognition params (just a dummy file)
-    simulateThirdMessageReply();
-    //
-    simulateFacialOneWayVerification();
+    if (!thirdMessage()) {
+        cout << endl << "Test One Way FAILED!!!!" << endl << endl;
+        return false;
+    }
+    // Simulate reception of encrypted facial recognition params + hash
+    simulateOneWayThirdMessageReply();
     // Decrypt and verify the third message
-    decryptThirdMessageReply();
+    if (!decryptThirdMessageReply()) {
+        cout << endl << "Test One Way FAILED!!!!" << endl << endl;
+        return false;
+    }
     if(checkFacialRecognitionFile()) {
         cout << endl << "Test One Way Passed!" << endl << endl;
         return true;
@@ -259,6 +366,9 @@ bool testOneWay() {
     }
 }
 
+/**
+ * Run a full test from the first sender's point of view where some bytes are corrupted. 
+ */ 
 bool testOneWayCorruption() {
     cout << endl << "testOneWayCorruption: " << endl;
     // Generate and save Diffie-Hellman parameters
@@ -266,26 +376,28 @@ bool testOneWayCorruption() {
     // Simulate reception of unencrypted Diffie-Hellman public key
     simulateFirstMessageReply();
     // Generate symmetric key and save
-    secondMessage();
+   if (!secondMessage()) {
+        cout << endl << "Test One Way FAILED!!!!" << endl << endl;
+        return false;
+    }
     // Simulate reception of a hash for verification
     simulateOneWayFirstVerification();
     // Encrypt facial recognition file
-    thirdMessage();
-    // Simulate reception of facial recognition params (just a dummy file)
-    simulateThirdMessageReply();
+    if (!thirdMessage()) {
+        cout << endl << "Test One Way FAILED!!!!" << endl << endl;
+        return false;
+    }
+    // Simulate reception of encrypted facial recognition params + hash
+    simulateOneWayThirdMessageReply();
     // Corrupt the third message reply!!!!
     corruptThirdMessageReply();
-    //
-    simulateFacialOneWayVerification();
-    // Catch the error that should be thrown due to the corruption above
-    try {
-        // Decrypt and verify the third message
-        decryptThirdMessageReply();   
-        cout << endl << "One Way Corruption Test FAILED!!!!!!" << endl << endl;
-        return false;
-    } catch (const CryptoPP::HashVerificationFilter::HashVerificationFailed &e) {
+    // Decrypt and verify the third message
+    if (!decryptThirdMessageReply()) {
         cout << endl << "One Way Corruption Test Passed!" << endl << endl;
         return true;
+    } else {
+        cout << endl << "One Way Corruption Test FAILED!!!!!!" << endl << endl;
+        return false;
     }
 }
 
@@ -297,17 +409,24 @@ bool testOtherWay() {
     // Simulate reception of unencrypted Diffie-Hellman public key
     simulateFirstMessageReply();
     // Generate and save Diffie-Hellman parameters
-    replyToFirstMessage();
+    if (!replyToFirstMessage()) {
+        cout << endl << "Test Other Way FAILED!!!!" << endl << endl;
+        return false;
+    }
     // Simulate reception of a hash for verification
     simulateOtherWayFirstVerification();
     // Perform verification on received hash
-    replyToSecondMessage();
-    //
-    simulateFacialOtherWayVerification();
-    // Simulate reception of facial recognition params (just a dummy file)
-    simulateThirdMessageReply();
+    if (!replyToSecondMessage()) {
+        cout << endl << "Test Other Way FAILED!!!!" << endl << endl;
+        return false;
+    }
+    // Simulate reception of encrypted facial recognition params + hash
+    simulateOtherWayThirdMessageReply();
     // Decrypt and verify the third message
-    replyToThirdMessage();
+    if (!replyToThirdMessage()) {
+        cout << endl << "Test Other Way Failed!" << endl << endl;
+        return false;
+    }
     if(checkFacialRecognitionFile()) {
         cout << endl << "Test Other Way Passed!" << endl << endl;
         return true;
@@ -318,31 +437,35 @@ bool testOtherWay() {
 }
 
 /**
- * Run a full test from the second sender's point of view.
+ * Run a full test from the second sender's point of view except some bytes are corrupted.
  */
 bool testOtherWayCorruption() {
     cout << endl << "testOtherWayCorruption: " << endl;
     // Simulate reception of unencrypted Diffie-Hellman public key
     simulateFirstMessageReply();
     // Generate and save Diffie-Hellman parameters
-    replyToFirstMessage();
+    if (!replyToFirstMessage()) {
+        cout << endl << "Test Other Way FAILED!!!!" << endl << endl;
+        return false;
+    }
     // Simulate reception of a hash for verification
     simulateOtherWayFirstVerification();
     // Perform verification on received hash
-    replyToSecondMessage();
-    // Simulate reception of facial recognition params (just a dummy file)
-    simulateThirdMessageReply();
+    if (!replyToSecondMessage()) {
+        cout << endl << "Test Other Way FAILED!!!!" << endl << endl;
+        return false;
+    }
+    // Simulate reception of encrypted facial recognition params + hash
+    simulateOtherWayThirdMessageReply();
     // Corrupt the third message reply!!!!
     corruptThirdMessageReply();
-    // Catch the error that should be thrown due to the corruption above
-    try {
-        // Decrypt and verify the third message
-        replyToThirdMessage();
-        cout << endl << "Other Way Corruption Test FAILED!!!!!!" << endl << endl;
-        return false;
-    } catch (const CryptoPP::HashVerificationFilter::HashVerificationFailed &e) {
+    // Decrypt and verify the third message
+    if (!replyToThirdMessage()) {
         cout << endl << "Other Way Corruption Test Passed!" << endl << endl;
         return true;
+    } else {
+        cout << endl << "Other Way Corruption Test FAILED!!!!!!" << endl << endl;
+        return false;
     }
 }
 
@@ -397,6 +520,7 @@ int main(int argc, char *argv[]) {
     if (!testOtherWayCorruption()) {
         return 1;
     }
+    cout << endl << endl << "ALL TESTS PASSED!!!!!" << endl;
     return 0;
 }
 
