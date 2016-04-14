@@ -23,6 +23,9 @@
 
 #include "lgtm_file_utils.hpp"
 
+// 1 to print debug messages, 0 to suppress them
+#define DEBUG_MESSAGES 0
+
 //~File operation functions-------------------------------------------------------------------------
 /**
  * Reads into a SecByteBlock from a file specified by fileName.
@@ -48,16 +51,20 @@ void readFromFile(const string &fileName, SecByteBlock &input) {
                 << " could not be opened in readFromFile in lgtm_crypto_runner.cpp "<< endl 
                 << "Disregarding and continuing...." << endl;
     }
-    cout << "Read from file, read " << input.SizeInBytes() 
-            << " bytes from file: " << fileName << endl;
+    if (DEBUG_MESSAGES) {
+        cout << "Read from file, read " << input.SizeInBytes() 
+                << " bytes from file: " << fileName << endl;
+    }
 }
 
 /**
  * Writes a SecByteBlock to a file specified by fileName.
  */
 void writeToFile(const string &fileName, SecByteBlock &output) {
-    cout << "Write to file, writing " << output.SizeInBytes() 
-            << " bytes to file: " << fileName << endl;
+    if (DEBUG_MESSAGES) {
+        cout << "Write to file, writing " << output.SizeInBytes() 
+                << " bytes to file: " << fileName << endl;
+    }
     ofstream outputStream(fileName, ios::out | ios::binary);
     outputStream.write((char*) output.BytePtr(), output.SizeInBytes());
     outputStream.close();
@@ -68,8 +75,6 @@ void writeToFile(const string &fileName, SecByteBlock &output) {
  * (in the order given in inputFileNames) and output the result into outputFileName.
  */
 void combineFiles(const vector<string> &inputFileNames, const string &outputFileName) {
-    // TODO: clean up
-    cout << "Combining files: " << endl;
     // Open output file
     ofstream outputStream(outputFileName, ios::out | ios::binary);
     if (!outputStream.is_open()) {
@@ -81,25 +86,17 @@ void combineFiles(const vector<string> &inputFileNames, const string &outputFile
     const int fileBufferSize = 512;
     byte fileBuffer[fileBufferSize];
     for (int i = 0; i < inputFileNames.size(); i++) {
-        // TODO: clean up
-        // Output current file name
-        cout << inputFileNames[i] << endl;
         // Open current file name
         ifstream curInputStream(inputFileNames[i], ios::in | ios::binary);
         if (curInputStream.is_open()) {
-            // TODO: clean up
-            cout << "Reading from: " << inputFileNames[i] << endl;
             // Loop until we don't read any more bytes
-            int numReadBytes = 1;
-            // TODO: make do-while
-            while (numReadBytes > 0) {
+            int numReadBytes = 0;
+            do {
                 numReadBytes = curInputStream.readsome((char*) fileBuffer, fileBufferSize);
                 if (numReadBytes > 0) {
-                    // TODO: clean up
-                    cout << "Read " << numReadBytes << " bytes" << endl;
                     outputStream.write((char*) fileBuffer, numReadBytes);
                 }
-            }
+            } while (numReadBytes > 0);
         } else {
             throw runtime_error("Error in combineFiles, could not open inputFileName: " 
                     + inputFileNames[i]);
@@ -107,8 +104,6 @@ void combineFiles(const vector<string> &inputFileNames, const string &outputFile
         curInputStream.close();
     }
     outputStream.close();
-    // TODO: clean up
-    cout << "Placing results in: " << outputFileName << endl;
 }
 
 /**
@@ -187,18 +182,29 @@ void printFile(const string &fileName) {
     if (inputStream.is_open()) {
         const int bufferSize = 128;
         byte buffer[bufferSize];
-        int bytesRead = 1;
-        // TODO: make do-while
-        while (bytesRead > 0) {
+        int bytesRead = 0;
+        do {
             bytesRead = inputStream.readsome((char*) buffer, bufferSize);
-            for (int i = 0; i < bytesRead; i++) {
-                cout << buffer[i];
+            if (bytesRead > 0) {
+                string encodedInputBytes;
+                StringSource stringSource(buffer, bytesRead, true,
+                    new HexEncoder(
+                        new StringSink(encodedInputBytes)));
+                cout << encodedInputBytes << endl;
             }
-            cout << endl;
-        }
+        } while (bytesRead > 0);
         inputStream.close();
     } else {
         cerr << "Error, in printFile, unable to open file: " << fileName << endl;
     }
     cout << "============File printed!============" << endl;
+}
+
+/**
+ * Takes a vector of strings and calls printFile on each one.
+ */
+void printFiles(const vector<string> &fileNames) {
+    for (int i = 0; i < fileNames.size(); i++) {
+        printFile(fileNames[i]);
+    }
 }

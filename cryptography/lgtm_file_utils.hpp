@@ -24,13 +24,19 @@
 #ifndef LGTM_FILE_UTILS_HPP_
 #define LGTM_FILE_UTILS_HPP_
 
+#include "../../cryptopp/filters.h"
+#include "../../cryptopp/hex.h"
 #include "../../cryptopp/secblock.h"
+
 
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
 
+using CryptoPP::HexEncoder;
 using CryptoPP::SecByteBlock;
+using CryptoPP::StringSource;
+using CryptoPP::StringSink;
 
 using std::cerr;
 using std::cout;
@@ -49,5 +55,5 @@ void combineFiles(const vector<string> &inputFileNames, const string &outputFile
 void splitFile(const string &inputFileName, const vector<string> &outputFileNames,
         const vector<int> &bytesPerFile);
 void printFile(const string &fileName);
-
+void printFiles(const vector<string> &fileNames);
 #endif

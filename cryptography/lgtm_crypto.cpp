@@ -26,9 +26,18 @@
 #include "lgtm_crypto.hpp"
 
 //~Constants----------------------------------------------------------------------------------------
-static const int MAC_SIZE = 12;
+static const unsigned int MAC_SIZE = 12;
 
 //~Functions----------------------------------------------------------------------------------------
+void generateRandomNumber(SecByteBlock &randomNumber, unsigned int randomNumberSize) {
+    
+    randomNumber.CleanNew(randomNumberSize);
+    AutoSeededRandomPool prng;
+
+    RandomNumberSource(prng, randomNumber.size(), true, 
+            new ArraySink(randomNumber, randomNumber.size()));
+}
+
 /**
  * Generate Diffie-Hellman Public-Private keys.
  */
@@ -268,13 +277,13 @@ bool decryptFile(const string &inputFileName, const string &authInputFileName,
         decryptionFilter.ChannelMessageEnd(AAD_CHANNEL);
         decryptionFilter.ChannelMessageEnd(DEFAULT_CHANNEL);
     } catch (const CryptoPP::Exception &e) {
-        cerr << "DATA FOUND TO BE TAMPERED WITH IN decryptFile on first check" << endl;
+        cerr << "DATA FOUND TO BE TAMPERED WITH IN decryptFile ON FIRST CHECK" << endl;
         return false;
     }
 
     // Check data authenticity again
     if (!decryptionFilter.GetLastResult()) {
-        cerr << "DATA FOUND TO BE TAMPERED WITH IN decryptFile on second check" << endl;
+        cerr << "DATA FOUND TO BE TAMPERED WITH IN decryptFile ON SECOND CHECK" << endl;
         return false;
     }
 
@@ -341,8 +350,6 @@ bool verifyHashFromFile(const string &inputFileName, const string &hashInputFile
  */
 void createHashFromFiles(const vector<string> &inputFileNames, const string &outputFileName) {
     vector<byte> inputBytes(0);
-    // TODO: clean up
-    cout << "createHashFromFiles" << endl;
     // Grab data from all the inputFileNames-------
     // Add data from files to inputBytes
     for (int i = 0; i < inputFileNames.size(); i++) {
@@ -356,14 +363,12 @@ void createHashFromFiles(const vector<string> &inputFileNames, const string &out
         // Resize inputBytes
         int priorLength = inputBytes.size();
         inputBytes.resize(inputBytes.size() + fileLength);
-        // Read from file into ArraySink
+
+         // Read from file into ArraySink
         FileSource fileSource(inputFileNames[i].c_str(), true, 
                 new ArraySink(&inputBytes[priorLength], fileLength));
-        // TODO: clean up
-        cout << "inputFileNames[i]: " << inputFileNames[i] << endl;
     }
-    // TODO: clean up
-    cout << "outputFile: " << outputFileName << endl;
+
     // Read from ArraySink into hash into file
     try {
         SHA512 hash;
@@ -385,8 +390,6 @@ void createHashFromFiles(const vector<string> &inputFileNames, const string &out
  */
 bool verifyHashFromFiles(const vector<string> &inputFileNames, const string &hashInputFileName) {
     vector<byte> inputBytes(0);
-    // TODO: clean up
-    cout << "verifyHashFromFiles" << endl;
     // Grab data from all the inputFileNames-------
     // Add data from files to inputBytes
     for (int i = 0; i < inputFileNames.size(); i++) {
@@ -404,12 +407,9 @@ bool verifyHashFromFiles(const vector<string> &inputFileNames, const string &has
         // Read from file into ArraySink
         FileSource fileSource(inputFileNames[i].c_str(), true, 
                 new ArraySink(&inputBytes[priorLength], fileLength));
-        // TODO: clean up
-        cout << "inputFileNames[i]: " << inputFileNames[i] << endl;
     }
-    // TODO: clean up
-    cout << "hashInputFileName: " << hashInputFileName << endl;
-    // Grab hashInputFileName data-----
+
+    // Add hashInputFileName data to the end, so that we can verify the hash at the end of the data
     // Get file size of hashInputFileName so inputBytes can be sized appropriately
     ifstream inputStream(hashInputFileName, ios::in | ios::binary);
     inputStream.seekg(0, inputStream.end);
@@ -424,6 +424,7 @@ bool verifyHashFromFiles(const vector<string> &inputFileNames, const string &has
     // Read from file into ArraySink
     FileSource fileSource(hashInputFileName.c_str(), true, 
                 new ArraySink(&inputBytes[priorLength], fileLength));
+
 
     // Read from ArraySink into hash into another ArraySink
     try {

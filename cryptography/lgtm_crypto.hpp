@@ -62,9 +62,13 @@ using CryptoPP::GCM;
 using CryptoPP::GCM_TablesOption;
 using CryptoPP::HashFilter;
 using CryptoPP::HashVerificationFilter;
+using CryptoPP::HexEncoder;
 using CryptoPP::HMAC;
 using CryptoPP::OID;
+using CryptoPP::RandomNumberSource;
 using CryptoPP::SecByteBlock;
+using CryptoPP::StringSource;
+using CryptoPP::StringSink;
 using CryptoPP::SHA256;
 using CryptoPP::SHA512;
 
@@ -79,13 +83,15 @@ using std::string;
 using std::vector;
 
 //~Function Headers---------------------------------------------------------------------------------
-// Diffie-Hellman------------------------------------------------------------
+void generateRandomNumber(SecByteBlock &randomNumber, unsigned int randomNumberSize);
+
+// Diffie-Hellman-----------------------------------------------------------------------------------
 void generateDiffieHellmanParameters(SecByteBlock &publicKey, SecByteBlock &privateKey);
 bool diffieHellmanSharedSecretAgreement(SecByteBlock &sharedSecret, SecByteBlock &otherPublicKey, 
         SecByteBlock &privateKey);
 void generateSymmetricKeyFromSharedSecret(SecByteBlock &key, SecByteBlock &sharedSecret);
 
-// Encryption/Decryption-----------------------------------------------------
+// Encryption/Decryption----------------------------------------------------------------------------
 void encryptFile(const string &inputFileName, const string &outputFileName, 
         SecByteBlock &key, byte *ivBytes);
 bool decryptFile(const string &inputFileName, const string &outputFileName, 
@@ -96,11 +102,11 @@ void encryptFile(const string &inputFileName, const string &authInputFileName,
 bool decryptFile(const string &inputFileName, const string &authInputFileName, 
         const string &outputFileName, SecByteBlock &key, byte *ivBytes);
 
-// Message Authentication Codes----------------------------------------------
-// Compute MACs from a single file
+// Hashing for verification-------------------------------------------------------------------------
+// Compute hashes from a single file
 void createHashFromFile(const string &inputFileName, const string &outputFileName);
 bool verifyHashFromFile(const string &inputFileName, const string &hashInputFileName);
-// Compute MACs from multiple files
+// Compute hashes from multiple files
 void createHashFromFiles(const vector<string> &inputFileNames, const string &outputFileName);
 bool verifyHashFromFiles(const vector<string> &inputFileNames, const string &hashInputFileName);
 
