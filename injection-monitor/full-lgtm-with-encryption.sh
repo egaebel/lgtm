@@ -130,7 +130,7 @@ monitor_mode () {
 }
 
 first_message () {
-    echo "Sending first message............................................"
+    echo "\nSending first message............................................"
     rm .lgtm-begin-protocol
     # Setup Injection mode
     injection_mode
@@ -143,7 +143,7 @@ first_message () {
 }
 
 reply_to_first_message () {
-    echo "Receiving and replying to first message.........................."
+    echo "\nReceiving and replying to first message.........................."
     sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "read_mpdu_file .lgtm-begin-monitor .lgtm-first-message, exit"
     file_size=$(wc -c .lgtm-first-message)
     # TODO: Verify that this syntax is correct....
@@ -161,7 +161,7 @@ reply_to_first_message () {
 }
 
 second_message () {
-    echo "Sending second message..........................................."
+    echo "\nSending second message..........................................."
     # Setup Monitor mode
     monitor_mode
 
@@ -204,7 +204,7 @@ second_message () {
 }
 
 reply_to_second_message () {
-    echo "Receiving and replying to second message........................."
+    echo "\nReceiving and replying to second message........................."
     # Setup Monitor mode
     monitor_mode
     # Listen for reply to first message
@@ -246,7 +246,7 @@ reply_to_second_message () {
 }
 
 third_message () {
-    echo "Receiving second message reply and sending third message........."
+    echo "\nReceiving second message reply and sending third message........."
     # Setup Monitor mode
     monitor_mode
     # Listen for reply to first message
@@ -297,7 +297,7 @@ third_message () {
 }
 
 reply_to_third_message () {
-    echo "Receiving second message reply and sending third message........."
+    echo "\nReceiving second message reply and sending third message........."
     # Setup Monitor mode
     monitor_mode
     # Listen for reply to first message
@@ -339,7 +339,7 @@ reply_to_third_message () {
 }
 
 verify_reply_to_third_message () {
-    echo "Receiving and verifying third message reply......................"
+    echo "\nReceiving and verifying third message reply......................"
     # Setup Monitor mode
     monitor_mode
     # Listen for reply to first message
