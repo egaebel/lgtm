@@ -168,3 +168,7 @@ cryptography/.lgtm-test-third-message-reply
 cryptography/.LGTM-HASH-TEST
 cryptography/.lgtm-facial-recognition-params-with-hash
 cryptography/.lgtm-received-facial-recognition-params-with-hash--decrypted
+injection-monitor/.lgtm-crypto-params-first-message
+injection-monitor/.lgtm-crypto-params-first-message-random-number
+injection-monitor/.lgtm-crypto-params-private-key
+injection-monitor/.lgtm-crypto-params-public-key
