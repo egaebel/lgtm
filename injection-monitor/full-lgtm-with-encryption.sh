@@ -129,13 +129,255 @@ monitor_mode () {
     echo "Monitor mode active!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 }
 
+first_message () {
+    echo "Sending first message............................................"
+    rm .lgtm-begin-protocol
+    # Setup Injection mode
+    injection_mode
+    # Sleep for 5 seconds to ensure other party has switched into monitor mode....
+    sleep $SWITCH_WAIT_TIME
+    ../cryptography/lgtm_crypto_runner first-message
+    dd if=.lgtm-crypto-params-first-message of=.lgtm-begin-protocol bs=1
+    echo $LGTM_BEGIN_TOKEN >> .lgtm-begin-protocol
+    ./packets-from-file/packets_from_file .lgtm-begin-protocol 1 $PACKET_DELAY
+}
+
+reply_to_first_message () {
+    echo "Receiving and replying to first message.........................."
+    sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "read_mpdu_file .lgtm-begin-monitor .lgtm-first-message, exit"
+    file_size=$(wc -c .lgtm-first-message)
+    # TODO: Verify that this syntax is correct....
+    bytes_to_copy=$((($file_size - ${#LGTM_BEGIN_TOKEN})))
+    # Trim off the $LGTM_BEGIN_TOKEN at the end of the file
+    dd if=.lgtm-first-message of=.lgtm-crypto-params-first-message bs=1 count=$bytes_to_copy
+    ../cryptography/lgtm_crypto_runner first-message-reply
+    # Attach footer to crypto params message
+    echo $FIRST_MESSAGE_REPLY_FOOTER >> .lgtm-crypto-params-first-message-reply
+    # Setup Injection mode
+    injection_mode
+    # Sleep to ensure other party has switched into monitor mode....
+    sleep $SWITCH_WAIT_TIME
+    ./packets-from-file/packets_from_file .lgtm-crypto-params-first-message-reply
+}
+
+second_message () {
+    echo "Sending second message..........................................."
+    # Setup Monitor mode
+    monitor_mode
+
+    # Listen for reply to first message
+    rm .lgtm-monitor-first-message-reply.dat
+    ./log-to-file/log_to_file .lgtm-monitor-first-message-reply.dat &
+    lgtm_ack=0
+    # Figure this out to use with sudo -u below
+    logged_on_user=$(who | head -n1 | awk '{print $1;}')
+    while [ $lgtm_ack -lt 1 ]; do
+        # Count the file size in bytes using wc, and cut off the file name from the output (only want the number!)
+        file_size=$(wc --bytes .lgtm-monitor-first-message-reply.dat | cut -d ' ' -f 1)
+        echo file size: $file_size
+        if [ "${file_size:0}" -gt 0 ]; then
+            # Extract data from mpdus in packets
+            echo "Extracting data from received packets............................"
+            # Extract data on facial recognition params from received data
+            sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "read_mpdu_file .lgtm-monitor-first-message-reply.dat .lgtm-first-message-reply, exit"
+            echo "Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+            # Receive ack + params
+            lgtm_ack=$(cat .lgtm-first-message-reply | grep $FIRST_MESSAGE_REPLY_FOOTER | wc -l)
+        fi
+        sleep 3
+    done
+    pkill log_to_file
+    chmod 644 .lgtm-monitor-first-message-reply.dat
+
+    # Process crypto parameters and prepare second message
+    bytes_to_copy=$((($file_size - ${#FIRST_MESSAGE_REPLY_FOOTER})))
+    dd if=.lgtm-first-message-reply of=.lgtm-crypto-params-first-message-reply bs=1 count=bytes_to_copy
+    ../cryptography/lgtm_crypto_runner second-message
+
+    # Setup injection mode
+    injection_mode
+    # Sleep to allow other user to switch over into monitor mode
+    sleep $SWITCH_WAIT_TIME
+    # Attach footer to crypto params message
+    echo $SECOND_MESSAGE_FOOTER >> .lgtm-crypto-params-second-message
+    ./packets-from-file/packets_from_file .lgtm-crypto-params-second-message
+}
+
+reply_to_second_message () {
+    echo "Receiving and replying to second message........................."
+    # Setup Monitor mode
+    monitor_mode
+    # Listen for reply to first message
+    rm .lgtm-monitor-second-message.dat
+    ./log-to-file/log_to_file .lgtm-monitor-second-message.dat &
+    lgtm_ack=0
+    # Figure this out to use with sudo -u below
+    logged_on_user=$(who | head -n1 | awk '{print $1;}')
+    while [ $lgtm_ack -lt 1 ]; do
+        # Count the file size in bytes using wc, and cut off the file name from the output (only want the number!)
+        file_size=$(wc --bytes .lgtm-monitor-second-message.dat | cut -d ' ' -f 1)
+        echo file size: $file_size
+        if [ "${file_size:0}" -gt 0 ]; then
+            # Extract data from mpdus in packets
+            echo "Extracting data from received packets............................"
+            # Extract data on facial recognition params from received data
+            sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "read_mpdu_file .lgtm-monitor-second-message.dat .lgtm-second-message, exit"
+            echo "Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+            # Receive ack + params
+            lgtm_ack=$(cat .lgtm-second-message | grep $SECOND_MESSAGE_FOOTER | wc -l)
+        fi
+        sleep 3
+    done    
+    pkill log_to_file
+    chmod 644 .lgtm-monitor-second-message.dat
+
+    # Process crypto parameters and prepare second message
+    bytes_to_copy=$((($file_size - ${#SECOND_MESSAGE_FOOTER})))
+    dd if=.lgtm-second-message of=.lgtm-crypto-params-second-message bs=1 count=bytes_to_copy
+    ../cryptography/lgtm_crypto_runner second-message-reply
+
+    # Setup injection mode
+    injection_mode
+    # Sleep to allow other user to switch over into monitor mode
+    sleep $SWITCH_WAIT_TIME
+    # Attach footer to crypto params message
+    echo $SECOND_MESSAGE_FOOTER >> .lgtm-crypto-params-second-message-reply
+    ./packets-from-file/packets_from_file .lgtm-crypto-params-second-message-reply
+}
+
+third_message () {
+    echo "Receiving second message reply and sending third message........."
+    # Setup Monitor mode
+    monitor_mode
+    # Listen for reply to first message
+    rm .lgtm-monitor-second-message-reply.dat
+    ./log-to-file/log_to_file .lgtm-monitor-second-message-reply.dat &
+    lgtm_ack=0
+    # Figure this out to use with sudo -u below
+    logged_on_user=$(who | head -n1 | awk '{print $1;}')
+    while [ $lgtm_ack -lt 1 ]; do
+        # Count the file size in bytes using wc, and cut off the file name from the output (only want the number!)
+        file_size=$(wc --bytes .lgtm-monitor-second-message-reply.dat | cut -d ' ' -f 1)
+        echo file size: $file_size
+        if [ "${file_size:0}" -gt 0 ]; then
+            # Extract data from mpdus in packets
+            echo "Extracting data from received packets............................"
+            # Extract data on facial recognition params from received data
+            sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "read_mpdu_file .lgtm-monitor-second-message-reply.dat .lgtm-second-message-reply, exit"
+            echo "Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+            # Receive ack + params
+            lgtm_ack=$(cat .lgtm-second-message-reply | grep $SECOND_MESSAGE_REPLY_FOOTER | wc -l)
+        fi
+        sleep 3
+    done  
+    pkill log_to_file
+    chmod 644 .lgtm-monitor-second-message-reply.dat  
+
+
+    # Process crypto parameters and prepare second message
+    bytes_to_copy=$((($file_size - ${#SECOND_MESSAGE_REPLY_FOOTER})))
+    dd if=.lgtm-second-message-reply of=.lgtm-crypto-params-second-message-reply bs=1 count=bytes_to_copy
+
+    # Setup facial-recognition-params
+    rm .lgtm-facial-recognition-params
+    echo $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
+    dd if=$facial_recognition_file of=.lgtm-facial-recognition-params seek=${#FACIAL_RECOGNITION_HEADER} bs=1
+    echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
+
+    # Construct third-message with crypto etc
+    ../cryptography/lgtm_crypto_runner third-message
+
+    # Setup injection mode
+    injection_mode
+    # Sleep to allow other user to switch over into monitor mode
+    sleep $SWITCH_WAIT_TIME
+    # Attach footer to crypto params message
+    echo $THIRD_MESSAGE_FOOTER >> .lgtm-crypto-params-third-message
+    ./packets-from-file/packets_from_file .lgtm-crypto-params-third-message
+}
+
+reply_to_third_message () {
+    echo "Receiving second message reply and sending third message........."
+    # Setup Monitor mode
+    monitor_mode
+    # Listen for reply to first message
+    rm .lgtm-monitor-third-message.dat
+    ./log-to-file/log_to_file .lgtm-monitor-third-message.dat &
+    lgtm_ack=0
+    # Figure this out to use with sudo -u below
+    logged_on_user=$(who | head -n1 | awk '{print $1;}')
+    while [ $lgtm_ack -lt 1 ]; do
+        # Count the file size in bytes using wc, and cut off the file name from the output (only want the number!)
+        file_size=$(wc --bytes .lgtm-monitor-third-message.dat | cut -d ' ' -f 1)
+        echo file size: $file_size
+        if [ "${file_size:0}" -gt 0 ]; then
+            # Extract data from mpdus in packets
+            echo "Extracting data from received packets............................"
+            # Extract data on facial recognition params from received data
+            sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "read_mpdu_file .lgtm-monitor-third-message.dat .lgtm-third-message, exit"
+            echo "Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+            # Receive ack + params
+            lgtm_ack=$(cat .lgtm-third-message | grep $THIRD_MESSAGE_FOOTER | wc -l)
+        fi
+        sleep 3
+    done    
+    pkill log_to_file
+    chmod 644 .lgtm-monitor-third-message.dat
+
+    # Process crypto parameters and prepare second message
+    bytes_to_copy=$((($file_size - ${#THIRD_MESSAGE_FOOTER})))
+    dd if=.lgtm-third-message of=.lgtm-crypto-params-third-message bs=1 count=bytes_to_copy
+    ../cryptography/lgtm_crypto_runner third-message-reply
+
+    # Setup injection mode
+    injection_mode
+    # Sleep to allow other user to switch over into monitor mode
+    sleep $SWITCH_WAIT_TIME
+    # Attach footer to crypto params message
+    echo $THIRD_MESSAGE_FOOTER >> .lgtm-crypto-params-third-message-reply
+    ./packets-from-file/packets_from_file .lgtm-crypto-params-third-message-reply
+}
+
+verify_reply_to_third_message () {
+    echo "Receiving and verifying third message reply......................"
+    # Setup Monitor mode
+    monitor_mode
+    # Listen for reply to first message
+    rm .lgtm-monitor-third-message-reply.dat
+    lgtm_ack=0
+    # Figure this out to use with sudo -u below
+    logged_on_user=$(who | head -n1 | awk '{print $1;}')
+    while [ $lgtm_ack -lt 1 ]; do
+        # Count the file size in bytes using wc, and cut off the file name from the output (only want the number!)
+        file_size=$(wc --bytes .lgtm-monitor-third-message-reply.dat | cut -d ' ' -f 1)
+        echo file size: $file_size
+        if [ "${file_size:0}" -gt 0 ]; then
+            # Extract data from mpdus in packets
+            echo "Extracting data from received packets............................"
+            # Extract data on facial recognition params from received data
+            sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "read_mpdu_file .lgtm-monitor-third-message-reply.dat .lgtm-third-message-reply, exit"
+            echo "Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+            # Receive ack + params
+            lgtm_ack=$(cat .lgtm-third-message-reply | grep $THIRD_MESSAGE_REPLY_FOOTER | wc -l)
+        fi
+        sleep 3
+    done    
+    pkill log_to_file
+    chmod 644 .lgtm-monitor-third-message-reply.dat
+
+    # Process crypto parameters and prepare second message
+    bytes_to_copy=$((($file_size - ${#THIRD_MESSAGE_REPLY_FOOTER})))
+    dd if=.lgtm-third-message-reply of=.lgtm-crypto-params-third-message-reply bs=1 count=bytes_to_copy
+    ../cryptography/lgtm_crypto_runner decrypt-third-message-reply
+}
+
 send_facial_recognition_params () {
     echo "Sending 'facial recognition params'.............................."
     # Setup Injection mode
     injection_mode
     # Sleep for 5 seconds to ensure other party has switched into monitor mode....
     sleep $SWITCH_WAIT_TIME
-    # Send acknowledgement + facial recognition params, TODO: later this will include a public key
+    # Send acknowledgment + facial recognition params, TODO: later this will include a public key
     # Send facial recognition params
     rm .lgtm-facial-recognition-params
     echo $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
@@ -167,6 +409,8 @@ receive_facial_recognition_params () {
             # Extract data from mpdus in packets
             echo "Extracting data from received packets............................"
             # Extract data on facial recognition params from received data
+            # TODO: Change command line args
+            # "read_mpdu_file .lgtm-begin-monitor some_output_file.txt, exit"
             sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('read_mpdu_file.m'), exit"    
             echo "Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
             # Receive ack + params
@@ -226,6 +470,10 @@ compare_wireless_location_with_face_location () {
     cd $old_dir
 }
 
+clean_up_old_files () {
+    rm .lgtm-crypto-params-* .lgtm-facial-recognition-params-* .lgtm-received-facial-recognition-params* .lgtm-test-* 2>/dev/null
+}
+
 # Main code-----------------------------------------------------------------------------------------
 pkill log_to_file
 monitor_mode
@@ -252,19 +500,18 @@ if [[ $input == 'l' ]]; then
     echo "Initiating LGTM protocol........................................."
     pkill log_to_file
 
-    # Sleep to ensure other party has switched into monitor mode
-    sleep $SWITCH_WAIT_TIME
+    # Send first message
+    first_message
 
-    # Setup Injection mode
-    injection_mode
-
-    # Send "begin-lgtm-protocol", TODO: later this will include a public key
-    rm .lgtm-begin-protocol
-    echo $LGTM_BEGIN_TOKEN > .lgtm-begin-protocol
-    ./packets-from-file/packets_from_file .lgtm-begin-protocol 1 $PACKET_DELAY
+    # Receive Message 1 reply and send second message
+    second_message
+ 
+    # Receive Message 2 reply and send third message (this includes the facial recognition params)
+    third_message
     
-    receive_facial_recognition_params
-    send_facial_recognition_params
+    # Receive Message 3 reply and simply verify the contents (this includes the received facial recognition params)
+    verify_reply_to_third_message
+
     localization_start_time=$(date +%s)
     localize_wireless_signal
     localization_end_time=$(date +%s)
@@ -281,8 +528,15 @@ fi
 if [ $begin_lgtm -gt 0 ]; then
     echo "Other party initiated LGTM protocol.............................."
     
-    send_facial_recognition_params
-    receive_facial_recognition_params
+    # Receive Message 1 and send reply
+    reply_to_first_message
+
+    # Receive Message 2 and send reply
+    reply_to_second_message
+
+    # Receive Message 3 and send reply (these both include facial recognition params)
+    reply_to_third_message
+
     localization_start_time=$(date +%s)
     localize_wireless_signal
     localization_end_time=$(date +%s)
