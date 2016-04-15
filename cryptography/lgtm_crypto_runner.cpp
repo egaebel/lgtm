@@ -23,6 +23,9 @@
 
 // g++ -std=c++11 -g3 -ggdb -O0 -I . lgtm_crypto.cpp lgtm_crypto_runner.cpp ../../cryptopp/libcryptopp.a -o lgtm_crypto_runner -lcryptopp -static -lpthread
 
+// Uncomment to enable test running
+// #define TESTING
+
 #include "lgtm_crypto_runner.hpp"
 
 //~Constants----------------------------------------------------------------------------------------
@@ -500,7 +503,7 @@ bool replyToThirdMessage() {
 }
 
 /**
- * 
+ * Decrypt and verify the third message reply.
  */
 bool decryptThirdMessageReply() {
     cout << "Decrypt Third Message Reply" << endl;
@@ -555,7 +558,7 @@ bool decryptThirdMessageReply() {
 }
 
 //~Main function------------------------------------------------------------------------------------
-/*
+#ifndef TESTING
 int main(int argc, char *argv[]) {
 
     if (argc != 2) {
@@ -564,23 +567,30 @@ int main(int argc, char *argv[]) {
     if (strncmp(argv[0], "first-message", 13)) {
         firstMessage();
     } else if (strncmp(argv[0], "first-message-reply", 19)) {
-        replyToFirstMessage();
+        if (!replyToFirstMessage()) {
+            return 1;
+        }
     } else if (strncmp(argv[0], "second-message", 14)) {
-        secondMessage();
+        if (!secondMessage()) {
+            return 1;
+        }
     } else if (strncmp(argv[0], "second-message-reply", 20)) {
-        replyToSecondMessage();
+        if (!replyToSecondMessage()) {
+            return 1;
+        }
     } else if (strncmp(argv[0], "third-message", 13)) {
-        thirdMessage();
+        if (!thirdMessage()) {
+            return 1;
+        }
     } else if (strncmp(argv[0], "third-message-reply", 19)) {
-        replyToThirdMessage();
+        if (!replyToThirdMessage()) {
+            return 1;
+        }
     } else if (strncmp(argv[0], "decrypt-third-message-reply", 27)) {
-        decryptThirdMessageReply();
+        if (!decryptThirdMessageReply()) {
+            return 1;
+        }
     }
-    // First message
-    // Reply to first message
-    // Second message
-    // Reply to second message
-    // Encrypt
     return 0;
 }
-*/
+#endif
