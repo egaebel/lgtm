@@ -138,7 +138,8 @@ monitor_mode () {
 }
 
 first_message () {
-    echo "\nSending first message............................................"
+    echo
+    echo "Sending first message............................................"
     rm .lgtm-begin-protocol
     # Setup Injection mode
     injection_mode
@@ -151,7 +152,8 @@ first_message () {
 }
 
 reply_to_first_message () {
-    echo "\nReceiving and replying to first message.........................."
+    echo
+    echo "Receiving and replying to first message.........................."
     sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "read_mpdu_file .lgtm-begin-monitor .lgtm-first-message, exit"
     file_size=$(wc -c .lgtm-first-message)
     # TODO: Verify that this syntax is correct....
@@ -169,7 +171,8 @@ reply_to_first_message () {
 }
 
 second_message () {
-    echo "\nSending second message..........................................."
+    echo
+    echo "Sending second message..........................................."
     # Setup Monitor mode
     monitor_mode
 
@@ -199,7 +202,7 @@ second_message () {
 
     # Process crypto parameters and prepare second message
     bytes_to_copy=$((($file_size - ${#FIRST_MESSAGE_REPLY_FOOTER})))
-    dd if=.lgtm-first-message-reply of=.lgtm-crypto-params-first-message-reply bs=1 count=bytes_to_copy
+    dd if=.lgtm-first-message-reply of=.lgtm-crypto-params-first-message-reply bs=1 count=$bytes_to_copy
     ../cryptography/lgtm_crypto_runner second-message
 
     # Setup injection mode
@@ -212,10 +215,11 @@ second_message () {
 }
 
 reply_to_second_message () {
-    echo "\nReceiving and replying to second message........................."
+    echo
+    echo "Receiving and replying to second message........................."
     # Setup Monitor mode
     monitor_mode
-    # Listen for reply to first message
+    # Listen for second message
     rm .lgtm-monitor-second-message.dat
     ./log-to-file/log_to_file .lgtm-monitor-second-message.dat &
     lgtm_ack=0
@@ -241,7 +245,7 @@ reply_to_second_message () {
 
     # Process crypto parameters and prepare second message
     bytes_to_copy=$((($file_size - ${#SECOND_MESSAGE_FOOTER})))
-    dd if=.lgtm-second-message of=.lgtm-crypto-params-second-message bs=1 count=bytes_to_copy
+    dd if=.lgtm-second-message of=.lgtm-crypto-params-second-message bs=1 count=$bytes_to_copy
     ../cryptography/lgtm_crypto_runner second-message-reply
 
     # Setup injection mode
@@ -254,10 +258,11 @@ reply_to_second_message () {
 }
 
 third_message () {
-    echo "\nReceiving second message reply and sending third message........."
+    echo
+    echo "Receiving second message reply and sending third message........"
     # Setup Monitor mode
     monitor_mode
-    # Listen for reply to first message
+    # Listen for reply to third message
     rm .lgtm-monitor-second-message-reply.dat
     ./log-to-file/log_to_file .lgtm-monitor-second-message-reply.dat &
     lgtm_ack=0
@@ -284,7 +289,7 @@ third_message () {
 
     # Process crypto parameters and prepare second message
     bytes_to_copy=$((($file_size - ${#SECOND_MESSAGE_REPLY_FOOTER})))
-    dd if=.lgtm-second-message-reply of=.lgtm-crypto-params-second-message-reply bs=1 count=bytes_to_copy
+    dd if=.lgtm-second-message-reply of=.lgtm-crypto-params-second-message-reply bs=1 count=$bytes_to_copy
 
     # Setup facial-recognition-params
     rm .lgtm-facial-recognition-params
@@ -305,10 +310,11 @@ third_message () {
 }
 
 reply_to_third_message () {
-    echo "\nReceiving second message reply and sending third message........."
+    echo
+    echo "Receiving third message and replying............................"
     # Setup Monitor mode
     monitor_mode
-    # Listen for reply to first message
+    # Listen for reply to third message
     rm .lgtm-monitor-third-message.dat
     ./log-to-file/log_to_file .lgtm-monitor-third-message.dat &
     lgtm_ack=0
@@ -334,7 +340,7 @@ reply_to_third_message () {
 
     # Process crypto parameters and prepare second message
     bytes_to_copy=$((($file_size - ${#THIRD_MESSAGE_FOOTER})))
-    dd if=.lgtm-third-message of=.lgtm-crypto-params-third-message bs=1 count=bytes_to_copy
+    dd if=.lgtm-third-message of=.lgtm-crypto-params-third-message bs=1 count=$bytes_to_copy
     ../cryptography/lgtm_crypto_runner third-message-reply
 
     # Setup injection mode
@@ -347,7 +353,8 @@ reply_to_third_message () {
 }
 
 verify_reply_to_third_message () {
-    echo "\nReceiving and verifying third message reply......................"
+    echo
+    echo "Receiving and verifying third message reply......................"
     # Setup Monitor mode
     monitor_mode
     # Listen for reply to first message
@@ -375,7 +382,7 @@ verify_reply_to_third_message () {
 
     # Process crypto parameters and prepare second message
     bytes_to_copy=$((($file_size - ${#THIRD_MESSAGE_REPLY_FOOTER})))
-    dd if=.lgtm-third-message-reply of=.lgtm-crypto-params-third-message-reply bs=1 count=bytes_to_copy
+    dd if=.lgtm-third-message-reply of=.lgtm-crypto-params-third-message-reply bs=1 count=$bytes_to_copy
     ../cryptography/lgtm_crypto_runner decrypt-third-message-reply
 }
 
