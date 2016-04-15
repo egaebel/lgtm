@@ -39,6 +39,14 @@ LGTM_BEGIN_TOKEN="lgtm-begin-protocol"
 FACIAL_RECOGNITION_HEADER="facial-recognition-params"
 FACIAL_RECOGNITION_FOOTER="facial-recognition-params-finished"
 
+# LGTM Magic Message String Constants---------------------------------------------------------------
+FIRST_MESSAGE_FOOTER="lgtm-first-message-footer"
+FIRST_MESSAGE_REPLY_FOOTER="lgtm-first-message-reply-footer"
+SECOND_MESSAGE_FOOTER="lgtm-second-message-footer"
+SECOND_MESSAGE_REPLY_FOOTER="lgtm-second-message-reply-footer"
+THIRD_MESSAGE_FOOTER="lgtm-third-message-footer"
+THIRD_MESSAGE_REPLY_FOOTER="lgtm-third-message-reply-footer"
+
 # Functions-----------------------------------------------------------------------------------------
 injection_mode () {
     echo "Switching $wlan_interface to inject........................................"
