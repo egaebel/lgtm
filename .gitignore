@@ -167,3 +167,4 @@ cryptography/.lgtm-test-second-message-reply
 cryptography/.lgtm-test-third-message-reply
 cryptography/.LGTM-HASH-TEST
 cryptography/.lgtm-facial-recognition-params-with-hash
+cryptography/.lgtm-received-facial-recognition-params-with-hash--decrypted
