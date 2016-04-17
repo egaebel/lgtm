@@ -37,7 +37,6 @@ def parse_spotfi_sampling_output(folder_name):
 
     # Iterate over all files in the passed directory
     # Don't stick anything you don't want touched in there....
-    print("top-level Parsing for loop")
     for sample_file_name in os.listdir(folder_name):
         sample_file_name = os.path.join(folder_name, sample_file_name)
         if not os.path.isdir(sample_file_name):
@@ -198,9 +197,10 @@ def compare_true_and_measured_angles(distance, true_angle, top_aoas):
 # If the angle parameter is given only the entries under ANGLE_KEY which match
 #       the given angle will be considered. 
 #       The angle argument to this function should be an integer.
-def error_rate(data_list, distance=None, angle=None):
+def error_rate(data_list, distance=None, angle=None, laptop_id=None):
     total_entries_considered = 0
-    complete_error_count = 0
+    complete_top_3_error_count = 0
+    complete_top_5_error_count = 0
     top_correct_count = [0 for x in range(5)]
     for entry in data_list:
         # Skip this entry if we care about the angle and it doesn't match up
@@ -209,10 +209,21 @@ def error_rate(data_list, distance=None, angle=None):
         # Skip this entry if we care about distance and it doesn't match up
         if distance is not None and int(entry[DISTANCE_KEY]) != distance:
             continue
+        # Skip this entry if we care about laptop id and it doesn't match up
+        if laptop_id is not None and int(entry[LAPTOP_ID_KEY]) != laptop_id:
+           continue
 
         if len(entry[AOA_MATCHES_KEY]) == 0:
-            complete_error_count += 1
+            complete_top_3_error_count += 1
+            complete_top_5_error_count += 1
         else:
+            # Add to top_3_error_count if there are no top angle choices in the top 3 indices
+            # I'm comparing to indices, so I need to use the >= for the 3
+            if min(entry[AOA_MATCHES_KEY], key=lambda x: x[TOP_AOA_INDEX_KEY])[TOP_AOA_INDEX_KEY] >= 3:
+                complete_top_3_error_count += 1
+
+            # Count up the number of correct matches in each position and 
+            #	 include the positions before (top 1, top 2, top 3, etc)
             for aoa_match in entry[AOA_MATCHES_KEY]:
                 entry_number = aoa_match[TOP_AOA_INDEX_KEY]
                 for i in range(entry_number, len(top_correct_count)):
@@ -220,19 +231,24 @@ def error_rate(data_list, distance=None, angle=None):
                 break;
 
         total_entries_considered += 1
+
+    # Convert counts for each position to percent correct and report
     for i in range(len(top_correct_count)):
         num_in_top_i = top_correct_count[i]
         percent_correct = num_in_top_i / total_entries_considered * 100
         # Add one to convert from zero-indexing
         print("Percent correct in top %d: %g" % ((i + 1), percent_correct))
+
+    # Report top level statistics
     print("Total number of samples: %d" % total_entries_considered)
-    print("Total number of errors (No elements in top 5): %d" % complete_error_count)
+    print("Total number of errors for top 3 (No elements in top 3): %d" % complete_top_3_error_count)
+    print("Total number of errors for top 5 (No elements in top 5): %d" % complete_top_5_error_count)
 
 # Compute the mean error in data_list
 # If distance and/or angle are passed then only entries matching distance and/or angle
 #       will be considered
 # Returns the mean error
-def mean_error(data_list, distance=None, angle=None):
+def mean_error(data_list, distance=None, angle=None, laptop_id=None):
     total_entries_considered = 0
     error_sum = 0
     for entry in data_list:
@@ -241,6 +257,9 @@ def mean_error(data_list, distance=None, angle=None):
             continue
         # Skip this entry if we care about distance and it doesn't match up
         if distance is not None and int(entry[DISTANCE_KEY]) != distance:
+            continue
+        # Skip this entry if we care about laptop id and it doesn't match up
+        if laptop_id is not None and int(entry[LAPTOP_ID_KEY]) != laptop_id:
             continue
 
         top_aoa = entry[TOP_AOAS_LIST_KEY][0]
@@ -264,7 +283,7 @@ def mean_error(data_list, distance=None, angle=None):
 # If distance and/or angle are passed then only entries matching distance and/or angle
 #       will be considered
 # Returns the median error
-def median_error(data_list, distance=None, angle=None):
+def median_error(data_list, distance=None, angle=None, laptop_id=None):
     errors = list()
     for entry in data_list:
         # Skip this entry if we care about the angle and it doesn't match up
@@ -272,6 +291,9 @@ def median_error(data_list, distance=None, angle=None):
             continue
         # Skip this entry if we care about distance and it doesn't match up
         if distance is not None and int(entry[DISTANCE_KEY]) != distance:
+            continue
+        # Skip this entry if we care about laptop id and it doesn't match up
+        if laptop_id is not None and int(entry[LAPTOP_ID_KEY]) != laptop_id:
             continue
 
         top_aoa = entry[TOP_AOAS_LIST_KEY][0]
@@ -292,7 +314,7 @@ def median_error(data_list, distance=None, angle=None):
 # If distance and/or angle are passed then only entries matching distance and/or angle
 #       will be considered
 # Returns the min and max errors, in that order
-def min_max_error(data_list, distance=None, angle=None):
+def min_max_error(data_list, distance=None, angle=None, laptop_id=None):
     errors = list()
     for entry in data_list:
         # Skip this entry if we care about the angle and it doesn't match up
@@ -300,6 +322,9 @@ def min_max_error(data_list, distance=None, angle=None):
             continue
         # Skip this entry if we care about distance and it doesn't match up
         if distance is not None and int(entry[DISTANCE_KEY]) != distance:
+            continue
+        # Skip this entry if we care about laptop id and it doesn't match up
+        if laptop_id is not None and int(entry[LAPTOP_ID_KEY]) != laptop_id:
             continue
 
         top_aoa = entry[TOP_AOAS_LIST_KEY][0]
@@ -319,7 +344,7 @@ def min_max_error(data_list, distance=None, angle=None):
 
 # Main method---------------------------------------------------------------------------------------
 if __name__ == '__main__':
-    data_files_data = parse_spotfi_sampling_output('fully-parsed-lgtm-monitors')
+    data_files_data = parse_spotfi_sampling_output('lgtm-distance-angle-experiments-output-data')
     aoa_experiment_comparison_data = list()
     # Loop over data files
     for data_file_key in sorted(data_files_data):
@@ -336,6 +361,7 @@ if __name__ == '__main__':
             aoa_matches = dict()
             aoa_matches[DISTANCE_KEY] = file_name_data[DISTANCE_KEY]
             aoa_matches[ANGLE_KEY] = file_name_data[ANGLE_KEY]
+            aoa_matches[LAPTOP_ID_KEY] = file_name_data[LAPTOP_ID_KEY]
             aoa_matches[AOA_MATCHES_KEY] = matching_indices
             aoa_matches[TOP_AOAS_LIST_KEY] = top_aoas
 
@@ -349,6 +375,26 @@ if __name__ == '__main__':
     median_error(aoa_experiment_comparison_data)
     print("")
     min_max_error(aoa_experiment_comparison_data)
+    print("")
+
+    print("\n\nLaptop 1 Statistics: ")
+    error_rate(aoa_experiment_comparison_data, laptop_id=1)
+    print("")
+    mean_error(aoa_experiment_comparison_data, laptop_id=1)
+    print("")
+    median_error(aoa_experiment_comparison_data, laptop_id=1)
+    print("")
+    min_max_error(aoa_experiment_comparison_data, laptop_id=1)
+    print("")
+
+    print("\n\nLaptop 2 Statistics: ")
+    error_rate(aoa_experiment_comparison_data, laptop_id=2)
+    print("")
+    mean_error(aoa_experiment_comparison_data, laptop_id=2)
+    print("")
+    median_error(aoa_experiment_comparison_data, laptop_id=2)
+    print("")
+    min_max_error(aoa_experiment_comparison_data, laptop_id=2)
     print("")
 
     print("\n\n1m Distance Level Statistics: ")
