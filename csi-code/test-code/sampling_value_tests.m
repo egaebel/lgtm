@@ -30,7 +30,8 @@ function sampling_value_tests(file_chunk)
     % Paths for the csitool functions provided
     path('../../../linux-80211n-csitool-supplementary/matlab', path);
     path('..', path);
-    path('../../injection-monitor/experimental-data/lgtm-monitor-data', path);
+    path('../../experimental-data/lgtm-distance-angle-experiments-monitor-data', path);
+
     %{
     data_files = {...
         'lgtm-monitor.dat--laptop-1--test-1', ...
