@@ -1,0 +1,5387 @@
+Running on data file: lgtm-monitor.dat--laptop-1--test-1
+Have CSI for 1025 packets
+Sampling results: 
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   -6.5613
+   26.5988
+  -42.7413
+   -6.5613
+   26.5988
+
+
+
+Sampling with:
+number of packets = 750
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   -6.5613
+   26.5988
+  -42.7413
+   -6.5613
+   26.5988
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   -6.5630
+   26.5886
+  -42.6983
+   -6.5630
+   26.5886
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   -6.5246
+   26.6311
+  -42.6680
+   -6.5246
+   26.6311
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   -6.6061
+   26.6458
+  -42.7083
+   -6.6061
+   26.6458
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   26.6327
+   -6.5306
+  -42.6042
+   78.8000
+   26.6383
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   26.6667
+  -42.7083
+   -6.3913
+   83.0000
+   26.6667
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   -6.5000
+  -42.5000
+   27.0909
+   -6.5833
+  -42.5833
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 525
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -11.0000
+  -49.0000
+   22.0000
+   69.5928
+   22.0000
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 775
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   21.2227
+  -11.6154
+  -49.8699
+   68.1260
+   21.2227
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 925
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+  -10.1846
+   22.7077
+  -47.8154
+   71.6935
+   22.1613
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 975
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+    2.2041
+  -31.6531
+   36.8800
+    2.2041
+  -31.6531
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1000
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+    2.9200
+  -30.9600
+   37.5385
+    2.9200
+  -30.9600
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1015
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+  -29.2222
+    6.3636
+   42.6364
+  -29.2222
+  -61.5000
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 500
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   26.8473
+  -42.3695
+   -6.2550
+   26.8610
+  -42.3554
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 250
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -42.0769
+   27.0000
+   -6.0000
+  -42.0772
+   27.0000
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 100
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    -6
+    27
+   -42
+    -6
+    27
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 50
+Top AoAs: 
+
+output_top_aoas =
+
+   -6.0000
+   27.0000
+  -42.0000
+   -6.0000
+   27.0000
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 25
+Top AoAs: 
+
+output_top_aoas =
+
+   -6.0000
+   27.0000
+  -42.0000
+   -6.0000
+   27.0000
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 10
+Top AoAs: 
+
+output_top_aoas =
+
+  -42.0000
+   27.0000
+   -6.0000
+   -6.0000
+  -42.0000
+
+
+
+Chunk and vote results: 
+Chunking in groups of 200
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+    27     1
+   -29     1
+    -3     1
+     5     1
+   -28     1
+   -10     1
+
+AoA selected by vote was: 27
+
+Chunking in groups of 100
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+    27     1
+   -29     4
+    -3     1
+     5     3
+   -28     2
+   -10     3
+    -6     1
+     1     1
+    -9     1
+
+AoA selected by vote was: -29
+
+Chunking in groups of 50
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+    27     1
+   -29     7
+    -3     1
+     5     5
+   -28     2
+   -10     5
+    -6     2
+     1     1
+    -9     2
+    -5     1
+   -47     1
+    40     1
+     2     1
+   -11     3
+     4     1
+    41     1
+   -12     1
+    -7     1
+    -4     1
+
+AoA selected by vote was: -29
+
+Chunking in groups of 10
+AoAs and votes: 
+
+top_aoas =
+
+    27     1
+   -29    26
+    -3     2
+     5     8
+   -28     2
+   -10    10
+    -6     3
+     1     2
+    -9     3
+    -5     1
+   -47     1
+    40     1
+     2     1
+   -11    17
+     4     7
+    41     3
+   -12     2
+    -7     4
+    -4     1
+   -42     1
+     8     1
+     6     1
+   -48     3
+    69     2
+    73     2
+   -54     1
+    22     2
+    24     1
+    23     2
+   -30     2
+   -31     1
+    70     4
+     3     4
+    16     2
+    71     1
+   -13     2
+   -49     2
+    21     4
+    68     1
+   -44     1
+    78     1
+   -25     1
+    72     1
+   -14     1
+    -2     1
+     0     1
+
+AoA selected by vote was: -29
+
+Running on data file: lgtm-monitor.dat--laptop-1--test-2
+Have CSI for 1019 packets
+Sampling results: 
+Sampling with:
+number of packets = 1019
+begin index = 1
+end_index = 1019
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   10.0677
+  -22.8842
+   47.6133
+  -72.4318
+   10.0677
+
+
+
+Sampling with:
+number of packets = 750
+begin index = 1
+end_index = 1019
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   10.0677
+  -22.8842
+   47.6133
+  -72.4318
+   10.0677
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 1019
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   10.0510
+  -22.9020
+   47.6255
+  -72.4588
+   10.0510
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 1019
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   10.0784
+  -22.8745
+   47.6196
+  -72.3961
+   10.0784
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1019
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -22.8725
+   10.0792
+   47.7228
+  -72.2673
+  -22.8725
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1019
+Top AoAs: 
+
+output_top_aoas =
+
+   10.0588
+  -22.9020
+   47.6275
+  -72.4118
+   10.0588
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1019
+Top AoAs: 
+
+output_top_aoas =
+
+  -22.8077
+   10.1923
+   47.7692
+  -71.8800
+   10.1923
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1019
+Top AoAs: 
+
+output_top_aoas =
+
+   10.0909
+  -22.8182
+   47.6364
+  -72.3636
+   10.0909
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 519
+end_index = 1019
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -28.4887
+   40.8005
+    5.0000
+  -28.4706
+   40.8296
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 769
+end_index = 1019
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    4.8607
+  -29.0000
+   40.0000
+    4.8607
+  -29.0000
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 919
+end_index = 1019
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   13.6733
+   55.1348
+  -60.7416
+  -19.2871
+   40.0000
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 969
+end_index = 1019
+Top AoAs: 
+
+output_top_aoas =
+
+     5
+    41
+   -28
+     5
+    41
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 994
+end_index = 1019
+Top AoAs: 
+
+output_top_aoas =
+
+    0.9615
+   35.4231
+  -33.8846
+   73.2000
+    0.9615
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1009
+end_index = 1019
+Top AoAs: 
+
+output_top_aoas =
+
+  -28.0000
+   41.1818
+    5.2727
+  -28.0000
+   41.1429
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 500
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   10.0620
+  -22.8920
+   47.6040
+  -72.4720
+   10.0620
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 250
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   10.0720
+  -22.8840
+   47.5920
+  -72.5160
+   10.0720
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 100
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   10.0900
+  -22.8800
+   47.6500
+  -72.4600
+   10.0900
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 50
+Top AoAs: 
+
+output_top_aoas =
+
+   10.0800
+  -22.8800
+   47.5600
+  -72.5400
+   10.0800
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 25
+Top AoAs: 
+
+output_top_aoas =
+
+   10.1600
+  -22.8400
+   47.5200
+  -72.5200
+  -22.8400
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 10
+Top AoAs: 
+
+output_top_aoas =
+
+   47.8000
+  -22.7000
+   10.3000
+  -72.0000
+   47.8000
+
+
+
+Chunk and vote results: 
+Chunking in groups of 200
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+    10     1
+     5     3
+   -29     1
+    41     1
+
+AoA selected by vote was: 5
+
+Chunking in groups of 100
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+    10     2
+     5     8
+   -29     4
+    41     2
+    40     1
+
+AoA selected by vote was: 5
+
+Chunking in groups of 50
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+    10     3
+     5    15
+   -29     9
+    41     3
+    40     3
+   -28     2
+     6     1
+   -30     1
+     2     1
+
+AoA selected by vote was: 5
+
+Chunking in groups of 10
+AoAs and votes: 
+
+top_aoas =
+
+    10     3
+     5    50
+   -29    27
+    41     9
+    40     6
+   -28    29
+     6     2
+   -30     2
+     2     2
+    48     1
+     3     1
+     4     5
+   -31     2
+     7     1
+
+AoA selected by vote was: 5
+
+Running on data file: lgtm-monitor.dat--laptop-1--test-3
+Have CSI for 1025 packets
+Sampling results: 
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   10.0881
+  -22.8386
+  -71.6497
+   48.0000
+   10.0881
+
+
+
+Sampling with:
+number of packets = 750
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   10.0881
+  -22.8386
+  -71.6497
+   48.0000
+   10.0881
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   10.0898
+  -22.8418
+  -71.6445
+   48.0000
+   10.0898
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   10.0781
+  -22.8594
+  -71.6172
+   48.0000
+   10.0781
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   48.0000
+   10.0980
+  -22.8627
+  -71.6471
+   48.0000
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   48.0000
+   10.0980
+  -22.9020
+  -71.6471
+   48.0000
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   10.0000
+   48.0000
+  -23.0000
+  -71.7500
+  -23.0000
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   10.0000
+   48.0000
+  -22.8000
+  -71.7000
+   48.0000
+   10.0000
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 525
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    1.6024
+  -32.4016
+   36.3293
+    1.6024
+  -32.4016
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 775
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    1.3191
+  -32.8697
+   35.9705
+    0.9761
+   35.5817
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 925
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+  -15.5347
+   17.1485
+  -56.4950
+   59.2574
+  -15.5347
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 975
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+  -52.0256
+   64.5135
+   -9.4706
+  -32.1667
+   23.7647
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1000
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   -0.6538
+  -35.1154
+   33.5769
+   -0.6538
+  -35.1154
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1015
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+  -29.0000
+   40.0000
+    3.0000
+  -31.4615
+   37.6154
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 500
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   10.0885
+  -22.8310
+  -71.6378
+   48.0000
+   10.0885
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 250
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   10.0891
+  -22.8381
+  -71.6154
+   48.0000
+   10.0891
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 100
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   10.0825
+  -22.8454
+  -71.6289
+   48.0000
+   10.0825
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 50
+Top AoAs: 
+
+output_top_aoas =
+
+  -22.8298
+  -71.6596
+   48.0000
+   10.0000
+  -22.8298
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 25
+Top AoAs: 
+
+output_top_aoas =
+
+  -22.8182
+  -71.5909
+   10.0000
+   48.0000
+  -22.8182
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 10
+Top AoAs: 
+
+output_top_aoas =
+
+  -71.5000
+    9.0000
+  -24.0000
+   46.3000
+  -71.5000
+
+
+
+Chunk and vote results: 
+Chunking in groups of 200
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+    10     1
+     4     2
+   -10     1
+     1     1
+   -11     1
+
+AoA selected by vote was: 4
+
+Chunking in groups of 100
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+    10     2
+     4     3
+   -10     1
+     1     3
+   -11     2
+     3     1
+    -7     1
+    -1     1
+    -9     2
+   -12     1
+
+AoA selected by vote was: 4
+
+Chunking in groups of 50
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+    10     2
+     4     4
+   -10     1
+     1     6
+   -11     3
+     3     1
+    -7     2
+    -1     1
+    -9     3
+   -12     2
+   -23     1
+    -6     1
+    11     1
+    65     1
+    15     1
+     6     1
+     9     2
+     0     2
+   -28     1
+    22     1
+    40     1
+
+AoA selected by vote was: 1
+
+Chunking in groups of 10
+AoAs and votes: 
+
+top_aoas =
+
+    10     3
+     4     9
+   -10     3
+     1     8
+   -11     5
+     3     6
+    -7     2
+    -1     3
+    -9     5
+   -12     2
+   -23     1
+    -6     1
+    11     5
+    65     2
+    15     3
+     6     4
+     9     5
+     0     5
+   -28     1
+    22     1
+    40     1
+   -72     1
+    -2     3
+    68     1
+    71     3
+   -52     1
+    70     2
+    72     1
+    74     1
+     5     5
+     7     4
+    20     1
+    62     1
+   -29     4
+   -14     2
+   -53     2
+   -30     1
+     2     1
+    14     2
+   -56     2
+    12     2
+    83     1
+     8     1
+    17     1
+    69     2
+   -35     1
+    19     2
+    16     1
+    -3     2
+    18     1
+    -5     1
+    37     1
+   -24     1
+    -4     1
+    80     1
+   -13     1
+   -55     1
+    13     1
+    39     1
+    64     1
+    75     1
+   -60     1
+   -31     1
+   -18     1
+
+AoA selected by vote was: 4
+
+Running on data file: lgtm-monitor.dat--laptop-1--test-4
+Have CSI for 1025 packets
+Sampling results: 
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   35.4663
+    1.0000
+  -33.0000
+    1.0000
+   35.4692
+
+
+
+Sampling with:
+number of packets = 750
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   35.4663
+    1.0000
+  -33.0000
+    1.0000
+   35.4692
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   35.4756
+    1.0000
+  -33.0000
+    1.0000
+   35.4814
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   35.4591
+    1.0000
+  -33.0000
+    1.0000
+   35.4706
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    1.0000
+   35.4272
+  -33.0000
+    1.0000
+  -33.0000
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+    1.0000
+   35.3846
+  -33.0000
+    1.0000
+  -33.0000
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+    1.0000
+   35.5200
+  -33.0000
+    1.0000
+  -33.0000
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+  -33.0000
+    1.0000
+   35.3636
+   35.3636
+    1.0000
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 525
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -10.9441
+   21.9880
+  -48.9242
+   69.8244
+  -10.9572
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 775
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+  -18.1774
+   14.5691
+  -61.2186
+   54.6449
+  -18.1774
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 925
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    9.5733
+  -23.4133
+   47.0811
+  -73.7973
+    9.5816
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 975
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   -3.3529
+   30.4118
+  -38.4314
+   -3.3529
+   30.4118
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1000
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+    9.2692
+  -23.6000
+   46.7200
+  -73.2381
+    9.2692
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1015
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   -7.3636
+   25.8182
+  -44.0909
+   77.6000
+   -7.3636
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 500
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   35.4740
+    1.0000
+  -33.0000
+    1.0000
+   35.4799
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 250
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   35.4480
+    1.0000
+  -33.0000
+    1.0000
+   35.4597
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 100
+Top AoAs: 
+
+output_top_aoas =
+
+   35.3800
+    1.0000
+  -33.0000
+    1.0000
+   35.4082
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 50
+Top AoAs: 
+
+output_top_aoas =
+
+   35.3600
+    1.0000
+  -33.0000
+    1.0000
+   35.4167
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 25
+Top AoAs: 
+
+output_top_aoas =
+
+    0.8800
+  -33.2800
+   35.2800
+    0.9565
+  -33.1304
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 10
+Top AoAs: 
+
+output_top_aoas =
+
+    0.8000
+   35.3000
+  -33.4000
+    0.8000
+   35.3000
+
+
+
+Chunk and vote results: 
+Chunking in groups of 200
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+    35     1
+     9     1
+    11     1
+    10     1
+    -9     1
+   -10     1
+
+AoA selected by vote was: 35
+
+Chunking in groups of 100
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+    35     2
+     9     2
+    11     2
+    10     1
+    -9     2
+   -10     2
+     4     1
+    -4     1
+    -8     1
+   -23     1
+   -14     1
+    27     1
+
+AoA selected by vote was: 35
+
+Chunking in groups of 50
+AoAs and votes: 
+
+top_aoas =
+
+    35     3
+     9     3
+    11     3
+    10     2
+    -9     3
+   -10     4
+     4     2
+    -4     1
+    -8     2
+   -23     1
+   -14     2
+    27     2
+   -18     1
+    29     1
+   -17     1
+     6     1
+    12     1
+   -72     1
+    -6     1
+    13     1
+   -26     1
+    -2     1
+
+AoA selected by vote was: -10
+
+Chunking in groups of 10
+AoAs and votes: 
+
+top_aoas =
+
+    35     3
+     9     4
+    11     6
+    10     3
+    -9     7
+   -10     9
+     4     3
+    -4     2
+    -8     4
+   -23     6
+   -14     5
+    27     3
+   -18     4
+    29     1
+   -17     4
+     6     1
+    12     5
+   -72     2
+    -6     7
+    13     3
+   -26     1
+    -2     3
+     1     2
+   -44     2
+    14     3
+   -12     1
+   -15     2
+     5     1
+   -13     3
+   -24     2
+    49     1
+   -55     1
+   -11     3
+    -7     1
+    -1     1
+    55     1
+    42     1
+    56     1
+    15     1
+   -22     2
+    21     1
+    18     4
+    51     1
+   -78     1
+    52     1
+    58     1
+   -21     2
+     8     3
+    -3     2
+   -64     1
+   -19     1
+   -20     1
+    17     2
+   -27     1
+   -16     1
+    20     1
+    31     1
+   -43     1
+
+AoA selected by vote was: -10
+
+Running on data file: lgtm-monitor.dat--laptop-1--test-5
+Have CSI for 1025 packets
+Sampling results: 
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -14.3053
+   18.4481
+  -14.2995
+   18.4546
+  -53.3806
+
+
+
+Sampling with:
+number of packets = 750
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -14.3053
+   18.4481
+  -14.2995
+   18.4546
+  -53.3806
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   18.4579
+  -14.2824
+  -54.2431
+   61.8200
+   18.4678
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   18.5020
+  -14.2392
+  -54.2118
+   61.8941
+  -14.2218
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   18.5490
+  -14.2059
+  -54.0792
+   61.9608
+   18.5728
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   18.4314
+  -14.2549
+  -54.1400
+   61.8235
+   18.4808
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   18.6250
+  -14.1250
+  -54.0833
+   62.1667
+   18.7200
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+  -54.3000
+   61.8000
+  -14.0909
+   19.0000
+  -54.0000
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 525
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   14.8170
+   56.5525
+  -23.4465
+   14.8170
+  -16.1223
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 775
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   14.4542
+  -18.2908
+  -17.2772
+   15.4356
+   54.4940
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 925
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -50.3978
+   21.0000
+  -12.0000
+   67.0000
+  -50.3889
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 975
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   -12
+    21
+   -50
+    67
+    40
+   -29
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1000
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+  -14.1200
+   18.5600
+  -53.6250
+   62.3200
+  -14.1667
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1015
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   20.3000
+  -12.6000
+  -51.5000
+   65.6000
+  -51.5789
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 500
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   18.4668
+  -14.2661
+  -54.2177
+   61.8330
+   18.4800
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 250
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   18.4777
+  -14.2561
+  -54.1545
+   61.8623
+   18.5040
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 100
+Top AoAs: 
+
+output_top_aoas =
+
+   18.4536
+  -14.2708
+  -54.1562
+   61.8144
+   18.5200
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 50
+Top AoAs: 
+
+output_top_aoas =
+
+  -14.3617
+   18.4255
+  -54.2128
+   61.7660
+   39.3333
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 25
+Top AoAs: 
+
+output_top_aoas =
+
+  -14.2400
+   18.6000
+  -54.0800
+   62.0800
+   39.3333
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 10
+Top AoAs: 
+
+output_top_aoas =
+
+  -53.6000
+   62.7000
+  -16.5833
+  -53.6000
+   19.7857
+
+
+
+Chunk and vote results: 
+Chunking in groups of 200
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+    18     1
+   -12     1
+   -11     1
+    22     1
+   -50     1
+     4     1
+
+AoA selected by vote was: 18
+
+Chunking in groups of 100
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+    18     3
+   -12     1
+   -11     1
+    22     3
+   -50     1
+     4     2
+    67     1
+    -8     1
+   -10     1
+     7     1
+    21     1
+   -13     1
+
+AoA selected by vote was: 18
+
+Chunking in groups of 50
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+    18     4
+   -12     3
+   -11     2
+    22     3
+   -50     2
+     4     3
+    67     1
+    -8     2
+   -10     2
+     7     3
+    21     1
+   -13     2
+   -14     1
+    64     1
+    68     1
+    16     1
+   -48     1
+    40     1
+    43     1
+    41     1
+   -51     1
+    15     1
+
+AoA selected by vote was: 18
+
+Chunking in groups of 10
+AoAs and votes: 
+
+top_aoas =
+
+    18     5
+   -12    12
+   -11     6
+    22     3
+   -50     4
+     4     6
+    67     4
+    -8     2
+   -10     6
+     7     4
+    21     3
+   -13     8
+   -14     3
+    64     3
+    68     4
+    16     4
+   -48     1
+    40     1
+    43     1
+    41     1
+   -51     3
+    15     1
+   -54     2
+    -2     1
+    -7     2
+   -69     1
+     6     3
+    12     1
+   -15     1
+   -52     1
+    -9     2
+    38     1
+   -32     1
+     8     5
+    14     2
+    19     3
+    74     1
+   -55     1
+   -17     1
+    63     1
+    37     2
+     5     3
+    -1     1
+   -28     1
+    27     1
+    17     1
+   -29     1
+     2     1
+    39     1
+     1     1
+    66     1
+   -21     1
+     3     2
+     9     1
+   -57     1
+   -33     1
+   -60     1
+   -58     1
+    60     1
+   -53     1
+   -16     1
+   -30     1
+
+AoA selected by vote was: -12
+
+Running on data file: lgtm-monitor.dat--laptop-2--test-1
+Have CSI for 1025 packets
+Sampling results: 
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    -6
+   -42
+    27
+   -42
+    -6
+    27
+
+
+
+Sampling with:
+number of packets = 750
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    -6
+   -42
+    27
+   -42
+    -6
+    27
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    -6
+   -42
+    27
+   -42
+    -6
+    27
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    -6
+   -42
+    27
+   -42
+    -6
+    27
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    -6
+   -42
+    27
+    -6
+   -42
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    27
+    -6
+   -42
+    -6
+   -42
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+    -6
+   -42
+    27
+    -6
+   -42
+    27
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+    -6
+   -42
+    27
+    -6
+    27
+   -42
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 525
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -41.0000
+   28.0000
+   -5.0000
+   28.0000
+  -41.0000
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 775
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   -8.5936
+   24.4861
+  -45.5040
+   78.1365
+   -8.5936
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 925
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   26.2574
+   -7.0000
+  -43.0000
+   26.2574
+   -7.0000
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 975
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+  -41.0000
+   -5.0000
+   28.0000
+  -41.0000
+   -5.0000
+   28.0000
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1000
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+  -10.6923
+   22.1154
+  -48.7308
+   70.0000
+  -10.6923
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1015
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+  -41.0000
+   28.0000
+   -5.0000
+   28.0000
+  -41.0000
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 500
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    -6
+   -42
+    27
+   -42
+    -6
+    27
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 250
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    -6
+   -42
+    27
+   -42
+    -6
+    27
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 100
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    27
+    -6
+   -42
+   -42
+    -6
+    27
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 50
+Top AoAs: 
+
+output_top_aoas =
+
+   27.0000
+   -6.0000
+  -42.0000
+  -65.0000
+   51.5000
+  -42.0000
+   -6.0000
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 25
+Top AoAs: 
+
+output_top_aoas =
+
+   27.0000
+   -6.0000
+  -42.0000
+   51.5000
+   -6.8519
+   26.1852
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 10
+Top AoAs: 
+
+output_top_aoas =
+
+   51.5000
+   -7.9167
+   25.1667
+  -45.3333
+   51.5000
+
+
+
+Chunk and vote results: 
+Chunking in groups of 200
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+    -6     1
+   -47     1
+   -41     2
+    -5     1
+    28     1
+
+AoA selected by vote was: -41
+
+Chunking in groups of 100
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+    -6     3
+   -47     2
+   -41     7
+    -5     2
+    28     1
+    27     1
+    -9     1
+
+AoA selected by vote was: -41
+
+Chunking in groups of 50
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+    -6     5
+   -47     2
+   -41    15
+    -5     4
+    28     2
+    27     3
+    -9     3
+   -10     2
+    -8     1
+   -11     1
+
+AoA selected by vote was: -41
+
+Chunking in groups of 10
+AoAs and votes: 
+
+top_aoas =
+
+    -6    13
+   -47     2
+   -41    51
+    -5    16
+    28     5
+    27     6
+    -9     6
+   -10     7
+    -8     5
+   -11     2
+    52     1
+   -42     6
+    26     3
+    29     6
+   -44     1
+   -40     5
+    25     2
+    -7     1
+   -43     2
+    22     1
+
+AoA selected by vote was: -41
+
+Running on data file: lgtm-monitor.dat--laptop-2--test-2
+Have CSI for 1025 packets
+Sampling results: 
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    28
+   -41
+    -5
+    28
+   -41
+    -5
+    -5
+
+
+
+Sampling with:
+number of packets = 750
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    28
+   -41
+    -5
+    28
+   -41
+    -5
+    -5
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    -5
+    28
+   -41
+    28
+   -41
+    -5
+    -5
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    28
+   -41
+    -5
+    28
+   -41
+    -5
+    -5
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+    28
+   -41
+    -5
+    28
+   -41
+    -5
+    28
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+    28
+   -41
+    -5
+    28
+   -41
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   -41
+    28
+    -5
+   -41
+    28
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   -41
+    28
+    -5
+    74
+    -5
+   -41
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 525
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   -4.8543
+   29.0000
+  -40.0000
+   -4.8543
+   29.0000
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 775
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   29.1275
+  -39.7769
+   -4.0000
+   29.1275
+  -39.7769
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 925
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   -4.0000
+  -39.2376
+   29.5050
+   -4.0000
+  -39.2376
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 975
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   -4.0000
+  -39.7647
+   29.0000
+   -4.0000
+  -39.7647
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1000
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   -4.0000
+  -39.8462
+   29.0000
+   -4.0000
+  -39.8462
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1015
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+    -4
+    29
+   -40
+    -4
+    29
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 500
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    -5
+    28
+   -41
+    28
+   -41
+    -5
+    -5
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 250
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    -5
+    28
+   -41
+    28
+   -41
+    -5
+    28
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 100
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    28
+   -41
+    -5
+    28
+   -41
+    -5
+    28
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 50
+Top AoAs: 
+
+output_top_aoas =
+
+   -41
+    28
+    -5
+    28
+    -5
+   -41
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 25
+Top AoAs: 
+
+output_top_aoas =
+
+    28
+   -41
+    -5
+    28
+   -41
+    -5
+    74
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 10
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.4000
+   27.8000
+  -41.3000
+   74.0000
+   -5.4000
+
+
+
+Chunk and vote results: 
+Chunking in groups of 200
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+    28     1
+    -4     4
+   -40     1
+
+AoA selected by vote was: -4
+
+Chunking in groups of 100
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+    28     2
+    -4    11
+   -40     3
+    29     1
+
+AoA selected by vote was: -4
+
+Chunking in groups of 50
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+    28     2
+    -4    26
+   -40     7
+    29     1
+   -41     1
+   -39     1
+
+AoA selected by vote was: -4
+
+Chunking in groups of 10
+AoAs and votes: 
+
+top_aoas =
+
+    28     2
+    -4    76
+   -40    24
+    29     3
+   -41     1
+   -39    31
+    -5     2
+    30     2
+
+AoA selected by vote was: -4
+
+Running on data file: lgtm-monitor.dat--laptop-2--test-3
+Have CSI for 1018 packets
+Sampling results: 
+Sampling with:
+number of packets = 1018
+begin index = 1
+end_index = 1018
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    9.0000
+  -77.1123
+  -24.0000
+   46.0000
+    9.0000
+
+
+
+Sampling with:
+number of packets = 750
+begin index = 1
+end_index = 1018
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    9.0000
+  -77.1123
+  -24.0000
+   46.0000
+    9.0000
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 1018
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -24.0000
+   46.0000
+    9.0000
+  -77.1085
+  -24.0000
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 1018
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -24.0000
+   46.0000
+    9.0000
+  -77.1067
+  -24.0000
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1018
+Top AoAs: 
+
+output_top_aoas =
+
+    9.0000
+   46.0000
+  -24.0000
+  -77.1584
+  -24.0000
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1018
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -24.0000
+   46.0000
+    9.0000
+  -77.1200
+   46.0000
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1018
+Top AoAs: 
+
+output_top_aoas =
+
+    9.0000
+   46.0000
+  -24.0000
+  -77.0800
+    9.0000
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1018
+Top AoAs: 
+
+output_top_aoas =
+
+     9
+    46
+   -24
+   -77
+     9
+    46
+   -24
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 518
+end_index = 1018
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -21.0000
+   50.1058
+  -67.3234
+   12.0000
+  -21.0000
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 768
+end_index = 1018
+Top AoAs: 
+
+output_top_aoas =
+
+  -67.7854
+   50.0000
+  -21.0000
+   12.0000
+   50.0000
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 918
+end_index = 1018
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   50.0000
+   12.0000
+  -21.0000
+  -67.5941
+   12.0000
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 968
+end_index = 1018
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   49.8235
+  -21.4706
+  -68.4902
+   11.0000
+   49.8235
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 993
+end_index = 1018
+Top AoAs: 
+
+output_top_aoas =
+
+   -21
+   -67
+    12
+    50
+   -67
+   -21
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1008
+end_index = 1018
+Top AoAs: 
+
+output_top_aoas =
+
+   -21
+    50
+    12
+   -67
+   -21
+    50
+    12
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 500
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    9.0000
+  -24.0000
+  -77.1127
+   46.0000
+  -24.0000
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 250
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    9.0000
+  -24.0000
+  -77.0850
+   46.0000
+  -24.0000
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 100
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    9.0000
+  -24.0000
+  -77.1031
+   46.0000
+  -24.0000
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 50
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    9.0000
+   46.0000
+  -24.0000
+  -77.0851
+  -24.0000
+    9.0000
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 25
+Top AoAs: 
+
+output_top_aoas =
+
+     9
+    46
+   -24
+   -77
+   -24
+     9
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 10
+Top AoAs: 
+
+output_top_aoas =
+
+    9.0000
+   46.0000
+  -24.0000
+  -77.0000
+    8.4000
+  -24.1111
+   45.1000
+
+
+
+Chunk and vote results: 
+Chunking in groups of 200
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+     9     1
+    12     1
+   -21     3
+    50     1
+
+AoA selected by vote was: -21
+
+Chunking in groups of 100
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+     9     2
+    12     4
+   -21     8
+    50     2
+    11     1
+
+AoA selected by vote was: -21
+
+Chunking in groups of 50
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+     9     3
+    12     6
+   -21    21
+    50     3
+    11     1
+   -67     3
+   -22     1
+
+AoA selected by vote was: -21
+
+Chunking in groups of 10
+AoAs and votes: 
+
+top_aoas =
+
+     9     4
+    12    17
+   -21    97
+    50     6
+    11     5
+   -67     3
+   -22     3
+   -40     2
+   -66     1
+    51     1
+    48     1
+
+AoA selected by vote was: -21
+
+Running on data file: lgtm-monitor.dat--laptop-2--test-4
+Have CSI for 1025 packets
+Sampling results: 
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -24.0000
+   46.0000
+    9.0000
+  -76.8940
+    9.0000
+   46.0000
+
+
+
+Sampling with:
+number of packets = 750
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -24.0000
+   46.0000
+    9.0000
+  -76.8940
+    9.0000
+   46.0000
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -24.0000
+   46.0000
+    9.0000
+  -76.8935
+  -24.0000
+    9.0000
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -24.0000
+   46.0000
+    9.0000
+  -76.9098
+  -24.0000
+    9.0000
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -24.0000
+   46.0000
+    9.0000
+  -76.9200
+  -24.0000
+    9.0000
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   -24
+    46
+     9
+   -77
+     9
+   -24
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+     9
+    46
+   -24
+   -77
+     9
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+     9
+   -77
+    46
+   -24
+   -24
+   -77
+    46
+     9
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 525
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -65.9261
+   12.4930
+  -20.0000
+   51.0000
+  -65.9267
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 775
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -21.0000
+  -67.0279
+   50.3944
+   12.0000
+  -21.0000
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 925
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   51.0000
+  -66.0000
+   12.0990
+  -20.0000
+  -66.0000
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 975
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   49.9020
+  -21.1569
+   11.6275
+  -67.9216
+   49.9020
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1000
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   51.0000
+   12.0000
+  -20.6154
+  -66.0000
+   51.0000
+   12.0000
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1015
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+  -20.0000
+   12.2727
+  -66.0000
+   51.0000
+  -20.0000
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 500
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    9.0000
+   46.0000
+  -24.0000
+  -76.9049
+  -24.0000
+    9.0000
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 250
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -24.0000
+   46.0000
+    9.0000
+  -76.8730
+  -24.0000
+   46.0000
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 100
+Top AoAs: 
+
+output_top_aoas =
+
+    9.0000
+   46.0000
+  -24.0000
+  -76.8511
+    9.0000
+   46.0000
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 50
+Top AoAs: 
+
+output_top_aoas =
+
+  -23.8980
+    9.1020
+   46.2041
+  -76.3673
+    9.0638
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 25
+Top AoAs: 
+
+output_top_aoas =
+
+   46.5200
+    9.2083
+  -23.7917
+  -75.5600
+   46.3913
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 10
+Top AoAs: 
+
+output_top_aoas =
+
+    9.0000
+  -77.0000
+   46.0000
+  -24.0000
+  -23.7000
+    9.3000
+
+
+
+Chunk and vote results: 
+Chunking in groups of 200
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+     9     1
+    12     1
+    11     1
+    51     1
+    50     1
+   -66     1
+
+AoA selected by vote was: 9
+
+Chunking in groups of 100
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+     9     2
+    12     4
+    11     2
+    51     3
+    50     2
+   -66     2
+   -68     1
+   -21     1
+
+AoA selected by vote was: 12
+
+Chunking in groups of 50
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+     9     2
+    12     7
+    11     2
+    51     7
+    50     4
+   -66     5
+   -68     2
+   -21     6
+   -24     1
+   -20     2
+
+AoA selected by vote was: 12
+
+Chunking in groups of 10
+AoAs and votes: 
+
+top_aoas =
+
+     9     3
+    12    42
+    11     3
+    51    11
+    50     6
+   -66    24
+   -68     3
+   -21    30
+   -24     2
+   -20    16
+   -39     1
+
+AoA selected by vote was: 12
+
+Running on data file: lgtm-monitor.dat--laptop-2--test-5
+Have CSI for 1025 packets
+Sampling results: 
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   -22
+   -69
+    11
+    49
+    11
+
+
+
+Sampling with:
+number of packets = 750
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   -22
+   -69
+    11
+    49
+    11
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   -22
+   -69
+    11
+    49
+    11
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -69.0000
+  -22.0000
+   49.0000
+   11.0000
+   11.0000
+  -69.0000
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+  -69.0000
+  -22.0000
+   49.0000
+   11.0000
+   11.0000
+  -69.0000
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+  -69.0000
+   49.0000
+   11.0000
+  -22.0000
+   11.0000
+  -69.0000
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+  -69.0000
+   49.0000
+   11.0000
+  -22.0000
+   11.0000
+  -22.0000
+  -69.0000
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+  -69.0000
+   49.0000
+  -22.0000
+   11.0000
+  -69.0000
+   49.0000
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 525
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+    50
+   -68
+   -21
+    12
+   -21
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 775
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   -21
+    12
+    51
+   -67
+   -21
+    12
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 925
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+  -21.0000
+   12.0000
+  -67.0000
+   50.2079
+  -67.0000
+  -21.0000
+   12.0000
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 975
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+  -67.0000
+  -21.0000
+   12.0000
+   50.6471
+  -67.0000
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1000
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   -67
+   -21
+    12
+    50
+   -67
+   -21
+    12
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1015
+end_index = 1025
+Top AoAs: 
+
+output_top_aoas =
+
+   -21
+   -67
+    12
+    51
+   -21
+    12
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 500
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   -22
+   -69
+    11
+    49
+    11
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 250
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+   -22
+   -69
+    11
+    49
+    11
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 100
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 107 
+Top AoAs: 
+
+output_top_aoas =
+
+  -22.0000
+   49.0000
+  -69.0000
+   11.0714
+   11.0000
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 50
+Top AoAs: 
+
+output_top_aoas =
+
+   49.0000
+  -69.0000
+  -24.0000
+   11.1290
+   11.0000
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 25
+Top AoAs: 
+
+output_top_aoas =
+
+  -69.1200
+   49.0000
+  -25.6129
+   11.2162
+  -69.1200
+   11.0000
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 10
+Top AoAs: 
+
+output_top_aoas =
+
+   49.0000
+  -69.0000
+  -25.0000
+   11.2857
+  -69.0000
+
+
+
+Chunk and vote results: 
+Chunking in groups of 200
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+   -22     1
+   -21     3
+    11     2
+
+AoA selected by vote was: -21
+
+Chunking in groups of 100
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+   -22     2
+   -21     7
+    11     4
+    12     3
+   -67     1
+
+AoA selected by vote was: -21
+
+Chunking in groups of 50
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 134 
+AoAs and votes: 
+
+top_aoas =
+
+   -22     2
+   -21    12
+    11     8
+    12     9
+   -67     4
+    49     1
+    51     2
+
+AoA selected by vote was: -21
+
+Chunking in groups of 10
+AoAs and votes: 
+
+top_aoas =
+
+   -22     4
+   -21    72
+    11    13
+    12    25
+   -67     5
+    49     5
+    51     7
+    50     5
+   -39     4
+    -5     1
+
+AoA selected by vote was: -21
