@@ -352,7 +352,7 @@ void createHashFromFiles(const vector<string> &inputFileNames, const string &out
     vector<byte> inputBytes(0);
     // Grab data from all the inputFileNames-------
     // Add data from files to inputBytes
-    for (int i = 0; i < inputFileNames.size(); i++) {
+    for (unsigned int i = 0; i < inputFileNames.size(); i++) {
         // Get file size so inputBytes can be sized appropriately
         ifstream inputStream(inputFileNames[i], ios::in | ios::binary);
         inputStream.seekg(0, inputStream.end);
@@ -392,7 +392,7 @@ bool verifyHashFromFiles(const vector<string> &inputFileNames, const string &has
     vector<byte> inputBytes(0);
     // Grab data from all the inputFileNames-------
     // Add data from files to inputBytes
-    for (int i = 0; i < inputFileNames.size(); i++) {
+    for (unsigned int i = 0; i < inputFileNames.size(); i++) {
         // Get file size so inputBytes can be sized appropriately
         ifstream inputStream(inputFileNames[i], ios::in | ios::binary);
         inputStream.seekg(0, inputStream.end);

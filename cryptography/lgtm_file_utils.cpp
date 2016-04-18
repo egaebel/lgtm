@@ -85,7 +85,7 @@ void combineFiles(const vector<string> &inputFileNames, const string &outputFile
     // Loop over files in inputFileNames and read into outputFileName
     const int fileBufferSize = 512;
     byte fileBuffer[fileBufferSize];
-    for (int i = 0; i < inputFileNames.size(); i++) {
+    for (unsigned int i = 0; i < inputFileNames.size(); i++) {
         // Open current file name
         ifstream curInputStream(inputFileNames[i], ios::in | ios::binary);
         if (curInputStream.is_open()) {
@@ -130,7 +130,7 @@ void splitFile(const string &inputFileName, const vector<string> &outputFileName
 
     // Loop over output files
     int bytesRead = 0;
-    for (int i = 0; i < outputFileNames.size(); i++) {
+    for (unsigned int i = 0; i < outputFileNames.size(); i++) {
         
         // Open new output stream
         ofstream curOutputStream(outputFileNames[i], ios::out | ios::binary);
@@ -204,7 +204,7 @@ void printFile(const string &fileName) {
  * Takes a vector of strings and calls printFile on each one.
  */
 void printFiles(const vector<string> &fileNames) {
-    for (int i = 0; i < fileNames.size(); i++) {
+    for (unsigned int i = 0; i < fileNames.size(); i++) {
         printFile(fileNames[i]);
     }
 }
