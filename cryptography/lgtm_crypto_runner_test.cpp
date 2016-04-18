@@ -45,45 +45,20 @@ using std::vector;
 // Common prefix
 static const string LGTM_CRYPTO_PREFIX = ".lgtm-crypto-params-";
 // Crypto params
-static const string PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "public-key";
-static const string COMPUTED_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "computed-key";    
+static const string PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "public-key";
+static const string COMPUTED_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "computed-key";    
 // "Other" Crypto params
-static const string OTHER_PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "other-public-key";
+static const string OTHER_PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "other-public-key";
 
 // Random numbers
 static const string FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME = LGTM_CRYPTO_PREFIX 
         + "first-message-random-number";
 static const string OTHER_FIRST_MESSAGE_RANDOM_NUMBER = LGTM_CRYPTO_PREFIX 
         + "other-first-message-random-number";
-static const string SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "second-message-random-number";
-static const string OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "other-second-message-random-number";
-
-// Hash verification files
-// First verification files
-static const string VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "verification-hash";
-static const string ENCRYPTED_OTHER_VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "encrypted-other-verification-hash";
-
-static const string OTHER_VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "other-verification-hash";
-
-// Second, facial recognition params included, verification hashes
-static const string FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "facial-recognition-verification-hash";
-static const string OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "facial-recognition-other-verification-hash";
 
 // Facial recognition params files
 static const string FACIAL_RECOGNITION_FILE_NAME 
         = ".lgtm-facial-recognition-params";
-static const string VERIFIED_FACIAL_RECOGNITION_FILE_NAME 
-        = ".lgtm-facial-recognition-params-with-hash";
 static const string ENCRYPTED_FACIAL_RECOGNITION_FILE_NAME 
         = ".lgtm-facial-recognition-params--encrypted";
 
@@ -97,9 +72,6 @@ static const string DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME
 static const string FIRST_MESSAGE_FILE_NAME = LGTM_CRYPTO_PREFIX + "first-message";
 static const string FIRST_MESSAGE_REPLY_FILE_NAME = LGTM_CRYPTO_PREFIX + "first-message-reply";
 
-static const string SECOND_MESSAGE_FILE_NAME = LGTM_CRYPTO_PREFIX + "second-message";
-static const string SECOND_MESSAGE_REPLY_FILE_NAME = LGTM_CRYPTO_PREFIX + "second-message-reply";
-
 static const string THIRD_MESSAGE_FILE_NAME = LGTM_CRYPTO_PREFIX + "third-message";
 static const string THIRD_MESSAGE_REPLY_FILE_NAME = LGTM_CRYPTO_PREFIX + "third-message-reply";
 
@@ -107,31 +79,20 @@ static const string THIRD_MESSAGE_REPLY_FILE_NAME = LGTM_CRYPTO_PREFIX + "third-
 static const string TEST_FIRST_MESSAGE_FILE_NAME = ".lgtm-test-first-message";
 static const string TEST_FIRST_MESSAGE_REPLY_FILE_NAME = ".lgtm-test-first-message-reply";
 
-static const string TEST_SECOND_MESSAGE_FILE_NAME = ".lgtm-test-second-message";
-static const string TEST_SECOND_MESSAGE_REPLY_FILE_NAME = ".lgtm-test-second-message-reply";
-
 static const string TEST_THIRD_MESSAGE_FILE_NAME = ".lgtm-test-third-message";
 static const string TEST_THIRD_MESSAGE_REPLY_FILE_NAME = ".lgtm-test-third-message-reply";
 
 // Test Files
 static const string TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME 
         = ".lgtm-test-unencrypted-received-facial-recognition-params";
-static const string TEST_OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME 
-        = ".lgtm-test-facial-recognition-other-verification-hash";
-static const string TEST_VERIFIED_FACIAL_RECOGNITION_FILE_NAME
-        = ".lgtm-test-facial-recognition-params-with-hash";
-static const string TEST_OTHER_VERIFICATION_HASH_FILE_NAME
-        = ".lgtm-test-other-verification-hash";
 static const string TEST_OTHER_PUBLIC_KEY_FILE_NAME
         = ".lgtm-test-other-public-key";
 static const string TEST_OTHER_FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME
         = ".lgtm-test-other-first-message-random-number";
-static const string TEST_OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME
-        = ".lgtm-test-other-second-message-random-number";
 
 // General constants
 static const string RECEIVED_FACIAL_RECOGNITION_PARAMS_STRING 
-    = "RECEIVED-FACIAL-RECOGNITION-PARAMS";
+        = "RECEIVED-FACIAL-RECOGNITION-PARAMS";
 
 static const unsigned int RANDOM_NUMBER_SIZE = 256;
 
@@ -187,89 +148,6 @@ void simulateFirstMessage() {
 }
 
 /**
- * Simulate a reply to the second message with a verification hash.
- */
-void simulateSecondMessageReply() {
-    cout << "Simulate Second Message Reply" << endl;
-
-    // Generate random number to be included in body of message
-    SecByteBlock secondMessageRandomNumber;
-    generateRandomNumber(secondMessageRandomNumber, RANDOM_NUMBER_SIZE);
-    writeToFile(TEST_OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME, 
-            secondMessageRandomNumber);
-
-    // Compute HASH of all prior messages + this
-    vector<string> hashFiles;
-    hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
-    hashFiles.push_back(TEST_OTHER_PUBLIC_KEY_FILE_NAME);
-    hashFiles.push_back(VERIFICATION_HASH_FILE_NAME);
-    hashFiles.push_back(FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(TEST_OTHER_FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(TEST_OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    createHashFromFiles(hashFiles, TEST_OTHER_VERIFICATION_HASH_FILE_NAME);
-
-    // Combine random number with hash
-    vector<string> inputFiles;
-    inputFiles.push_back(TEST_OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    inputFiles.push_back(TEST_OTHER_VERIFICATION_HASH_FILE_NAME);
-    combineFiles(inputFiles, TEST_SECOND_MESSAGE_REPLY_FILE_NAME);
-
-    // Read symmetric key from file
-    SecByteBlock key;
-    readFromFile(COMPUTED_KEY_FILE_NAME, key);
-    // Read in the current initialization vector from file
-    byte curIv[AES::BLOCKSIZE];
-    // TODO: actually read it in
-    // Set to 0 for now
-    memset(curIv, 0, AES::BLOCKSIZE);
-
-    encryptFile(TEST_SECOND_MESSAGE_REPLY_FILE_NAME, 
-            ENCRYPTED_OTHER_VERIFICATION_HASH_FILE_NAME,
-            key, curIv);
-}
-
-/**
- * Simulate a reply to the second message with a verification hash.
- */
-void simulateSecondMessage() {
-    cout << "Simulate Second Message" << endl;
-
-    // Generate random number to be included in body of message
-    SecByteBlock secondMessageRandomNumber;
-    generateRandomNumber(secondMessageRandomNumber, RANDOM_NUMBER_SIZE);
-    writeToFile(TEST_OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME, 
-            secondMessageRandomNumber);
-
-    // Compute HASH of all prior messages + this
-    vector<string> hashFiles;
-    hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
-    hashFiles.push_back(TEST_OTHER_PUBLIC_KEY_FILE_NAME);
-    hashFiles.push_back(TEST_OTHER_FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(TEST_OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    createHashFromFiles(hashFiles, TEST_OTHER_VERIFICATION_HASH_FILE_NAME);
-
-    // Combine random number + hash into one file
-    vector<string> inputFiles;
-    inputFiles.push_back(TEST_OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    inputFiles.push_back(TEST_OTHER_VERIFICATION_HASH_FILE_NAME);
-    combineFiles(inputFiles, TEST_SECOND_MESSAGE_FILE_NAME);
-
-    // Read symmetric key from file
-    SecByteBlock key;
-    readFromFile(COMPUTED_KEY_FILE_NAME, key);
-    // Read in the current initialization vector from file
-    byte curIv[AES::BLOCKSIZE];
-    // TODO: actually read it in
-    // Set to 0 for now
-    memset(curIv, 0, AES::BLOCKSIZE);
-    encryptFile(TEST_SECOND_MESSAGE_FILE_NAME, 
-            ENCRYPTED_OTHER_VERIFICATION_HASH_FILE_NAME,
-            key, curIv);
-}
-
-/**
  * Simulate a reply to the third message by creating a dummy file for received, encrypted 
  * facial recognition parameters.
  */
@@ -285,33 +163,11 @@ void simulateThirdMessageReply() {
             RECEIVED_FACIAL_RECOGNITION_PARAMS_STRING.length());
     plainTextOutputStream.close();
 
-    // Compute HASH of all prior messages + this
-    vector<string> hashFiles;
-    // Remember, the order isn't inverted because this test is run on the same machine....
-    hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
-    hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
-    hashFiles.push_back(VERIFICATION_HASH_FILE_NAME);
-    hashFiles.push_back(FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(TEST_OTHER_FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(TEST_OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(OTHER_VERIFICATION_HASH_FILE_NAME);
-    hashFiles.push_back(FACIAL_RECOGNITION_FILE_NAME);
-    hashFiles.push_back(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
-    hashFiles.push_back(FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
-    createHashFromFiles(hashFiles, TEST_OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
-
-    // Combine facial recognition params + Hash
-    vector<string> fileNames;
-    fileNames.push_back(TEST_OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
-    fileNames.push_back(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
-    combineFiles(fileNames, TEST_THIRD_MESSAGE_REPLY_FILE_NAME);
-
     // Encrypt received facial recognition params
     // TODO: This test will need to get more sophisticated when the IV is set differently.
     byte curIv[AES::BLOCKSIZE];
     memset(curIv, 0, AES::BLOCKSIZE);
-    encryptFile(TEST_THIRD_MESSAGE_REPLY_FILE_NAME, 
+    encryptFile(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME, // TEST_THIRD_MESSAGE_REPLY_FILE_NAME, 
             RECEIVED_FACIAL_RECOGNITION_FILE_NAME, 
             key, curIv);
 }
@@ -332,32 +188,11 @@ void simulateThirdMessage() {
             RECEIVED_FACIAL_RECOGNITION_PARAMS_STRING.length());
     plainTextOutputStream.close();
 
-    // Compute HASH of all prior messages + this
-    vector<string> hashFiles;
-    // Remember, the order isn't inverted because this test is run on the same machine....
-    hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
-    hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
-    hashFiles.push_back(VERIFICATION_HASH_FILE_NAME);
-    hashFiles.push_back(FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(TEST_OTHER_FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(TEST_OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(TEST_OTHER_VERIFICATION_HASH_FILE_NAME);
-    hashFiles.push_back(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
-    hashFiles.push_back(FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
-    createHashFromFiles(hashFiles, TEST_OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
-
-    // Combine facial recognition params + Hash
-    vector<string> fileNames;
-    fileNames.push_back(TEST_OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
-    fileNames.push_back(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
-    combineFiles(fileNames, TEST_VERIFIED_FACIAL_RECOGNITION_FILE_NAME);
-
     // Encrypt received facial recognition params
     // TODO: This test will need to get more sophisticated when the IV is set differently.
     byte curIv[AES::BLOCKSIZE];
     memset(curIv, 0, AES::BLOCKSIZE);
-    encryptFile(TEST_VERIFIED_FACIAL_RECOGNITION_FILE_NAME,
+    encryptFile(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME,
             RECEIVED_FACIAL_RECOGNITION_FILE_NAME, 
             key, curIv);
 }
@@ -419,19 +254,12 @@ bool testOneWay() {
     firstMessage();
     // Simulate reception of unencrypted Diffie-Hellman public key
     simulateFirstMessageReply();
-    // Generate symmetric key and save
-    if (!secondMessage()) {
-        cout << endl << "Test One Way FAILED!!!!" << endl << endl;
-        return false;
-    }
-    // Simulate reception of a hash for verification
-    simulateSecondMessageReply();
     // Encrypt facial recognition file
     if (!thirdMessage()) {
         cout << endl << "Test One Way FAILED!!!!" << endl << endl;
         return false;
     }
-    // Simulate reception of encrypted facial recognition params + hash
+    // Simulate reception of encrypted facial recognition params
     simulateThirdMessageReply();
     // Decrypt and verify the third message
     if (!decryptThirdMessageReply()) {
@@ -456,19 +284,7 @@ bool testOneWayCorruption() {
     firstMessage();
     // Simulate reception of unencrypted Diffie-Hellman public key
     simulateFirstMessageReply();
-    // Generate symmetric key and save
-   if (!secondMessage()) {
-        cout << endl << "Test One Way FAILED!!!!" << endl << endl;
-        return false;
-    }
-    // Simulate reception of a hash for verification
-    simulateSecondMessageReply();
-    // Encrypt facial recognition file
-    if (!thirdMessage()) {
-        cout << endl << "Test One Way FAILED!!!!" << endl << endl;
-        return false;
-    }
-    // Simulate reception of encrypted facial recognition params + hash
+    // Simulate reception of encrypted facial recognition params
     simulateThirdMessageReply();
     // Corrupt the third message reply!!!!
     corruptThirdMessageReply();
@@ -494,14 +310,7 @@ bool testOtherWay() {
         cout << endl << "Test Other Way FAILED!!!!" << endl << endl;
         return false;
     }
-    // Simulate reception of a hash for verification
-    simulateSecondMessage();
-    // Perform verification on received hash
-    if (!replyToSecondMessage()) {
-        cout << endl << "Test Other Way FAILED!!!!" << endl << endl;
-        return false;
-    }
-    // Simulate reception of encrypted facial recognition params + hash
+    // Simulate reception of encrypted facial recognition params
     simulateThirdMessage();
     // Decrypt and verify the third message
     if (!replyToThirdMessage()) {
@@ -529,14 +338,7 @@ bool testOtherWayCorruption() {
         cout << endl << "Test Other Way FAILED!!!!" << endl << endl;
         return false;
     }
-    // Simulate reception of a hash for verification
-    simulateSecondMessage();
-    // Perform verification on received hash
-    if (!replyToSecondMessage()) {
-        cout << endl << "Test Other Way FAILED!!!!" << endl << endl;
-        return false;
-    }
-    // Simulate reception of encrypted facial recognition params + hash
+    // Simulate reception of encrypted facial recognition params
     simulateThirdMessage();
     // Corrupt the third message reply!!!!
     corruptThirdMessageReply();

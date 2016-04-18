@@ -52,7 +52,6 @@ using CryptoPP::ArraySource;
 using CryptoPP::AuthenticatedDecryptionFilter;
 using CryptoPP::AuthenticatedEncryptionFilter;
 using CryptoPP::AutoSeededRandomPool;
-using CryptoPP::CBC_Mode;
 using CryptoPP::ECDH;
 using CryptoPP::ECP;
 using CryptoPP::DEFAULT_CHANNEL;
@@ -60,7 +59,6 @@ using CryptoPP::FileSink;
 using CryptoPP::FileSource;
 using CryptoPP::GCM;
 using CryptoPP::GCM_TablesOption;
-using CryptoPP::HashFilter;
 using CryptoPP::HashVerificationFilter;
 using CryptoPP::HexEncoder;
 using CryptoPP::HMAC;
@@ -70,7 +68,6 @@ using CryptoPP::SecByteBlock;
 using CryptoPP::StringSource;
 using CryptoPP::StringSink;
 using CryptoPP::SHA256;
-using CryptoPP::SHA512;
 
 using std::cerr;
 using std::cout;
@@ -101,13 +98,4 @@ void encryptFile(const string &inputFileName, const string &authInputFileName,
         const string &outputFileName, SecByteBlock &key, byte *ivBytes);
 bool decryptFile(const string &inputFileName, const string &authInputFileName, 
         const string &outputFileName, SecByteBlock &key, byte *ivBytes);
-
-// Hashing for verification-------------------------------------------------------------------------
-// Compute hashes from a single file
-void createHashFromFile(const string &inputFileName, const string &outputFileName);
-bool verifyHashFromFile(const string &inputFileName, const string &hashInputFileName);
-// Compute hashes from multiple files
-void createHashFromFiles(const vector<string> &inputFileNames, const string &outputFileName);
-bool verifyHashFromFiles(const vector<string> &inputFileNames, const string &hashInputFileName);
-
 #endif

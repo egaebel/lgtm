@@ -31,51 +31,19 @@
 //~Constants----------------------------------------------------------------------------------------
 static const string LGTM_CRYPTO_PREFIX = ".lgtm-crypto-params-";
 // Crypto parameters file names
-static const string PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "public-key";
-static const string PRIVATE_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "private-key";
-static const string SHARED_SECRET_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "shared-secret";
-static const string COMPUTED_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "computed-key";
-static const string CURRENT_IV = LGTM_CRYPTO_PREFIX 
-        + "initialization-vector";
+static const string PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "public-key";
+static const string PRIVATE_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "private-key";
+static const string SHARED_SECRET_FILE_NAME = LGTM_CRYPTO_PREFIX + "shared-secret";
+static const string COMPUTED_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "computed-key";
+static const string CURRENT_IV = LGTM_CRYPTO_PREFIX + "initialization-vector";
 // "Other" crypto parameters file names
-static const string OTHER_PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "other-public-key";
+static const string OTHER_PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "other-public-key";
 
 // Random numbers
 static const string FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME = LGTM_CRYPTO_PREFIX 
         + "first-message-random-number";
 static const string OTHER_FIRST_MESSAGE_RANDOM_NUMBER = LGTM_CRYPTO_PREFIX 
         + "other-first-message-random-number";
-static const string SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "second-message-random-number";
-static const string OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "other-second-message-random-number";
-
-// Hash verification files
-// First verification hashes
-static const string VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "verification-hash";
-static const string ENCRYPTED_VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "encrypted-verification-hash";
-
-static const string OTHER_VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "other-verification-hash";
-static const string ENCRYPTED_OTHER_VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "encrypted-other-verification-hash";
-
-// Second, facial recognition params included, verification hashes
-static const string FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "facial-recognition-verification-hash";
-static const string OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "facial-recognition-other-verification-hash";
-
-// Other LGTM file names
-static const string VERIFIED_FACIAL_RECOGNITION_FILE_NAME 
-        = ".lgtm-facial-recognition-params-with-hash";
 
 // Facial recognition params files
 static const string FACIAL_RECOGNITION_FILE_NAME 
@@ -86,8 +54,6 @@ static const string ENCRYPTED_FACIAL_RECOGNITION_FILE_NAME
 // Received facial recognition params files
 static const string RECEIVED_FACIAL_RECOGNITION_FILE_NAME 
         = ".lgtm-received-facial-recognition-params";
-static const string DECRYPTED_RECEIVED_VERIFIED_FACIAL_RECOGNITION_FILE_NAME 
-        = ".lgtm-received-facial-recognition-params-with-hash--decrypted";
 static const string DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME 
         = ".lgtm-received-facial-recognition-params--decrypted";
 
@@ -95,14 +61,10 @@ static const string DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME
 static const string FIRST_MESSAGE_FILE_NAME = LGTM_CRYPTO_PREFIX + "first-message";
 static const string FIRST_MESSAGE_REPLY_FILE_NAME = LGTM_CRYPTO_PREFIX + "first-message-reply";
 
-static const string SECOND_MESSAGE_FILE_NAME = LGTM_CRYPTO_PREFIX + "second-message";
-static const string SECOND_MESSAGE_REPLY_FILE_NAME = LGTM_CRYPTO_PREFIX + "second-message-reply";
-
 static const string THIRD_MESSAGE_FILE_NAME = LGTM_CRYPTO_PREFIX + "third-message";
 static const string THIRD_MESSAGE_REPLY_FILE_NAME = LGTM_CRYPTO_PREFIX + "third-message-reply";
 
 // Crypto parameters
-static const unsigned int HASH_NUM_BYTES = 64;
 static const unsigned int RANDOM_NUMBER_SIZE = 256;
 
 //~Functions----------------------------------------------------------------------------------------
@@ -198,15 +160,13 @@ bool replyToFirstMessage() {
 }
 
 /**
- * Compute shared secret and computed key using the received other's public key.
- * Compute hash over all prior messages + a random number which is also saved.
- * Save hash and random number to separate files.
- * Encrypt hash and save to another file.
+ * Process public key and random number received from other user.
+ * Encrypt facial recognition parameters.
  */
-bool secondMessage() {
-    cout << "Second Message" << endl;
+bool thirdMessage() {
+    cout << "Third Message" << endl;
 
-    // Split received file into separate files
+    // Split received file into random number and public key
     vector<string> outputFiles;
     outputFiles.push_back(OTHER_FIRST_MESSAGE_RANDOM_NUMBER);
     outputFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
@@ -223,7 +183,7 @@ bool secondMessage() {
     // Compute shared secret
     SecByteBlock sharedSecret;
     if (!diffieHellmanSharedSecretAgreement(sharedSecret, otherPublicKey, privateKey)) {
-        cerr << "Security Error in secondMessage. Diffie-Hellman shared secret could not be agreed to." << endl;
+        cerr << "Security Error in thirdMessage. Diffie-Hellman shared secret could not be agreed to." << endl;
         return false;
     }
 
@@ -241,191 +201,15 @@ bool secondMessage() {
     // Set to 0 for now
     memset(curIv, 0, AES::BLOCKSIZE);
 
-    // Generate random number to be included in body of message
-    SecByteBlock secondMessageRandomNumber;
-    generateRandomNumber(secondMessageRandomNumber, RANDOM_NUMBER_SIZE);
-    // Write to file immediately so we can combine this file with the hash in a moment
-    writeToFile(SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME, secondMessageRandomNumber);
-
-    // Compute hash over all prior messages + this (Other public key + my public key)
-    vector<string> hashFiles;
-    hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
-    hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
-    hashFiles.push_back(OTHER_FIRST_MESSAGE_RANDOM_NUMBER);
-    hashFiles.push_back(FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    createHashFromFiles(hashFiles, VERIFICATION_HASH_FILE_NAME);
-
-    // Combine hash with random number into one file
-    vector<string> inputFileNames;
-    inputFileNames.push_back(SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    inputFileNames.push_back(VERIFICATION_HASH_FILE_NAME);
-    combineFiles(inputFileNames, SECOND_MESSAGE_FILE_NAME);
-
-    encryptFile(SECOND_MESSAGE_FILE_NAME, 
-            ENCRYPTED_VERIFICATION_HASH_FILE_NAME, 
-            key, curIv);
-
-    return true;
-}
-
-/**
- * Decrypt hash received from other user.
- * Validate hash.
- * Compute hash over all prior messages + a random number which is also saved.
- * Save hash and random number to separate files.
- * Encrypt hash and save to file to prepare for sending.
- */
-bool replyToSecondMessage() {
-    cout << "Reply To Second Message" << endl;
-
-    // Read from file
-    SecByteBlock key;
-    readFromFile(COMPUTED_KEY_FILE_NAME, key);
-
-    // Read in the current initialization vector from file
-    byte curIv[AES::BLOCKSIZE];
-    // TODO: actually read it in
-    // Set to 0 for now
-    memset(curIv, 0, AES::BLOCKSIZE);
-
-    // Decrypt random number + hash file
-    if (!decryptFile(ENCRYPTED_OTHER_VERIFICATION_HASH_FILE_NAME, 
-            SECOND_MESSAGE_FILE_NAME,
-            key, curIv)) {
-        cerr << "Security Error in replyToSecondMessage. MAC could not be verified." << endl;
-        return false;
-    }
-
-    // Split decrypted received file into separate files for the random number and the hash
-    vector<string> outputFiles;
-    outputFiles.push_back(OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    outputFiles.push_back(OTHER_VERIFICATION_HASH_FILE_NAME);
-    vector<int> bytesPerFile;
-    bytesPerFile.push_back(RANDOM_NUMBER_SIZE);
-    splitFile(SECOND_MESSAGE_FILE_NAME, outputFiles, bytesPerFile);
-
-    // Verify received hash
-    vector<string> verifyHashFiles;
-    verifyHashFiles.push_back(PUBLIC_KEY_FILE_NAME);
-    verifyHashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
-    verifyHashFiles.push_back(OTHER_FIRST_MESSAGE_RANDOM_NUMBER);
-    verifyHashFiles.push_back(FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    verifyHashFiles.push_back(OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    if (!verifyHashFromFiles(verifyHashFiles, OTHER_VERIFICATION_HASH_FILE_NAME)) {
-        cerr << "Security Error in replyToSecondMessage. Hash could not be verified." << endl;
-        return false;
-    }
-
-    // Generate random number to be included in body of message
-    SecByteBlock secondMessageRandomNumber;
-    generateRandomNumber(secondMessageRandomNumber, RANDOM_NUMBER_SIZE);
-    writeToFile(SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME, secondMessageRandomNumber);
-
-    // Compute HASH of all prior messages + this
-    vector<string> hashFiles;
-    hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
-    hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
-    hashFiles.push_back(OTHER_VERIFICATION_HASH_FILE_NAME);
-    hashFiles.push_back(OTHER_FIRST_MESSAGE_RANDOM_NUMBER);
-    hashFiles.push_back(FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    createHashFromFiles(hashFiles, VERIFICATION_HASH_FILE_NAME);
-
-    // Combine random number with hash
-    vector<string> inputFiles;
-    inputFiles.push_back(SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    inputFiles.push_back(VERIFICATION_HASH_FILE_NAME);
-    combineFiles(inputFiles, SECOND_MESSAGE_FILE_NAME);
-
-    // Encrypt hash for transmission
-    encryptFile(SECOND_MESSAGE_REPLY_FILE_NAME, 
-            ENCRYPTED_VERIFICATION_HASH_FILE_NAME,
-            key, curIv);
-
-    return true;
-}
-
-/**
- * Decrypt hash received from other user.
- * Verify hash.
- * Compute hash over all prior messages + facial recognition params.
- * Encrypt facial recognition parameters.
- */
-bool thirdMessage() {
-    cout << "Third Message" << endl;
-    // Read session key from file
-    SecByteBlock key;
-    readFromFile(COMPUTED_KEY_FILE_NAME, key);
-
-    // Read in the current initialization vector from file
-    byte curIv[AES::BLOCKSIZE];
-    // TODO: actually read it in
-    // Set to 0 for now
-    memset(curIv, 0, AES::BLOCKSIZE);
-
-    // Decrypt received second message
-    // which should be a hash of all prior messages + a random number
-    if (!decryptFile(ENCRYPTED_OTHER_VERIFICATION_HASH_FILE_NAME, 
-            SECOND_MESSAGE_REPLY_FILE_NAME,
-            key, curIv)) {
-        cerr << "Security Error in thirdMessage. MAC could not be verified." << endl;
-        return false;
-    }
-
-    // Split decrypted received file into separate files for the random number and the hash
-    vector<string> outputFiles;
-    outputFiles.push_back(OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    outputFiles.push_back(OTHER_VERIFICATION_HASH_FILE_NAME);
-    vector<int> bytesPerFile;
-    bytesPerFile.push_back(RANDOM_NUMBER_SIZE);
-    splitFile(SECOND_MESSAGE_REPLY_FILE_NAME, outputFiles, bytesPerFile);    
-
-    // Verify received HASH
-    vector<string> verifyHashFiles;
-    verifyHashFiles.push_back(PUBLIC_KEY_FILE_NAME);
-    verifyHashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
-    verifyHashFiles.push_back(VERIFICATION_HASH_FILE_NAME);
-    verifyHashFiles.push_back(FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    verifyHashFiles.push_back(OTHER_FIRST_MESSAGE_RANDOM_NUMBER);
-    verifyHashFiles.push_back(SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    verifyHashFiles.push_back(OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    if (!verifyHashFromFiles(verifyHashFiles, OTHER_VERIFICATION_HASH_FILE_NAME)) {
-        cerr << "Security Error in thirdMessage. Hash could not be verified." << endl;
-        return false;
-    }
-
-    // Compute HASH of all prior messages + this
-    vector<string> hashFiles;
-    hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
-    hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
-    hashFiles.push_back(OTHER_VERIFICATION_HASH_FILE_NAME);
-    hashFiles.push_back(OTHER_FIRST_MESSAGE_RANDOM_NUMBER);
-    hashFiles.push_back(FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(VERIFICATION_HASH_FILE_NAME);
-    hashFiles.push_back(FACIAL_RECOGNITION_FILE_NAME);
-    createHashFromFiles(hashFiles, FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
-
-    // Combine facial recognition params + Hash
-    vector<string> fileNames;
-    fileNames.push_back(FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
-    fileNames.push_back(FACIAL_RECOGNITION_FILE_NAME);
-    combineFiles(fileNames, THIRD_MESSAGE_REPLY_FILE_NAME);
-
-    // Encrypt (facial recognition params + HASH)
-    encryptFile(THIRD_MESSAGE_REPLY_FILE_NAME,
+    // Encrypt facial recognition params
+    encryptFile(FACIAL_RECOGNITION_FILE_NAME, 
             ENCRYPTED_FACIAL_RECOGNITION_FILE_NAME, 
             key, curIv);
     return true;
 }
 
 /**
- * Decrypt hash received from other user.
- * Verify hash.
- * Compute hash over all prior messages + facial recognition params.
+ * Decrypt received facial recognition parameters.
  * Encrypt facial recognition parameters.
  */
 bool replyToThirdMessage() {
@@ -448,55 +232,8 @@ bool replyToThirdMessage() {
         return false;
     }
 
-    // Split off hash from DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME into a separate file
-    vector<string> outputFiles;
-    outputFiles.push_back(OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
-    outputFiles.push_back(DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
-    vector<int> bytesPerFile;
-    bytesPerFile.push_back(HASH_NUM_BYTES);
-    splitFile(THIRD_MESSAGE_REPLY_FILE_NAME, outputFiles, bytesPerFile);
-
-    // Verify received HASH
-    vector<string> verifyHashFiles;
-    verifyHashFiles.push_back(PUBLIC_KEY_FILE_NAME);
-    verifyHashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
-    verifyHashFiles.push_back(VERIFICATION_HASH_FILE_NAME);
-    verifyHashFiles.push_back(FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    verifyHashFiles.push_back(OTHER_FIRST_MESSAGE_RANDOM_NUMBER);
-    verifyHashFiles.push_back(SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    verifyHashFiles.push_back(OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    verifyHashFiles.push_back(OTHER_VERIFICATION_HASH_FILE_NAME);
-    verifyHashFiles.push_back(DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
-    verifyHashFiles.push_back(FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
-    if (!verifyHashFromFiles(verifyHashFiles, 
-            OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME)) {
-        cerr << "Security Error in replyToThirdMessage. Hash could not be verified." << endl;
-        return false;
-    }
-
-    // Compute HASH of all prior messages + this
-    vector<string> hashFiles;
-    hashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
-    hashFiles.push_back(PUBLIC_KEY_FILE_NAME);
-    hashFiles.push_back(OTHER_VERIFICATION_HASH_FILE_NAME);
-    hashFiles.push_back(OTHER_FIRST_MESSAGE_RANDOM_NUMBER);
-    hashFiles.push_back(FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    hashFiles.push_back(VERIFICATION_HASH_FILE_NAME);
-    hashFiles.push_back(DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
-    hashFiles.push_back(FACIAL_RECOGNITION_FILE_NAME);
-    hashFiles.push_back(OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
-    createHashFromFiles(hashFiles, FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
-
-    // Combine facial recognition params + Hash
-    vector<string> fileNames;
-    fileNames.push_back(FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
-    fileNames.push_back(FACIAL_RECOGNITION_FILE_NAME);
-    combineFiles(fileNames, VERIFIED_FACIAL_RECOGNITION_FILE_NAME);
-
-    // Encrypt (facial recognition params + HASH)
-    encryptFile(VERIFIED_FACIAL_RECOGNITION_FILE_NAME, 
+    // Encrypt facial recognition params
+    encryptFile(FACIAL_RECOGNITION_FILE_NAME, 
             ENCRYPTED_FACIAL_RECOGNITION_FILE_NAME,
             key, curIv);
     return true;
@@ -517,40 +254,11 @@ bool decryptThirdMessageReply() {
     // Set to 0 for now
     memset(curIv, 0, AES::BLOCKSIZE);
 
-    // Decrypt (facial recognition params + HASH)
+    // Decrypt facial recognition params
     if (!decryptFile(RECEIVED_FACIAL_RECOGNITION_FILE_NAME, 
-            DECRYPTED_RECEIVED_VERIFIED_FACIAL_RECOGNITION_FILE_NAME, 
+            DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME, 
             key, curIv)) {
         cerr << "Security Error in decryptThirdMessageReply. MAC could not be verified." << endl;
-        return false;
-    }
-
-
-    // Split off hash from DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME into a separate file
-    vector<string> outputFiles;
-    outputFiles.push_back(OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
-    outputFiles.push_back(DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
-    vector<int> bytesPerFile;
-    bytesPerFile.push_back(HASH_NUM_BYTES);
-    splitFile(DECRYPTED_RECEIVED_VERIFIED_FACIAL_RECOGNITION_FILE_NAME, 
-            outputFiles, bytesPerFile);
-
-    // Verify received HASH
-    vector<string> verifyHashFiles;
-    verifyHashFiles.push_back(PUBLIC_KEY_FILE_NAME);
-    verifyHashFiles.push_back(OTHER_PUBLIC_KEY_FILE_NAME);
-    verifyHashFiles.push_back(VERIFICATION_HASH_FILE_NAME);
-    verifyHashFiles.push_back(FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    verifyHashFiles.push_back(OTHER_FIRST_MESSAGE_RANDOM_NUMBER);
-    verifyHashFiles.push_back(SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    verifyHashFiles.push_back(OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME);
-    verifyHashFiles.push_back(OTHER_VERIFICATION_HASH_FILE_NAME);
-    verifyHashFiles.push_back(FACIAL_RECOGNITION_FILE_NAME);
-    verifyHashFiles.push_back(DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME);
-    verifyHashFiles.push_back(FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME);
-    if (!verifyHashFromFiles(verifyHashFiles, 
-            OTHER_FACIAL_RECOGNITION_VERIFICATION_HASH_FILE_NAME)) {
-        cerr << "Security Error in decryptThirdMessageReply. Hash could not be verified." << endl;
         return false;
     }
 
@@ -568,14 +276,6 @@ int main(int argc, char *argv[]) {
         firstMessage();
     } else if (strncmp(argv[0], "first-message-reply", 19)) {
         if (!replyToFirstMessage()) {
-            return 1;
-        }
-    } else if (strncmp(argv[0], "second-message", 14)) {
-        if (!secondMessage()) {
-            return 1;
-        }
-    } else if (strncmp(argv[0], "second-message-reply", 20)) {
-        if (!replyToSecondMessage()) {
             return 1;
         }
     } else if (strncmp(argv[0], "third-message", 13)) {
