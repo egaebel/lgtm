@@ -376,4 +376,6 @@ function sampling_value_tests(file_chunk)
             fprintf('AoA selected by vote was: %d\n\n', top_aoas(max_index, 1))
         end
     end
+
+    fprintf('COMPLETE!\n')
 end
