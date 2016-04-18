@@ -31,29 +31,19 @@
 //~Constants----------------------------------------------------------------------------------------
 static const string LGTM_CRYPTO_PREFIX = ".lgtm-crypto-params-";
 // Crypto parameters file names
-static const string PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "public-key";
-static const string PRIVATE_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "private-key";
-static const string SHARED_SECRET_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "shared-secret";
-static const string COMPUTED_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "computed-key";
-static const string CURRENT_IV = LGTM_CRYPTO_PREFIX 
-        + "initialization-vector";
+static const string PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "public-key";
+static const string PRIVATE_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "private-key";
+static const string SHARED_SECRET_FILE_NAME = LGTM_CRYPTO_PREFIX + "shared-secret";
+static const string COMPUTED_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "computed-key";
+static const string CURRENT_IV = LGTM_CRYPTO_PREFIX + "initialization-vector";
 // "Other" crypto parameters file names
-static const string OTHER_PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "other-public-key";
+static const string OTHER_PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "other-public-key";
 
 // Random numbers
 static const string FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME = LGTM_CRYPTO_PREFIX 
         + "first-message-random-number";
 static const string OTHER_FIRST_MESSAGE_RANDOM_NUMBER = LGTM_CRYPTO_PREFIX 
         + "other-first-message-random-number";
-static const string SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "second-message-random-number";
-static const string OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "other-second-message-random-number";
 
 // Facial recognition params files
 static const string FACIAL_RECOGNITION_FILE_NAME 
@@ -71,14 +61,10 @@ static const string DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME
 static const string FIRST_MESSAGE_FILE_NAME = LGTM_CRYPTO_PREFIX + "first-message";
 static const string FIRST_MESSAGE_REPLY_FILE_NAME = LGTM_CRYPTO_PREFIX + "first-message-reply";
 
-static const string SECOND_MESSAGE_FILE_NAME = LGTM_CRYPTO_PREFIX + "second-message";
-static const string SECOND_MESSAGE_REPLY_FILE_NAME = LGTM_CRYPTO_PREFIX + "second-message-reply";
-
 static const string THIRD_MESSAGE_FILE_NAME = LGTM_CRYPTO_PREFIX + "third-message";
 static const string THIRD_MESSAGE_REPLY_FILE_NAME = LGTM_CRYPTO_PREFIX + "third-message-reply";
 
 // Crypto parameters
-static const unsigned int HASH_NUM_BYTES = 64;
 static const unsigned int RANDOM_NUMBER_SIZE = 256;
 
 //~Functions----------------------------------------------------------------------------------------
@@ -197,7 +183,7 @@ bool thirdMessage() {
     // Compute shared secret
     SecByteBlock sharedSecret;
     if (!diffieHellmanSharedSecretAgreement(sharedSecret, otherPublicKey, privateKey)) {
-        cerr << "Security Error in secondMessage. Diffie-Hellman shared secret could not be agreed to." << endl;
+        cerr << "Security Error in thirdMessage. Diffie-Hellman shared secret could not be agreed to." << endl;
         return false;
     }
 
@@ -246,7 +232,7 @@ bool replyToThirdMessage() {
         return false;
     }
 
-    // Encrypt (facial recognition params + HASH)
+    // Encrypt facial recognition params
     encryptFile(FACIAL_RECOGNITION_FILE_NAME, 
             ENCRYPTED_FACIAL_RECOGNITION_FILE_NAME,
             key, curIv);
@@ -268,7 +254,7 @@ bool decryptThirdMessageReply() {
     // Set to 0 for now
     memset(curIv, 0, AES::BLOCKSIZE);
 
-    // Decrypt (facial recognition params + HASH)
+    // Decrypt facial recognition params
     if (!decryptFile(RECEIVED_FACIAL_RECOGNITION_FILE_NAME, 
             DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME, 
             key, curIv)) {

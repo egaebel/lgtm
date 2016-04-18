@@ -45,23 +45,16 @@ using std::vector;
 // Common prefix
 static const string LGTM_CRYPTO_PREFIX = ".lgtm-crypto-params-";
 // Crypto params
-static const string PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "public-key";
-static const string COMPUTED_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "computed-key";    
+static const string PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "public-key";
+static const string COMPUTED_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "computed-key";    
 // "Other" Crypto params
-static const string OTHER_PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "other-public-key";
+static const string OTHER_PUBLIC_KEY_FILE_NAME = LGTM_CRYPTO_PREFIX + "other-public-key";
 
 // Random numbers
 static const string FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME = LGTM_CRYPTO_PREFIX 
         + "first-message-random-number";
 static const string OTHER_FIRST_MESSAGE_RANDOM_NUMBER = LGTM_CRYPTO_PREFIX 
         + "other-first-message-random-number";
-static const string SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "second-message-random-number";
-static const string OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME = LGTM_CRYPTO_PREFIX 
-        + "other-second-message-random-number";
 
 // Facial recognition params files
 static const string FACIAL_RECOGNITION_FILE_NAME 
@@ -79,18 +72,12 @@ static const string DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME
 static const string FIRST_MESSAGE_FILE_NAME = LGTM_CRYPTO_PREFIX + "first-message";
 static const string FIRST_MESSAGE_REPLY_FILE_NAME = LGTM_CRYPTO_PREFIX + "first-message-reply";
 
-static const string SECOND_MESSAGE_FILE_NAME = LGTM_CRYPTO_PREFIX + "second-message";
-static const string SECOND_MESSAGE_REPLY_FILE_NAME = LGTM_CRYPTO_PREFIX + "second-message-reply";
-
 static const string THIRD_MESSAGE_FILE_NAME = LGTM_CRYPTO_PREFIX + "third-message";
 static const string THIRD_MESSAGE_REPLY_FILE_NAME = LGTM_CRYPTO_PREFIX + "third-message-reply";
 
 // TEST Message file names
 static const string TEST_FIRST_MESSAGE_FILE_NAME = ".lgtm-test-first-message";
 static const string TEST_FIRST_MESSAGE_REPLY_FILE_NAME = ".lgtm-test-first-message-reply";
-
-static const string TEST_SECOND_MESSAGE_FILE_NAME = ".lgtm-test-second-message";
-static const string TEST_SECOND_MESSAGE_REPLY_FILE_NAME = ".lgtm-test-second-message-reply";
 
 static const string TEST_THIRD_MESSAGE_FILE_NAME = ".lgtm-test-third-message";
 static const string TEST_THIRD_MESSAGE_REPLY_FILE_NAME = ".lgtm-test-third-message-reply";
@@ -102,12 +89,10 @@ static const string TEST_OTHER_PUBLIC_KEY_FILE_NAME
         = ".lgtm-test-other-public-key";
 static const string TEST_OTHER_FIRST_MESSAGE_RANDOM_NUMBER_FILE_NAME
         = ".lgtm-test-other-first-message-random-number";
-static const string TEST_OTHER_SECOND_MESSAGE_RANDOM_NUMBER_FILE_NAME
-        = ".lgtm-test-other-second-message-random-number";
 
 // General constants
 static const string RECEIVED_FACIAL_RECOGNITION_PARAMS_STRING 
-    = "RECEIVED-FACIAL-RECOGNITION-PARAMS";
+        = "RECEIVED-FACIAL-RECOGNITION-PARAMS";
 
 static const unsigned int RANDOM_NUMBER_SIZE = 256;
 
