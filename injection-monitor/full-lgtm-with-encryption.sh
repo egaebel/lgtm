@@ -154,7 +154,7 @@ reply_to_first_message () {
     echo "Receiving and replying to first message.........................."
     logged_on_user=$(who | head -n1 | awk '{print $1;}')
     sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "read_mpdu_file .lgtm-begin-monitor.dat .lgtm-first-message, exit"
-    file_size=$(wc -c .lgtm-first-message)
+    file_size=$(wc --bytes .lgtm-first-message | cut -d ' ' -f 1)
     bytes_to_copy=$((($file_size - ${#LGTM_BEGIN_TOKEN})))
     # Trim off the $LGTM_BEGIN_TOKEN at the end of the file
     dd if=.lgtm-first-message of=.lgtm-crypto-params-first-message bs=1 count=$bytes_to_copy
