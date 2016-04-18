@@ -42,8 +42,6 @@ FACIAL_RECOGNITION_FOOTER="facial-recognition-params-finished"
 # LGTM Magic Message String Constants---------------------------------------------------------------
 FIRST_MESSAGE_FOOTER="lgtm-first-message-footer"
 FIRST_MESSAGE_REPLY_FOOTER="lgtm-first-message-reply-footer"
-SECOND_MESSAGE_FOOTER="lgtm-second-message-footer"
-SECOND_MESSAGE_REPLY_FOOTER="lgtm-second-message-reply-footer"
 THIRD_MESSAGE_FOOTER="lgtm-third-message-footer"
 THIRD_MESSAGE_REPLY_FOOTER="lgtm-third-message-reply-footer"
 
@@ -170,13 +168,12 @@ reply_to_first_message () {
     ./packets-from-file/packets_from_file .lgtm-crypto-params-first-message-reply
 }
 
-second_message () {
+third_message () {
     echo
-    echo "Sending second message..........................................."
+    echo "Receiving first message reply and sending third message........"
     # Setup Monitor mode
     monitor_mode
-
-    # Listen for reply to first message
+    # Listen for reply to third message
     rm .lgtm-monitor-first-message-reply.dat
     ./log-to-file/log_to_file .lgtm-monitor-first-message-reply.dat &
     lgtm_ack=0
@@ -196,100 +193,14 @@ second_message () {
             lgtm_ack=$(cat .lgtm-first-message-reply | grep $FIRST_MESSAGE_REPLY_FOOTER | wc -l)
         fi
         sleep 3
-    done
-    pkill log_to_file
-    chmod 644 .lgtm-monitor-first-message-reply.dat
-
-    # Process crypto parameters and prepare second message
-    bytes_to_copy=$((($file_size - ${#FIRST_MESSAGE_REPLY_FOOTER})))
-    dd if=.lgtm-first-message-reply of=.lgtm-crypto-params-first-message-reply bs=1 count=$bytes_to_copy
-    ../cryptography/lgtm_crypto_runner second-message
-
-    # Setup injection mode
-    injection_mode
-    # Sleep to allow other user to switch over into monitor mode
-    sleep $SWITCH_WAIT_TIME
-    # Attach footer to crypto params message
-    echo $SECOND_MESSAGE_FOOTER >> .lgtm-crypto-params-second-message
-    ./packets-from-file/packets_from_file .lgtm-crypto-params-second-message
-}
-
-reply_to_second_message () {
-    echo
-    echo "Receiving and replying to second message........................."
-    # Setup Monitor mode
-    monitor_mode
-    # Listen for second message
-    rm .lgtm-monitor-second-message.dat
-    ./log-to-file/log_to_file .lgtm-monitor-second-message.dat &
-    lgtm_ack=0
-    # Figure this out to use with sudo -u below
-    logged_on_user=$(who | head -n1 | awk '{print $1;}')
-    while [ $lgtm_ack -lt 1 ]; do
-        # Count the file size in bytes using wc, and cut off the file name from the output (only want the number!)
-        file_size=$(wc --bytes .lgtm-monitor-second-message.dat | cut -d ' ' -f 1)
-        echo file size: $file_size
-        if [ "${file_size:0}" -gt 0 ]; then
-            # Extract data from mpdus in packets
-            echo "Extracting data from received packets............................"
-            # Extract data on facial recognition params from received data
-            sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "read_mpdu_file .lgtm-monitor-second-message.dat .lgtm-second-message, exit"
-            echo "Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-            # Receive ack + params
-            lgtm_ack=$(cat .lgtm-second-message | grep $SECOND_MESSAGE_FOOTER | wc -l)
-        fi
-        sleep 3
-    done    
-    pkill log_to_file
-    chmod 644 .lgtm-monitor-second-message.dat
-
-    # Process crypto parameters and prepare second message
-    bytes_to_copy=$((($file_size - ${#SECOND_MESSAGE_FOOTER})))
-    dd if=.lgtm-second-message of=.lgtm-crypto-params-second-message bs=1 count=$bytes_to_copy
-    ../cryptography/lgtm_crypto_runner second-message-reply
-
-    # Setup injection mode
-    injection_mode
-    # Sleep to allow other user to switch over into monitor mode
-    sleep $SWITCH_WAIT_TIME
-    # Attach footer to crypto params message
-    echo $SECOND_MESSAGE_FOOTER >> .lgtm-crypto-params-second-message-reply
-    ./packets-from-file/packets_from_file .lgtm-crypto-params-second-message-reply
-}
-
-third_message () {
-    echo
-    echo "Receiving second message reply and sending third message........"
-    # Setup Monitor mode
-    monitor_mode
-    # Listen for reply to third message
-    rm .lgtm-monitor-second-message-reply.dat
-    ./log-to-file/log_to_file .lgtm-monitor-second-message-reply.dat &
-    lgtm_ack=0
-    # Figure this out to use with sudo -u below
-    logged_on_user=$(who | head -n1 | awk '{print $1;}')
-    while [ $lgtm_ack -lt 1 ]; do
-        # Count the file size in bytes using wc, and cut off the file name from the output (only want the number!)
-        file_size=$(wc --bytes .lgtm-monitor-second-message-reply.dat | cut -d ' ' -f 1)
-        echo file size: $file_size
-        if [ "${file_size:0}" -gt 0 ]; then
-            # Extract data from mpdus in packets
-            echo "Extracting data from received packets............................"
-            # Extract data on facial recognition params from received data
-            sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "read_mpdu_file .lgtm-monitor-second-message-reply.dat .lgtm-second-message-reply, exit"
-            echo "Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-            # Receive ack + params
-            lgtm_ack=$(cat .lgtm-second-message-reply | grep $SECOND_MESSAGE_REPLY_FOOTER | wc -l)
-        fi
-        sleep 3
     done  
     pkill log_to_file
-    chmod 644 .lgtm-monitor-second-message-reply.dat  
+    chmod 644 .lgtm-monitor-first-message-reply.dat  
 
 
-    # Process crypto parameters and prepare second message
-    bytes_to_copy=$((($file_size - ${#SECOND_MESSAGE_REPLY_FOOTER})))
-    dd if=.lgtm-second-message-reply of=.lgtm-crypto-params-second-message-reply bs=1 count=$bytes_to_copy
+    # Process crypto parameters and prepare first message reply
+    bytes_to_copy=$((($file_size - ${#SFIRST_MESSAGE_REPLY_FOOTER})))
+    dd if=.lgtm-first-message-reply of=.lgtm-crypto-params-first-message-reply bs=1 count=$bytes_to_copy
 
     # Setup facial-recognition-params
     rm .lgtm-facial-recognition-params
@@ -338,7 +249,7 @@ reply_to_third_message () {
     pkill log_to_file
     chmod 644 .lgtm-monitor-third-message.dat
 
-    # Process crypto parameters and prepare second message
+    # Process crypto parameters and prepare third message
     bytes_to_copy=$((($file_size - ${#THIRD_MESSAGE_FOOTER})))
     dd if=.lgtm-third-message of=.lgtm-crypto-params-third-message bs=1 count=$bytes_to_copy
     ../cryptography/lgtm_crypto_runner third-message-reply
@@ -380,7 +291,7 @@ verify_reply_to_third_message () {
     pkill log_to_file
     chmod 644 .lgtm-monitor-third-message-reply.dat
 
-    # Process crypto parameters and prepare second message
+    # Process crypto parameters and prepare third message reply
     bytes_to_copy=$((($file_size - ${#THIRD_MESSAGE_REPLY_FOOTER})))
     dd if=.lgtm-third-message-reply of=.lgtm-crypto-params-third-message-reply bs=1 count=$bytes_to_copy
     ../cryptography/lgtm_crypto_runner decrypt-third-message-reply
@@ -518,9 +429,6 @@ if [[ $input == 'l' ]]; then
     # Send first message
     first_message
 
-    # Receive Message 1 reply and send second message
-    second_message
- 
     # Receive Message 2 reply and send third message (this includes the facial recognition params)
     third_message
     
@@ -545,9 +453,6 @@ if [ $begin_lgtm -gt 0 ]; then
     
     # Receive Message 1 and send reply
     reply_to_first_message
-
-    # Receive Message 2 and send reply
-    reply_to_second_message
 
     # Receive Message 3 and send reply (these both include facial recognition params)
     reply_to_third_message
