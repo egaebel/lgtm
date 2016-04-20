@@ -252,6 +252,10 @@ reply_to_third_message () {
     # Process crypto parameters and prepare third message
     bytes_to_copy=$((($file_size - ${#THIRD_MESSAGE_FOOTER})))
     dd if=.lgtm-third-message of=.lgtm-crypto-params-third-message bs=1 count=$bytes_to_copy
+    # Setup facial-recognition-params
+    rm .lgtm-facial-recognition-params
+    echo $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
+    dd if=$facial_recognition_file of=.lgtm-facial-recognition-params seek=${#FACIAL_RECOGNITION_HEADER} bs=1
     ../cryptography/lgtm_crypto_runner third-message-reply
 
     # Setup injection mode
@@ -277,6 +281,7 @@ verify_reply_to_third_message () {
         # Count the file size in bytes using wc, and cut off the file name from the output (only want the number!)
         file_size=$(wc --bytes .lgtm-monitor-third-message-reply.dat | cut -d ' ' -f 1)
         echo file size: $file_size
+        echo file size is now: ${file_size:0}
         if [ "${file_size:0}" -gt 0 ]; then
             # Extract data from mpdus in packets
             echo "Extracting data from received packets............................"
@@ -353,7 +358,12 @@ localize_wireless_signal () {
     # Localize wireless signal
     echo "Localizing signal source........................................."
     logged_on_user=$(who | head -n1 | awk '{print $1;}')
-    sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/lgtm_spotfi_runner.m'), exit"
+    cd ../csi-code
+    sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "lgtm_spotfi_runner .lgtm-monitor-third-message.dat, exit"
+    mv .lgtm-monitor-third-message ../injection-monitor
+    cd ../injection-monitor
+    #sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "'../csi-code/lgtm_spotfi_runner' '.lgtm-monitor-third-message', exit"
+    #sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "read_mpdu_file .lgtm-monitor-third-message.dat .lgtm-third-message, exit"
     echo "Successfully localized signal source!"
 }
 
