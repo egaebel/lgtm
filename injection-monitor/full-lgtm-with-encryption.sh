@@ -276,8 +276,8 @@ verify_reply_to_third_message () {
     while [ $lgtm_ack -lt 1 ]; do
         # Count the file size in bytes using wc, and cut off the file name from the output (only want the number!)
         file_size=$(wc --bytes .lgtm-monitor-third-message-reply.dat | cut -d ' ' -f 1)
-        echo file size: $file_size
-        if [ "${file_size:0}" -gt 0 ]; then
+        echo "file size: ||$file_size||"
+        if [ "${file_size:=0}" -gt 0 ]; then
             # Extract data from mpdus in packets
             echo "Extracting data from received packets............................"
             # Extract data on facial recognition params from received data
