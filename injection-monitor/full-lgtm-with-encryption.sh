@@ -197,6 +197,7 @@ third_message () {
     pkill log_to_file
 
     # Cut off the footer so we only have the crypto things
+    file_size=$(wc --bytes .lgtm-first-message-reply | cut -d ' ' -f 1)
     bytes_to_copy=$((($file_size - ${#SFIRST_MESSAGE_REPLY_FOOTER})))
     dd if=.lgtm-first-message-reply of=.lgtm-crypto-params-first-message-reply bs=1 count=$bytes_to_copy
 
@@ -249,6 +250,7 @@ reply_to_third_message () {
     chmod 644 .lgtm-monitor-third-message.dat
 
     # Process crypto parameters and prepare third message
+    file_size=$(wc --bytes .lgtm-third-message | cut -d ' ' -f 1)
     bytes_to_copy=$((($file_size - ${#THIRD_MESSAGE_FOOTER})))
     rm .lgtm-crypto-params-third-message
     dd if=.lgtm-third-message of=.lgtm-crypto-params-third-message bs=1 count=$bytes_to_copy
@@ -299,6 +301,7 @@ verify_reply_to_third_message () {
     chmod 644 .lgtm-monitor-third-message-reply.dat
 
     # Process crypto parameters and prepare third message reply
+    file_size=$(wc --bytes .lgtm-third-message-reply | cut -d ' ' -f 1)
     bytes_to_copy=$((($file_size - ${#THIRD_MESSAGE_REPLY_FOOTER})))
     dd if=.lgtm-third-message-reply of=.lgtm-crypto-params-third-message-reply bs=1 count=$bytes_to_copy
     ../cryptography/lgtm_crypto_runner decrypt-third-message-reply
