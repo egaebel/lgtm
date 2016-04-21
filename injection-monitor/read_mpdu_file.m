@@ -34,8 +34,12 @@ function read_mpdu_file(input_filename, output_filename)
     if nargin == 0
         input_filename = '.lgtm-monitor.dat';
         output_filename = '.lgtm-received-facial-recognition-params';
+        fprintf('No arguments given to read_mpdu_file....reverting to defaults: %s and %s\n', ...
+                input_filename, output_filename)
     else
         narginchk(2, 2);
+        fprintf('Received input and output arugments: %s and %s\n', ...
+                input_filename, output_filename)
     end
     
     % Get the full path to the currently executing file and change the
