@@ -145,7 +145,7 @@ first_message () {
     sleep $SWITCH_WAIT_TIME
     ../cryptography/lgtm_crypto_runner first-message
     dd if=.lgtm-crypto-params-first-message of=.lgtm-begin-protocol bs=1
-    echo $LGTM_BEGIN_TOKEN | dd of=.lgtm-begin-protocol bs=1 oflang=append conv=notrunc
+    echo $LGTM_BEGIN_TOKEN | dd of=.lgtm-begin-protocol bs=1 oflag=append conv=notrunc
     ./packets-from-file/packets_from_file .lgtm-begin-protocol 1 $PACKET_DELAY
 }
 
@@ -161,7 +161,7 @@ reply_to_first_message () {
     ../cryptography/lgtm_crypto_runner first-message-reply
     # Attach footer to crypto params message
     #echo $FIRST_MESSAGE_REPLY_FOOTER >> .lgtm-crypto-params-first-message-reply
-    echo $FIRST_MESSAGE_REPLY_FOOTER | dd of=.lgtm-crypto-params-first-message-reply bs=1 oflang=append conv=notrunc
+    echo $FIRST_MESSAGE_REPLY_FOOTER | dd of=.lgtm-crypto-params-first-message-reply bs=1 oflag=append conv=notrunc
     # Setup Injection mode
     injection_mode
     # Sleep to ensure other party has switched into monitor mode....
@@ -206,7 +206,7 @@ third_message () {
     echo $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
     dd if=$facial_recognition_file of=.lgtm-facial-recognition-params seek=${#FACIAL_RECOGNITION_HEADER} bs=1
     #echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
-    echo $FACIAL_RECOGNITION_FOOTER | dd of=.lgtm-facial-recognition-params oflang=append conv=notrunc
+    echo $FACIAL_RECOGNITION_FOOTER | dd of=.lgtm-facial-recognition-params oflag=append conv=notrunc
 
     # Process crypto parameters and prepare third message
     ../cryptography/lgtm_crypto_runner third-message
@@ -217,7 +217,7 @@ third_message () {
     sleep $SWITCH_WAIT_TIME
     # Attach footer to crypto params message
     #echo $THIRD_MESSAGE_FOOTER >> .lgtm-crypto-params-third-message
-    echo $THIRD_MESSAGE_FOOTER | dd of=.lgtm-crypto-params-third-message oflang=append conv=notrunc
+    echo $THIRD_MESSAGE_FOOTER | dd of=.lgtm-crypto-params-third-message oflag=append conv=notrunc
     ./packets-from-file/packets_from_file .lgtm-crypto-params-third-message
 }
 
@@ -259,7 +259,7 @@ reply_to_third_message () {
     rm .lgtm-facial-recognition-params
     echo $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
     dd if=$facial_recognition_file of=.lgtm-facial-recognition-params seek=${#FACIAL_RECOGNITION_HEADER} bs=1
-    echo $FACIAL_RECOGNITION_FOOTER | dd of=.lgtm-facial-recognition-params oflang=append conv=notrunc
+    echo $FACIAL_RECOGNITION_FOOTER | dd of=.lgtm-facial-recognition-params oflag=append conv=notrunc
 
     # Construct message with encryption, etc
     ../cryptography/lgtm_crypto_runner third-message-reply
@@ -270,7 +270,7 @@ reply_to_third_message () {
     sleep $SWITCH_WAIT_TIME
     # Attach footer to crypto params message
     #echo $THIRD_MESSAGE_REPLY_FOOTER >> .lgtm-crypto-params-third-message-reply
-    echo $THIRD_MESSAGE_REPLY_FOOTER | dd of=.lgtm-crypto-params-third-message-reply oflang=append conv=notrunc
+    echo $THIRD_MESSAGE_REPLY_FOOTER | dd of=.lgtm-crypto-params-third-message-reply oflag=append conv=notrunc
     ./packets-from-file/packets_from_file .lgtm-crypto-params-third-message-reply
 }
 
