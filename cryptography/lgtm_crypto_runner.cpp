@@ -268,18 +268,18 @@ int main(int argc, char *argv[]) {
     if (argc != 2) {
         return 1; }
 
-    if (strncmp(argv[0], "first-message", 13)) {
-        firstMessage();
-    } else if (strncmp(argv[0], "first-message-reply", 19)) {
+    if (strncmp(argv[0], "first-message-reply", 19)) {
         if (!replyToFirstMessage()) {
+            return 1;
+        }
+    } else if (strncmp(argv[0], "first-message", 13)) {
+        firstMessage();
+    } else if (strncmp(argv[0], "third-message-reply", 19)) {
+        if (!replyToThirdMessage()) {
             return 1;
         }
     } else if (strncmp(argv[0], "third-message", 13)) {
         if (!thirdMessage()) {
-            return 1;
-        }
-    } else if (strncmp(argv[0], "third-message-reply", 19)) {
-        if (!replyToThirdMessage()) {
             return 1;
         }
     } else if (strncmp(argv[0], "decrypt-third-message-reply", 27)) {
