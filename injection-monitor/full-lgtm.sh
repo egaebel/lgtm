@@ -140,7 +140,8 @@ send_facial_recognition_params () {
     rm .lgtm-facial-recognition-params
     echo $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
     dd if=$facial_recognition_file of=.lgtm-facial-recognition-params seek=${#FACIAL_RECOGNITION_HEADER} bs=1
-    echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
+    #echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
+    echo $FACIAL_RECOGNITION_FOOTER | dd of=.lgtm-facial-recognition-params bs=1 oflag=append conv=notrunc
 
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
     echo "Sent 'facial recognition params'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
