@@ -364,12 +364,13 @@ receive_facial_recognition_params () {
 }
 
 localize_wireless_signal () {
+    localization_file=$1
     # Localize wireless signal
     echo
     echo "Localizing signal source........................................."
     logged_on_user=$(who | head -n1 | awk '{print $1;}')
     cd ../csi-code
-    sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "lgtm_spotfi_runner .lgtm-monitor-third-message.dat, exit"
+    sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "lgtm_spotfi_runner $localization_file, exit"
     mv .lgtm-monitor-third-message ../injection-monitor
     cd ../injection-monitor
     echo "Successfully localized signal source!"
@@ -454,7 +455,7 @@ if [[ $input == 'l' ]]; then
     verify_reply_to_third_message
 
     localization_start_time=$(date +%s)
-    localize_wireless_signal
+    localize_wireless_signal .lgtm-monitor-third-message-reply.dat
     localization_end_time=$(date +%s)
     localization_elapsed_time=$(expr $localization_end_time - $localization_start_time)
     echo Localization ran in time: $localization_elapsed_time seconds
@@ -476,7 +477,7 @@ if [ $begin_lgtm -gt 0 ]; then
     reply_to_third_message
 
     localization_start_time=$(date +%s)
-    localize_wireless_signal
+    localize_wireless_signal .lgtm-monitor-third-message.dat
     localization_end_time=$(date +%s)
     localization_elapsed_time=$(expr $localization_end_time - $localization_start_time)
     echo Localization ran in time: $localization_elapsed_time seconds
