@@ -283,7 +283,7 @@ verify_reply_to_third_message () {
     rm .lgtm-monitor-third-message-reply.dat
     rm .lgtm-third-message-reply
     pkill log_to_file
-    ./log-to-file/log_to_file .lgtm-monitor-third-message.dat &
+    ./log-to-file/log_to_file .lgtm-monitor-third-message-reply.dat &
     lgtm_ack=0
     # Figure this out to use with sudo -u below
     logged_on_user=$(who | head -n1 | awk '{print $1;}')
