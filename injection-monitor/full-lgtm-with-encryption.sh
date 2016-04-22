@@ -165,7 +165,7 @@ reply_to_first_message () {
     injection_mode
     # Sleep to ensure other party has switched into monitor mode....
     sleep $SWITCH_WAIT_TIME
-    ./packets-from-file/packets_from_file .lgtm-crypto-params-first-message-reply
+    ./packets-from-file/packets_from_file .lgtm-crypto-params-first-message-reply 1 $PACKET_DELAY
 }
 
 third_message () {
@@ -210,13 +210,14 @@ third_message () {
     # Process crypto parameters and prepare third message
     ../cryptography/lgtm_crypto_runner third-message
 
+
     # Setup injection mode
     injection_mode
     # Sleep to allow other user to switch over into monitor mode
     sleep $SWITCH_WAIT_TIME
     # Attach footer to crypto params message
     echo -n $THIRD_MESSAGE_FOOTER | dd of=.lgtm-crypto-params-third-message oflag=append conv=notrunc
-    ./packets-from-file/packets_from_file .lgtm-crypto-params-third-message
+    ./packets-from-file/packets_from_file .lgtm-crypto-params-third-message 1 $PACKET_DELAY
 }
 
 reply_to_third_message () {
@@ -227,6 +228,7 @@ reply_to_third_message () {
     # Listen for reply to third message
     rm .lgtm-monitor-third-message.dat
     rm .lgtm-third-message
+    pkill log_to_file
     ./log-to-file/log_to_file .lgtm-monitor-third-message.dat &
     lgtm_ack=0
     # Figure this out to use with sudo -u below
@@ -269,7 +271,7 @@ reply_to_third_message () {
     sleep $SWITCH_WAIT_TIME
     # Attach footer to crypto params message
     echo -n $THIRD_MESSAGE_REPLY_FOOTER | dd of=.lgtm-crypto-params-third-message-reply oflag=append conv=notrunc
-    ./packets-from-file/packets_from_file .lgtm-crypto-params-third-message-reply
+    ./packets-from-file/packets_from_file .lgtm-crypto-params-third-message-reply 1 $PACKET_DELAY
 }
 
 verify_reply_to_third_message () {
@@ -313,14 +315,14 @@ send_facial_recognition_params () {
     injection_mode
     # Sleep for 5 seconds to ensure other party has switched into monitor mode....
     sleep $SWITCH_WAIT_TIME
-    # Send acknowledgment + facial recognition params, TODO: later this will include a public key
+    # Send acknowledgment + facial recognition params
     # Send facial recognition params
     rm .lgtm-facial-recognition-params
     echo $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
     dd if=$facial_recognition_file of=.lgtm-facial-recognition-params seek=${#FACIAL_RECOGNITION_HEADER} bs=1
-    echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
+    echo -n $FACIAL_RECOGNITION_FOOTER | dd of=.lgtm-facial-recognition-params bs=1 oflag=append conv=notrunc
 
-    ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
+    ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1 $PACKET_DELAY
     echo "Sent 'facial recognition params'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 }
 
@@ -329,7 +331,7 @@ receive_facial_recognition_params () {
     # Switch to monitor mode
     monitor_mode
 
-    # Listen for facial recognition parameters, TODO: later it will be ack + recog params + public key
+    # Listen for facial recognition parameters
     echo "Awaiting 'facial recognition params'............................."
     rm .lgtm-monitor.dat
     rm .lgtm-received-facial-recognition-params
@@ -345,7 +347,6 @@ receive_facial_recognition_params () {
             # Extract data from mpdus in packets
             echo "Extracting data from received packets............................"
             # Extract data on facial recognition params from received data
-            # TODO: Change command line args
             # "read_mpdu_file .lgtm-begin-monitor some_output_file.txt, exit"
             sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('read_mpdu_file.m'), exit"    
             echo "Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
@@ -367,8 +368,6 @@ localize_wireless_signal () {
     sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "lgtm_spotfi_runner .lgtm-monitor-third-message.dat, exit"
     mv .lgtm-monitor-third-message ../injection-monitor
     cd ../injection-monitor
-    #sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "'../csi-code/lgtm_spotfi_runner' '.lgtm-monitor-third-message', exit"
-    #sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "read_mpdu_file .lgtm-monitor-third-message.dat .lgtm-third-message, exit"
     echo "Successfully localized signal source!"
 }
 
@@ -431,7 +430,6 @@ begin_lgtm=0
 input='a'
 while [[ $input != 'l' ]] && [[ $begin_lgtm -lt 1 ]]; do
     read -n 1 -s -t 1 -r input
-    # TODO: Later this token, "begin-lgtm-protocol", will also include a public key
     begin_lgtm=$(cat .lgtm-begin-monitor.dat | grep $LGTM_BEGIN_TOKEN | wc -l)
 done
 
