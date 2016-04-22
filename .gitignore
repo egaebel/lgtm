@@ -180,3 +180,7 @@ injection-monitor/.lgtm-first-message-reply
 injection-monitor/.lgtm-monitor-first-message-reply.dat
 injection-monitor/.lgtm-monitor-third-message.dat
 injection-monitor/.lgtm-third-message
+injection-monitor/.lgtm-crypto-params-computed-key
+injection-monitor/.lgtm-crypto-params-other-first-message-random-number
+injection-monitor/.lgtm-crypto-params-other-public-key
+injection-monitor/.lgtm-crypto-params-shared-secret
