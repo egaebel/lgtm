@@ -526,7 +526,7 @@ if __name__ == '__main__':
 
     distances = [1, 2, 3]
     num_samples_list = None
-    if directory_name == 'lgtm-distance-angle-experiments-sampling-output-data':
+    if directory_name == 'lgtm-distance-angle-experiments-sampling-output-data' or directory_name == 'lgtm-distance-angle-experiments-sampling-output-data/':
         num_samples_list = [None, 750, 500, 250, 100, 50, 25, 10]
         for num_samples in num_samples_list:
             if num_samples is None:
