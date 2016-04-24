@@ -80,5 +80,5 @@ if [[ $chunk_of_cluster_number == 6 ]]; then
     ssh locust -t "pkill MATLAB; $my_dir/run_matlab_data_proc.sh 28"
     ssh maple -t "pkill MATLAB; $my_dir/run_matlab_data_proc.sh 29"
     ssh mulberry -t "pkill MATLAB; $my_dir/run_matlab_data_proc.sh 30"
-    echo "Chunk 6 jobs submitted to pawpaw, pine, sassafras, spruce, and sumac"
+    echo "Chunk 6 jobs submitted to hornbeam, linden, locust, maple, and mulberry"
 fi
