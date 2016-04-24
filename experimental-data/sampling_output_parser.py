@@ -8,6 +8,12 @@ DISTANCE_KEY = 'DISTANCE'
 ANGLE_KEY = 'ANGLE'
 LAPTOP_ID_KEY = 'LAPTOP_ID'
 TEST_NUMBER_KEY = 'TEST_NUMBER'
+SAMPLING_PARAMETERS_DICT_KEY = 'SAMPLING_PARAMETERS'
+# Keys to the sampling parameters dict
+FILE_NAME_KEY = 'file name'
+NUM_SAMPLES_KEY = 'number of samples'
+SAMPLING_BEGIN_INDEX_KEY = 'sampling beginning index'
+SAMPLING_END_INDEX_KEY = 'sampling ending index'
 
 TOP_AOA_INDEX_KEY = 'TOP_AOA_INDEX'
 TOP_AOA_KEY = 'TOP_AOA'
@@ -158,6 +164,24 @@ def parse_file_name(file_name):
 
     return file_data
 
+# Takes a string in the form: 
+#     <file_name> <number of samples> <sampling begin index> <sampling end index>
+def parse_sampling_parameters_key(sampling_parameters_key):
+    
+    parameters_list = sampling_parameters_key.split(' ')
+    file_name = parameters_list[0]
+    number_of_samples = parameters_list[1]
+    sampling_begin_index = parameters_list[2]
+    sampling_end_index = parameters_list[3]
+
+    return_dict = {FILE_NAME_KEY: file_name, 
+            NUM_SAMPLES_KEY: number_of_samples,
+            SAMPLING_BEGIN_INDEX_KEY: sampling_begin_index,
+            SAMPLING_END_INDEX_KEY: sampling_end_index}
+
+    return return_dict
+
+
 # Take the distance between nodes, true angle, and a list of angles
 # Output a dictionary with the index and angle of any angles that match
 # the true angle (within 40 cm tolerance (on either side))
@@ -197,7 +221,7 @@ def compare_true_and_measured_angles(distance, true_angle, top_aoas):
 # If the angle parameter is given only the entries under ANGLE_KEY which match
 #       the given angle will be considered. 
 #       The angle argument to this function should be an integer.
-def error_rate(data_list, distance=None, angle=None, laptop_id=None):
+def error_rate(data_list, distance=None, angle=None, laptop_id=None, num_samples=None):
     total_entries_considered = 0
     complete_top_3_error_count = 0
     complete_top_5_error_count = 0
@@ -212,6 +236,20 @@ def error_rate(data_list, distance=None, angle=None, laptop_id=None):
         # Skip this entry if we care about laptop id and it doesn't match up
         if laptop_id is not None and int(entry[LAPTOP_ID_KEY]) != laptop_id:
            continue
+        # Skip this entry if we care about the number of samples and it doesn't match up
+        if num_samples is not None\
+                and int(entry[SAMPLING_PARAMETERS_DICT_KEY][NUM_SAMPLES_KEY]) != num_samples:
+            continue
+        # Skip this entry if the number of samples is not equivalent to the full spread of packets
+        # This runs counter to the case above
+        if num_samples is None:
+            cur_num_samples = int(entry[SAMPLING_PARAMETERS_DICT_KEY][NUM_SAMPLES_KEY])
+            cur_end_index = int(entry[SAMPLING_PARAMETERS_DICT_KEY][SAMPLING_END_INDEX_KEY])
+            cur_begin_index = int(entry[SAMPLING_PARAMETERS_DICT_KEY][SAMPLING_BEGIN_INDEX_KEY])
+            # If the current number of samples is not equal to the total count of packets, skip
+            #   I need to subtract one because these indices are from MATLAB, so they start at 1
+            if cur_num_samples != cur_end_index - (cur_begin_index - 1):
+                continue
 
         if len(entry[AOA_MATCHES_KEY]) == 0:
             complete_top_3_error_count += 1
@@ -248,7 +286,7 @@ def error_rate(data_list, distance=None, angle=None, laptop_id=None):
 # If distance and/or angle are passed then only entries matching distance and/or angle
 #       will be considered
 # Returns the mean error
-def mean_error(data_list, distance=None, angle=None, laptop_id=None):
+def mean_error(data_list, distance=None, angle=None, laptop_id=None, num_samples=None):
     total_entries_considered = 0
     error_sum = 0
     for entry in data_list:
@@ -261,6 +299,20 @@ def mean_error(data_list, distance=None, angle=None, laptop_id=None):
         # Skip this entry if we care about laptop id and it doesn't match up
         if laptop_id is not None and int(entry[LAPTOP_ID_KEY]) != laptop_id:
             continue
+        # Skip this entry if we care about the number of samples and it doesn't match up
+        if num_samples is not None\
+                and int(entry[SAMPLING_PARAMETERS_DICT_KEY][NUM_SAMPLES_KEY]) != num_samples:
+            continue
+        # Skip this entry if the number of samples is not equivalent to the full spread of packets
+        # This runs counter to the case above
+        if num_samples is None:
+            cur_num_samples = int(entry[SAMPLING_PARAMETERS_DICT_KEY][NUM_SAMPLES_KEY])
+            cur_end_index = int(entry[SAMPLING_PARAMETERS_DICT_KEY][SAMPLING_END_INDEX_KEY])
+            cur_begin_index = int(entry[SAMPLING_PARAMETERS_DICT_KEY][SAMPLING_BEGIN_INDEX_KEY])
+            # If the current number of samples is not equal to the total count of packets, skip
+            #   I need to subtract one because these indices are from MATLAB, so they start at 1
+            if cur_num_samples != cur_end_index - (cur_begin_index - 1):
+                continue
 
         top_aoa = entry[TOP_AOAS_LIST_KEY][0]
         true_aoa = float(entry[ANGLE_KEY])
@@ -283,7 +335,7 @@ def mean_error(data_list, distance=None, angle=None, laptop_id=None):
 # If distance and/or angle are passed then only entries matching distance and/or angle
 #       will be considered
 # Returns the median error
-def median_error(data_list, distance=None, angle=None, laptop_id=None):
+def median_error(data_list, distance=None, angle=None, laptop_id=None, num_samples=None):
     errors = list()
     for entry in data_list:
         # Skip this entry if we care about the angle and it doesn't match up
@@ -295,6 +347,20 @@ def median_error(data_list, distance=None, angle=None, laptop_id=None):
         # Skip this entry if we care about laptop id and it doesn't match up
         if laptop_id is not None and int(entry[LAPTOP_ID_KEY]) != laptop_id:
             continue
+        # Skip this entry if we care about the number of samples and it doesn't match up
+        if num_samples is not None\
+                and int(entry[SAMPLING_PARAMETERS_DICT_KEY][NUM_SAMPLES_KEY]) != num_samples:
+            continue
+        # Skip this entry if the number of samples is not equivalent to the full spread of packets
+        # This runs counter to the case above
+        if num_samples is None:
+            cur_num_samples = int(entry[SAMPLING_PARAMETERS_DICT_KEY][NUM_SAMPLES_KEY])
+            cur_end_index = int(entry[SAMPLING_PARAMETERS_DICT_KEY][SAMPLING_END_INDEX_KEY])
+            cur_begin_index = int(entry[SAMPLING_PARAMETERS_DICT_KEY][SAMPLING_BEGIN_INDEX_KEY])
+            # If the current number of samples is not equal to the total count of packets, skip
+            #   I need to subtract one because these indices are from MATLAB, so they start at 1
+            if cur_num_samples != cur_end_index - (cur_begin_index - 1):
+                continue
 
         top_aoa = entry[TOP_AOAS_LIST_KEY][0]
         true_aoa = float(entry[ANGLE_KEY])
@@ -314,7 +380,7 @@ def median_error(data_list, distance=None, angle=None, laptop_id=None):
 # If distance and/or angle are passed then only entries matching distance and/or angle
 #       will be considered
 # Returns the min and max errors, in that order
-def min_max_error(data_list, distance=None, angle=None, laptop_id=None):
+def min_max_error(data_list, distance=None, angle=None, laptop_id=None, num_samples=None):
     errors = list()
     for entry in data_list:
         # Skip this entry if we care about the angle and it doesn't match up
@@ -326,6 +392,21 @@ def min_max_error(data_list, distance=None, angle=None, laptop_id=None):
         # Skip this entry if we care about laptop id and it doesn't match up
         if laptop_id is not None and int(entry[LAPTOP_ID_KEY]) != laptop_id:
             continue
+        # Skip this entry if we care about the number of samples and it doesn't match up
+        if num_samples is not None\
+                and int(entry[SAMPLING_PARAMETERS_DICT_KEY][NUM_SAMPLES_KEY]) != num_samples:
+            continue
+        # Skip this entry if the number of samples is not equivalent to the full spread of packets
+        # This runs counter to the case above
+        if num_samples is None:
+            cur_num_samples = int(entry[SAMPLING_PARAMETERS_DICT_KEY][NUM_SAMPLES_KEY])
+            cur_end_index = int(entry[SAMPLING_PARAMETERS_DICT_KEY][SAMPLING_END_INDEX_KEY])
+            cur_begin_index = int(entry[SAMPLING_PARAMETERS_DICT_KEY][SAMPLING_BEGIN_INDEX_KEY])
+            # If the current number of samples is not equal to the total count of packets, skip
+            #   I need to subtract one because these indices are from MATLAB, so they start at 1
+            if cur_num_samples != cur_end_index - (cur_begin_index - 1):
+                continue
+
 
         top_aoa = entry[TOP_AOAS_LIST_KEY][0]
         true_aoa = float(entry[ANGLE_KEY])
@@ -342,9 +423,79 @@ def min_max_error(data_list, distance=None, angle=None, laptop_id=None):
     print("Min Error: %g\nMax Error: %g" % (min_error, max_error))
     return min_error, max_error
 
+# Run all of the statistics
+# Top level, laptop 1 vs laptop 2, 1 m, 2 m
+# But constrain it with the number of samples used
+def run_statistics(aoa_experiment_comparison_data, distances=None, num_samples=None, separate_laptops=False):
+    print("\n\nTop Level Statistics: ")
+    error_rate(aoa_experiment_comparison_data, num_samples=num_samples)
+    print("")
+    mean_error(aoa_experiment_comparison_data, num_samples=num_samples)
+    print("")
+    median_error(aoa_experiment_comparison_data, num_samples=num_samples)
+    print("")
+    min_max_error(aoa_experiment_comparison_data, num_samples=num_samples)
+    print("")
+
+    # Separate laptops statistics switch
+    if separate_laptops:
+        print("\n\nLaptop 1 Statistics: ")
+        error_rate(aoa_experiment_comparison_data, laptop_id=1, num_samples=num_samples)
+        print("")
+        mean_error(aoa_experiment_comparison_data, laptop_id=1, num_samples=num_samples)
+        print("")
+        median_error(aoa_experiment_comparison_data, laptop_id=1, num_samples=num_samples)
+        print("")
+        min_max_error(aoa_experiment_comparison_data, laptop_id=1, num_samples=num_samples)
+        print("")
+
+        print("\n\nLaptop 2 Statistics: ")
+        error_rate(aoa_experiment_comparison_data, laptop_id=2, num_samples=num_samples)
+        print("")
+        mean_error(aoa_experiment_comparison_data, laptop_id=2, num_samples=num_samples)
+        print("")
+        median_error(aoa_experiment_comparison_data, laptop_id=2, num_samples=num_samples)
+        print("")
+        min_max_error(aoa_experiment_comparison_data, laptop_id=2, num_samples=num_samples)
+        print("")
+
+    # Separate distances statistics switch
+    if distances is not None:
+        for distance in distances:
+            print("\n\n%d m Distance Level Statistics: " % distance)
+            error_rate(aoa_experiment_comparison_data, distance=distance, num_samples=num_samples)
+            print("")
+            mean_error(aoa_experiment_comparison_data, distance=distance, num_samples=num_samples)
+            print("")
+            median_error(aoa_experiment_comparison_data, distance=distance, num_samples=num_samples)
+            print("")
+            min_max_error(aoa_experiment_comparison_data, distance=distance, num_samples=num_samples)
+            print("")
+
+    # Calculate the error rate and other correctness stats
+    """
+    for distance in [1, 2]:
+
+        print("\nDistance = %d" % distance)
+        error_rate(aoa_experiment_comparison_data, distance=distance, num_samples=num_samples)
+
+        for angle in [-20, -10, 0, 10, 20]:
+            print("\nDistance = %d, Angle = %d" % (distance, angle))
+            error_rate(aoa_experiment_comparison_data, distance=distance, angle=angle, num_samples=num_samples)
+
+    for angle in [-20, -10, 0, 10, 20]:
+        print("\nAngle = %d" % angle)
+        error_rate(aoa_experiment_comparison_data, angle=angle, num_samples=num_samples)
+    """
+
 # Main method---------------------------------------------------------------------------------------
 if __name__ == '__main__':
-    data_files_data = parse_spotfi_sampling_output('lgtm-distance-angle-experiments-output-data')
+    if len(sys.argv) > 1:
+        directory_name = sys.argv[1]
+    else:
+        directory_name = 'lgtm-distance-angle-experiments-output-data'
+    
+    data_files_data = parse_spotfi_sampling_output(directory_name)
     aoa_experiment_comparison_data = list()
     # Loop over data files
     for data_file_key in sorted(data_files_data):
@@ -352,10 +503,15 @@ if __name__ == '__main__':
         file_name_data = parse_file_name(data_file_key)
         # Loop over different sampling parameters
         for sampling_parameters_key in sorted(data_files_data[data_file_key]):
+
             top_aoas = data_files_data[data_file_key][sampling_parameters_key]
+
             # Get correct angles and angle index (ordered from highest to lowest likelihood)
             matching_indices = compare_true_and_measured_angles(file_name_data[DISTANCE_KEY], \
                     file_name_data[ANGLE_KEY], top_aoas)
+
+            # Extract sampling parameters from key name
+            sampling_parameters_dict = parse_sampling_parameters_key(sampling_parameters_key)
 
             # Append match data to data list so I can run through correct/incorrect stats
             aoa_matches = dict()
@@ -364,71 +520,26 @@ if __name__ == '__main__':
             aoa_matches[LAPTOP_ID_KEY] = file_name_data[LAPTOP_ID_KEY]
             aoa_matches[AOA_MATCHES_KEY] = matching_indices
             aoa_matches[TOP_AOAS_LIST_KEY] = top_aoas
+            aoa_matches[SAMPLING_PARAMETERS_DICT_KEY] = sampling_parameters_dict
 
             aoa_experiment_comparison_data.append(aoa_matches)
 
-    print("\n\nTop Level Statistics: ")
-    error_rate(aoa_experiment_comparison_data)
-    print("")
-    mean_error(aoa_experiment_comparison_data)
-    print("")
-    median_error(aoa_experiment_comparison_data)
-    print("")
-    min_max_error(aoa_experiment_comparison_data)
-    print("")
-
-    print("\n\nLaptop 1 Statistics: ")
-    error_rate(aoa_experiment_comparison_data, laptop_id=1)
-    print("")
-    mean_error(aoa_experiment_comparison_data, laptop_id=1)
-    print("")
-    median_error(aoa_experiment_comparison_data, laptop_id=1)
-    print("")
-    min_max_error(aoa_experiment_comparison_data, laptop_id=1)
-    print("")
-
-    print("\n\nLaptop 2 Statistics: ")
-    error_rate(aoa_experiment_comparison_data, laptop_id=2)
-    print("")
-    mean_error(aoa_experiment_comparison_data, laptop_id=2)
-    print("")
-    median_error(aoa_experiment_comparison_data, laptop_id=2)
-    print("")
-    min_max_error(aoa_experiment_comparison_data, laptop_id=2)
-    print("")
-
-    print("\n\n1m Distance Level Statistics: ")
-    error_rate(aoa_experiment_comparison_data, distance=1)
-    print("")
-    mean_error(aoa_experiment_comparison_data, distance=1)
-    print("")
-    median_error(aoa_experiment_comparison_data, distance=1)
-    print("")
-    min_max_error(aoa_experiment_comparison_data, distance=1)
-    print("")
-
-    print("\n\n2m Distance Level Statistics: ")
-    error_rate(aoa_experiment_comparison_data, distance=2)
-    print("")
-    mean_error(aoa_experiment_comparison_data, distance=2)
-    print("")
-    median_error(aoa_experiment_comparison_data, distance=2)
-    print("")
-    min_max_error(aoa_experiment_comparison_data, distance=2)
-    print("")
-
-    # Calculate the error rate and other correctness stats
-    """
-    for distance in [1, 2]:
-
-        print("\nDistance = %d" % distance)
-        error_rate(aoa_experiment_comparison_data, distance=distance)
-
-        for angle in [-20, -10, 0, 10, 20]:
-            print("\nDistance = %d, Angle = %d" % (distance, angle))
-            error_rate(aoa_experiment_comparison_data, distance=distance, angle=angle)
-
-    for angle in [-20, -10, 0, 10, 20]:
-        print("\nAngle = %d" % angle)
-        error_rate(aoa_experiment_comparison_data, angle=angle)
-    """
+    distances = [1, 2]
+    num_samples_list = None
+    if directory_name == 'lgtm-distance-angle-experiments-sampling-output-data':
+        num_samples_list = [None, 750, 500, 250, 100, 50, 25, 10]
+        for num_samples in num_samples_list:
+            if num_samples is None:
+                print("\n\n\nFor using ALL packets")
+            else:
+                print("\n\n\nFor sampling %d packets" % num_samples)
+            run_statistics(aoa_experiment_comparison_data, 
+                    distances=distances, 
+                    num_samples=num_samples, 
+                    separate_laptops=False)
+    else:
+        run_statistics(aoa_experiment_comparison_data, 
+                distances=distances, 
+                num_samples=None,
+                separate_laptops=False)
+        

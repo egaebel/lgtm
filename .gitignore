@@ -172,3 +172,15 @@ injection-monitor/.lgtm-crypto-params-first-message
 injection-monitor/.lgtm-crypto-params-first-message-random-number
 injection-monitor/.lgtm-crypto-params-private-key
 injection-monitor/.lgtm-crypto-params-public-key
+injection-monitor/.lgtm-crypto-params-first-message-reply
+injection-monitor/.lgtm-crypto-params-third-message
+injection-monitor/.lgtm-crypto-params-third-message-reply
+injection-monitor/.lgtm-first-message
+injection-monitor/.lgtm-first-message-reply
+injection-monitor/.lgtm-monitor-first-message-reply.dat
+injection-monitor/.lgtm-monitor-third-message.dat
+injection-monitor/.lgtm-third-message
+injection-monitor/.lgtm-crypto-params-computed-key
+injection-monitor/.lgtm-crypto-params-other-first-message-random-number
+injection-monitor/.lgtm-crypto-params-other-public-key
+injection-monitor/.lgtm-crypto-params-shared-secret

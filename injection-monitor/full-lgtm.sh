@@ -135,12 +135,11 @@ send_facial_recognition_params () {
     injection_mode
     # Sleep for 5 seconds to ensure other party has switched into monitor mode....
     sleep $SWITCH_WAIT_TIME
-    # Send acknowledgement + facial recognition params, TODO: later this will include a public key
     # Send facial recognition params
     rm .lgtm-facial-recognition-params
     echo $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
     dd if=$facial_recognition_file of=.lgtm-facial-recognition-params seek=${#FACIAL_RECOGNITION_HEADER} bs=1
-    echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
+    echo $FACIAL_RECOGNITION_FOOTER | dd of=.lgtm-facial-recognition-params bs=1 oflag=append conv=notrunc
 
     ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
     echo "Sent 'facial recognition params'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
@@ -151,7 +150,7 @@ receive_facial_recognition_params () {
     # Switch to monitor mode
     monitor_mode
 
-    # Listen for facial recognition parameters, TODO: later it will be ack + recog params + public key
+    # Listen for facial recognition parameters
     echo "Awaiting 'facial recognition params'............................."
     rm .lgtm-monitor.dat
     rm .lgtm-received-facial-recognition-params
@@ -242,7 +241,6 @@ begin_lgtm=0
 input='a'
 while [[ $input != 'l' ]] && [[ $begin_lgtm -lt 1 ]]; do
     read -n 1 -s -t 1 -r input
-    # TODO: Later this token, "begin-lgtm-protocol", will also include a public key
     begin_lgtm=$(cat .lgtm-begin-monitor.dat | grep $LGTM_BEGIN_TOKEN | wc -l)
 done
 
@@ -258,7 +256,7 @@ if [[ $input == 'l' ]]; then
     # Setup Injection mode
     injection_mode
 
-    # Send "begin-lgtm-protocol", TODO: later this will include a public key
+    # Send "begin-lgtm-protocol"
     rm .lgtm-begin-protocol
     echo $LGTM_BEGIN_TOKEN > .lgtm-begin-protocol
     ./packets-from-file/packets_from_file .lgtm-begin-protocol 1 $PACKET_DELAY

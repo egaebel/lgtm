@@ -48,14 +48,10 @@ static const string OTHER_FIRST_MESSAGE_RANDOM_NUMBER = LGTM_CRYPTO_PREFIX
 // Facial recognition params files
 static const string FACIAL_RECOGNITION_FILE_NAME 
         = ".lgtm-facial-recognition-params";
-static const string ENCRYPTED_FACIAL_RECOGNITION_FILE_NAME 
-        = ".lgtm-facial-recognition-params--encrypted";
 
 // Received facial recognition params files
 static const string RECEIVED_FACIAL_RECOGNITION_FILE_NAME 
         = ".lgtm-received-facial-recognition-params";
-static const string DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME 
-        = ".lgtm-received-facial-recognition-params--decrypted";
 
 // Message file names
 static const string FIRST_MESSAGE_FILE_NAME = LGTM_CRYPTO_PREFIX + "first-message";
@@ -203,7 +199,7 @@ bool thirdMessage() {
 
     // Encrypt facial recognition params
     encryptFile(FACIAL_RECOGNITION_FILE_NAME, 
-            ENCRYPTED_FACIAL_RECOGNITION_FILE_NAME, 
+            THIRD_MESSAGE_FILE_NAME, 
             key, curIv);
     return true;
 }
@@ -225,8 +221,8 @@ bool replyToThirdMessage() {
     memset(curIv, 0, AES::BLOCKSIZE);
 
     // Decrypt received facial recognition params
-    if (!decryptFile(RECEIVED_FACIAL_RECOGNITION_FILE_NAME,
-            THIRD_MESSAGE_REPLY_FILE_NAME, 
+    if (!decryptFile(THIRD_MESSAGE_FILE_NAME, 
+            RECEIVED_FACIAL_RECOGNITION_FILE_NAME,
             key, curIv)) {
         cerr << "Security Error in replyToThirdMessage. MAC could not be verified." << endl;
         return false;
@@ -234,7 +230,7 @@ bool replyToThirdMessage() {
 
     // Encrypt facial recognition params
     encryptFile(FACIAL_RECOGNITION_FILE_NAME, 
-            ENCRYPTED_FACIAL_RECOGNITION_FILE_NAME,
+            THIRD_MESSAGE_REPLY_FILE_NAME, 
             key, curIv);
     return true;
 }
@@ -255,8 +251,8 @@ bool decryptThirdMessageReply() {
     memset(curIv, 0, AES::BLOCKSIZE);
 
     // Decrypt facial recognition params
-    if (!decryptFile(RECEIVED_FACIAL_RECOGNITION_FILE_NAME, 
-            DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME, 
+    if (!decryptFile(THIRD_MESSAGE_REPLY_FILE_NAME,
+            RECEIVED_FACIAL_RECOGNITION_FILE_NAME,
             key, curIv)) {
         cerr << "Security Error in decryptThirdMessageReply. MAC could not be verified." << endl;
         return false;
@@ -270,26 +266,35 @@ bool decryptThirdMessageReply() {
 int main(int argc, char *argv[]) {
 
     if (argc != 2) {
-        return 1; }
+        cout << "Incorrect number of aruments passed to lgtm_crypto_runner.cpp. Expected 2 but got: " << argc << endl;
+        return 1; 
+    }
 
-    if (strncmp(argv[0], "first-message", 13)) {
-        firstMessage();
-    } else if (strncmp(argv[0], "first-message-reply", 19)) {
+    if (strncmp(argv[1], "first-message-reply", 19) == 0) {
+cout << "first-message-reply" << endl;
         if (!replyToFirstMessage()) {
             return 1;
         }
-    } else if (strncmp(argv[0], "third-message", 13)) {
-        if (!thirdMessage()) {
-            return 1;
-        }
-    } else if (strncmp(argv[0], "third-message-reply", 19)) {
+    } else if (strncmp(argv[1], "first-message", 13) == 0) {
+cout << "first-message" << endl;
+        firstMessage();
+    } else if (strncmp(argv[1], "third-message-reply", 19) == 0) {
+cout << "third-message-reply" << endl;
         if (!replyToThirdMessage()) {
             return 1;
         }
-    } else if (strncmp(argv[0], "decrypt-third-message-reply", 27)) {
+    } else if (strncmp(argv[1], "third-message", 13) == 0) {
+cout << "third-message" << endl;
+        if (!thirdMessage()) {
+            return 1;
+        }
+    } else if (strncmp(argv[1], "decrypt-third-message-reply", 27) == 0) {
+cout << "decrypt-third-message-reply" << endl;
         if (!decryptThirdMessageReply()) {
             return 1;
         }
+    } else {
+        cout << "Argument:" << argv[1] << " was not recognized in lgtm_crypto_runner.cpp! Exiting...." << endl;
     }
     return 0;
 }

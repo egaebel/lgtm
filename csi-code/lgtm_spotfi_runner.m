@@ -21,7 +21,7 @@
 % DEALINGS IN THE SOFTWARE.
 %
 
-function spotfi_file_runner
+function spotfi_file_runner(input_file_name)
     %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%
     globals_init()
     global DEBUG_BRIDGE_CODE_CALLING
@@ -43,7 +43,12 @@ function spotfi_file_runner
     % data_files = {'test-data/line-of-sight-localization-tests--in-room/los-test-heater.dat'};
     % top_aoas = run(data_files);
     % top_aoas
-    data_file = '../injection-monitor/.lgtm-monitor-third-message-reply.dat';
+    if nargin == 0 
+        data_file = '../injection-monitor/.lgtm-monitor.dat';
+    else
+        data_file = sprintf('../injection-monitor/%s', input_file_name);
+    end
+    fprintf('data_file: %s\n', data_file)
     %data_file = 'test-data/line-of-sight-localization-tests--in-room/los-test-heater.dat';
     top_aoas = run(data_file);
     output_file_name = '../injection-monitor/.lgtm-top-aoas';
@@ -143,9 +148,13 @@ function output_top_aoas = run(data_file)
         fprintf('Considering CSI for %d packets\n', num_packets)
     end
     %% TODO: Remove after testing
+    fprintf('csi_trace\n')
+    csi_trace
+    csi_trace{1}
+    
     fprintf('num_packets: %d\n', num_packets)
     sampled_csi_trace = csi_sampling(csi_trace, num_packets, ...
-            (length(csi_trace) - num_packets), length(csi_trace));
+            1, length(csi_trace));
     
     output_top_aoas = spotfi(sampled_csi_trace, frequency, sub_freq_delta, antenna_distance);
 end

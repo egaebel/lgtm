@@ -1,3 +1,28 @@
+%%
+% The MIT License (MIT)
+% Copyright (c) 2016 Ethan Gaebel <egaebel@vt.edu>
+% 
+% Permission is hereby granted, free of charge, to any person obtaining a 
+% copy of this software and associated documentation files (the "Software"), 
+% to deal in the Software without restriction, including without limitation 
+% the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+% and/or sell copies of the Software, and to permit persons to whom the 
+% Software is furnished to do so, subject to the following conditions:
+% 
+% The above copyright notice and this permission notice shall be included 
+% in all copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
+% OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+% AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+% LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
+% FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+% DEALINGS IN THE SOFTWARE.
+%
+% Original code provided by Daniel Halperin with the original copywrite
+% information below
+
 %READ_BF_FILE_MODIFIED Reads in a file of beamforming feedback logs.
 %   This version uses the *C* version of read_bfee, compiled with
 %   MATLAB's MEX utility.
@@ -5,6 +30,11 @@
 % (c) 2008-2011 Daniel Halperin <dhalperi@cs.washington.edu>
 %
 function ret = read_bf_file_modified(filename)
+
+    % Add path information for read_bfee (this is a testing file so don't
+    % worry yourself about whether this is the proper place to do this)
+    path('../../../linux-80211n-csitool-supplementary/matlab', path);
+    
     fprintf('read_bf_file_modified called: checking nargchk....\n')
     %% Input check
     error(nargchk(1,1,nargin));
@@ -59,6 +89,7 @@ function ret = read_bf_file_modified(filename)
         fprintf('code: %d\n', code)
         % If unhandled code, skip (seek over) the record and continue
         if (code == 187) % get beamforming or phy data
+            fprintf('yay, phy data!\n')
             bytes = fread(f, field_len-1, 'uint8=>uint8');
             cur = cur + field_len - 1;
             if (length(bytes) ~= field_len-1)
@@ -69,12 +100,12 @@ function ret = read_bf_file_modified(filename)
             payload_count = payload_count + 1;
             bytes = fread(f, field_len-1, 'uint8=>uint8');
             % data is in bytes: 25-length(bytes) - 4
-            fprintf('Full bytes: \n')
-            dec2hex(bytes);
-            fprintf('Sliced version: \n')
-            dec2hex(bytes(25:length(bytes) - 4))
+            %fprintf('Full bytes: \n')
+            %dec2hex(bytes)
+            %fprintf('Sliced version: \n')
+            %dec2hex(bytes(25:length(bytes) - 4))
             fwrite(payload_file, bytes(25:length(bytes) - 4), 'uint8');
-            fprintf('length(bytes): %d\n', length(bytes))
+            %fprintf('length(bytes): %d\n', length(bytes))
             num_bytes_written = num_bytes_written + length(bytes);
             continue
         elseif isempty(field_len)
@@ -114,5 +145,5 @@ function ret = read_bf_file_modified(filename)
     %% Close files
     fclose(f);
     fclose(payload_file);
-    fprintf('Exiting read_bf_file normally...wtf\n')
+    fprintf('Exiting read_bf_file normally...\n')
 end

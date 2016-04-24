@@ -145,7 +145,7 @@ first_message () {
     sleep $SWITCH_WAIT_TIME
     ../cryptography/lgtm_crypto_runner first-message
     dd if=.lgtm-crypto-params-first-message of=.lgtm-begin-protocol bs=1
-    echo $LGTM_BEGIN_TOKEN >> .lgtm-begin-protocol
+    echo -n $LGTM_BEGIN_TOKEN | dd of=.lgtm-begin-protocol bs=1 oflag=append conv=notrunc
     ./packets-from-file/packets_from_file .lgtm-begin-protocol 1 $PACKET_DELAY
 }
 
@@ -160,12 +160,12 @@ reply_to_first_message () {
     dd if=.lgtm-first-message of=.lgtm-crypto-params-first-message bs=1 count=$bytes_to_copy
     ../cryptography/lgtm_crypto_runner first-message-reply
     # Attach footer to crypto params message
-    echo $FIRST_MESSAGE_REPLY_FOOTER >> .lgtm-crypto-params-first-message-reply
+    echo -n $FIRST_MESSAGE_REPLY_FOOTER | dd of=.lgtm-crypto-params-first-message-reply bs=1 oflag=append conv=notrunc
     # Setup Injection mode
     injection_mode
     # Sleep to ensure other party has switched into monitor mode....
     sleep $SWITCH_WAIT_TIME
-    ./packets-from-file/packets_from_file .lgtm-crypto-params-first-message-reply
+    ./packets-from-file/packets_from_file .lgtm-crypto-params-first-message-reply 1 $PACKET_DELAY
 }
 
 third_message () {
@@ -195,29 +195,29 @@ third_message () {
         sleep 3
     done  
     pkill log_to_file
-    chmod 644 .lgtm-monitor-first-message-reply.dat  
 
-
-    # Process crypto parameters and prepare first message reply
+    # Cut off the footer so we only have the crypto things
+    file_size=$(wc --bytes .lgtm-first-message-reply | cut -d ' ' -f 1)
     bytes_to_copy=$((($file_size - ${#SFIRST_MESSAGE_REPLY_FOOTER})))
     dd if=.lgtm-first-message-reply of=.lgtm-crypto-params-first-message-reply bs=1 count=$bytes_to_copy
 
     # Setup facial-recognition-params
     rm .lgtm-facial-recognition-params
-    echo $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
+    echo -n $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
     dd if=$facial_recognition_file of=.lgtm-facial-recognition-params seek=${#FACIAL_RECOGNITION_HEADER} bs=1
-    echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
+    echo -n $FACIAL_RECOGNITION_FOOTER | dd of=.lgtm-facial-recognition-params oflag=append conv=notrunc
 
-    # Construct third-message with crypto etc
+    # Process crypto parameters and prepare third message
     ../cryptography/lgtm_crypto_runner third-message
+
 
     # Setup injection mode
     injection_mode
     # Sleep to allow other user to switch over into monitor mode
     sleep $SWITCH_WAIT_TIME
     # Attach footer to crypto params message
-    echo $THIRD_MESSAGE_FOOTER >> .lgtm-crypto-params-third-message
-    ./packets-from-file/packets_from_file .lgtm-crypto-params-third-message
+    echo -n $THIRD_MESSAGE_FOOTER | dd of=.lgtm-crypto-params-third-message oflag=append conv=notrunc
+    ./packets-from-file/packets_from_file .lgtm-crypto-params-third-message 1 $PACKET_DELAY
 }
 
 reply_to_third_message () {
@@ -227,6 +227,8 @@ reply_to_third_message () {
     monitor_mode
     # Listen for reply to third message
     rm .lgtm-monitor-third-message.dat
+    rm .lgtm-third-message
+    pkill log_to_file
     ./log-to-file/log_to_file .lgtm-monitor-third-message.dat &
     lgtm_ack=0
     # Figure this out to use with sudo -u below
@@ -250,8 +252,17 @@ reply_to_third_message () {
     chmod 644 .lgtm-monitor-third-message.dat
 
     # Process crypto parameters and prepare third message
+    file_size=$(wc --bytes .lgtm-third-message | cut -d ' ' -f 1)
     bytes_to_copy=$((($file_size - ${#THIRD_MESSAGE_FOOTER})))
+    rm .lgtm-crypto-params-third-message
     dd if=.lgtm-third-message of=.lgtm-crypto-params-third-message bs=1 count=$bytes_to_copy
+    # Setup facial-recognition-params
+    rm .lgtm-facial-recognition-params
+    echo -n $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
+    dd if=$facial_recognition_file of=.lgtm-facial-recognition-params seek=${#FACIAL_RECOGNITION_HEADER} bs=1
+    echo -n $FACIAL_RECOGNITION_FOOTER | dd of=.lgtm-facial-recognition-params oflag=append conv=notrunc
+
+    # Construct message with encryption, etc
     ../cryptography/lgtm_crypto_runner third-message-reply
 
     # Setup injection mode
@@ -259,8 +270,8 @@ reply_to_third_message () {
     # Sleep to allow other user to switch over into monitor mode
     sleep $SWITCH_WAIT_TIME
     # Attach footer to crypto params message
-    echo $THIRD_MESSAGE_FOOTER >> .lgtm-crypto-params-third-message-reply
-    ./packets-from-file/packets_from_file .lgtm-crypto-params-third-message-reply
+    echo -n $THIRD_MESSAGE_REPLY_FOOTER | dd of=.lgtm-crypto-params-third-message-reply oflag=append conv=notrunc
+    ./packets-from-file/packets_from_file .lgtm-crypto-params-third-message-reply 1 $PACKET_DELAY
 }
 
 verify_reply_to_third_message () {
@@ -270,14 +281,17 @@ verify_reply_to_third_message () {
     monitor_mode
     # Listen for reply to first message
     rm .lgtm-monitor-third-message-reply.dat
+    rm .lgtm-third-message-reply
+    pkill log_to_file
+    ./log-to-file/log_to_file .lgtm-monitor-third-message-reply.dat &
     lgtm_ack=0
     # Figure this out to use with sudo -u below
     logged_on_user=$(who | head -n1 | awk '{print $1;}')
     while [ $lgtm_ack -lt 1 ]; do
         # Count the file size in bytes using wc, and cut off the file name from the output (only want the number!)
         file_size=$(wc --bytes .lgtm-monitor-third-message-reply.dat | cut -d ' ' -f 1)
-        echo file size: $file_size
-        if [ "${file_size:0}" -gt 0 ]; then
+        echo "file size: $file_size"
+        if [ "${file_size:=0}" -gt 0 ]; then
             # Extract data from mpdus in packets
             echo "Extracting data from received packets............................"
             # Extract data on facial recognition params from received data
@@ -292,6 +306,7 @@ verify_reply_to_third_message () {
     chmod 644 .lgtm-monitor-third-message-reply.dat
 
     # Process crypto parameters and prepare third message reply
+    file_size=$(wc --bytes .lgtm-third-message-reply | cut -d ' ' -f 1)
     bytes_to_copy=$((($file_size - ${#THIRD_MESSAGE_REPLY_FOOTER})))
     dd if=.lgtm-third-message-reply of=.lgtm-crypto-params-third-message-reply bs=1 count=$bytes_to_copy
     ../cryptography/lgtm_crypto_runner decrypt-third-message-reply
@@ -303,14 +318,14 @@ send_facial_recognition_params () {
     injection_mode
     # Sleep for 5 seconds to ensure other party has switched into monitor mode....
     sleep $SWITCH_WAIT_TIME
-    # Send acknowledgment + facial recognition params, TODO: later this will include a public key
+    # Send acknowledgment + facial recognition params
     # Send facial recognition params
     rm .lgtm-facial-recognition-params
     echo $FACIAL_RECOGNITION_HEADER > .lgtm-facial-recognition-params
     dd if=$facial_recognition_file of=.lgtm-facial-recognition-params seek=${#FACIAL_RECOGNITION_HEADER} bs=1
-    echo $FACIAL_RECOGNITION_FOOTER >> .lgtm-facial-recognition-params
+    echo -n $FACIAL_RECOGNITION_FOOTER | dd of=.lgtm-facial-recognition-params bs=1 oflag=append conv=notrunc
 
-    ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1
+    ./packets-from-file/packets_from_file .lgtm-facial-recognition-params 1 $PACKET_DELAY
     echo "Sent 'facial recognition params'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 }
 
@@ -319,7 +334,7 @@ receive_facial_recognition_params () {
     # Switch to monitor mode
     monitor_mode
 
-    # Listen for facial recognition parameters, TODO: later it will be ack + recog params + public key
+    # Listen for facial recognition parameters
     echo "Awaiting 'facial recognition params'............................."
     rm .lgtm-monitor.dat
     rm .lgtm-received-facial-recognition-params
@@ -335,7 +350,6 @@ receive_facial_recognition_params () {
             # Extract data from mpdus in packets
             echo "Extracting data from received packets............................"
             # Extract data on facial recognition params from received data
-            # TODO: Change command line args
             # "read_mpdu_file .lgtm-begin-monitor some_output_file.txt, exit"
             sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('read_mpdu_file.m'), exit"    
             echo "Data extracted!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
@@ -350,14 +364,20 @@ receive_facial_recognition_params () {
 }
 
 localize_wireless_signal () {
+    localization_file=$1
     # Localize wireless signal
+    echo
     echo "Localizing signal source........................................."
     logged_on_user=$(who | head -n1 | awk '{print $1;}')
-    sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "run('../csi-code/lgtm_spotfi_runner.m'), exit"
+    cd ../csi-code
+    sudo -u $logged_on_user matlab -nojvm -nodisplay -nosplash -r "lgtm_spotfi_runner $localization_file, exit"
+    mv .lgtm-monitor-third-message ../injection-monitor
+    cd ../injection-monitor
     echo "Successfully localized signal source!"
 }
 
 compare_wireless_location_with_face_location () {
+    echo
     echo "Checking for face/signal overlap................................."
 
     rm .lgtm-received-facial-recognition-params--no-header
@@ -416,7 +436,6 @@ begin_lgtm=0
 input='a'
 while [[ $input != 'l' ]] && [[ $begin_lgtm -lt 1 ]]; do
     read -n 1 -s -t 1 -r input
-    # TODO: Later this token, "begin-lgtm-protocol", will also include a public key
     begin_lgtm=$(cat .lgtm-begin-monitor.dat | grep $LGTM_BEGIN_TOKEN | wc -l)
 done
 
@@ -436,7 +455,7 @@ if [[ $input == 'l' ]]; then
     verify_reply_to_third_message
 
     localization_start_time=$(date +%s)
-    localize_wireless_signal
+    localize_wireless_signal .lgtm-monitor-third-message-reply.dat
     localization_end_time=$(date +%s)
     localization_elapsed_time=$(expr $localization_end_time - $localization_start_time)
     echo Localization ran in time: $localization_elapsed_time seconds
@@ -458,7 +477,7 @@ if [ $begin_lgtm -gt 0 ]; then
     reply_to_third_message
 
     localization_start_time=$(date +%s)
-    localize_wireless_signal
+    localize_wireless_signal .lgtm-monitor-third-message.dat
     localization_end_time=$(date +%s)
     localization_elapsed_time=$(expr $localization_end_time - $localization_start_time)
     echo Localization ran in time: $localization_elapsed_time seconds

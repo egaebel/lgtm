@@ -59,14 +59,10 @@ static const string OTHER_FIRST_MESSAGE_RANDOM_NUMBER = LGTM_CRYPTO_PREFIX
 // Facial recognition params files
 static const string FACIAL_RECOGNITION_FILE_NAME 
         = ".lgtm-facial-recognition-params";
-static const string ENCRYPTED_FACIAL_RECOGNITION_FILE_NAME 
-        = ".lgtm-facial-recognition-params--encrypted";
 
 // Received facial recognition params files
 static const string RECEIVED_FACIAL_RECOGNITION_FILE_NAME 
         = ".lgtm-received-facial-recognition-params";
-static const string DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME 
-        = ".lgtm-received-facial-recognition-params--decrypted";
 
 // Message file names
 static const string FIRST_MESSAGE_FILE_NAME = LGTM_CRYPTO_PREFIX + "first-message";
@@ -167,8 +163,8 @@ void simulateThirdMessageReply() {
     // TODO: This test will need to get more sophisticated when the IV is set differently.
     byte curIv[AES::BLOCKSIZE];
     memset(curIv, 0, AES::BLOCKSIZE);
-    encryptFile(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME, // TEST_THIRD_MESSAGE_REPLY_FILE_NAME, 
-            RECEIVED_FACIAL_RECOGNITION_FILE_NAME, 
+    encryptFile(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME,
+            THIRD_MESSAGE_REPLY_FILE_NAME,
             key, curIv);
 }
 
@@ -193,7 +189,7 @@ void simulateThirdMessage() {
     byte curIv[AES::BLOCKSIZE];
     memset(curIv, 0, AES::BLOCKSIZE);
     encryptFile(TEST_UNENCRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME,
-            RECEIVED_FACIAL_RECOGNITION_FILE_NAME, 
+            THIRD_MESSAGE_FILE_NAME,
             key, curIv);
 }
 
@@ -204,7 +200,19 @@ void simulateThirdMessage() {
 void corruptThirdMessageReply() {
     cout << "Corrupt Third Message Reply" << endl;
     byte corruption[] = {0x4, 0x4, 0x4};
-    ofstream outputStream(RECEIVED_FACIAL_RECOGNITION_FILE_NAME, ios::in | ios::out | ios::binary);
+    ofstream outputStream(THIRD_MESSAGE_REPLY_FILE_NAME, ios::in | ios::out | ios::binary);
+    outputStream.seekp(4);
+    outputStream.write((char*) corruption, 3); 
+    outputStream.close();
+}
+
+/**
+ * Corrupts three bytes of the "received" facial recognition file.
+ */
+void corruptThirdMessage() {
+    cout << "Corrupt Third Message" << endl;
+    byte corruption[] = {0x4, 0x4, 0x4};
+    ofstream outputStream(THIRD_MESSAGE_FILE_NAME, ios::in | ios::out | ios::binary);
     outputStream.seekp(4);
     outputStream.write((char*) corruption, 3); 
     outputStream.close();
@@ -215,10 +223,10 @@ void corruptThirdMessageReply() {
  * Check if the string in the decrypted facial recognition file matches the string written to it.
  */
 bool checkFacialRecognitionFile() {
-    ifstream inputStream(DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME, ios::in);
+    ifstream inputStream(RECEIVED_FACIAL_RECOGNITION_FILE_NAME, ios::in);
     if (!inputStream.is_open()) {
         cout << "Failure in checkFacialRecognitionFile: " 
-                << DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME << " could not be opened...." 
+                << RECEIVED_FACIAL_RECOGNITION_FILE_NAME << " could not be opened...." 
                 << endl;
         return false;
     }
@@ -227,7 +235,7 @@ bool checkFacialRecognitionFile() {
     inputStream.seekg(0, inputStream.beg);
     if (fileLength < 1) {
         cout << "Failure in checkFacialRecognitionFile: " 
-                << DECRYPTED_RECEIVED_FACIAL_RECOGNITION_FILE_NAME 
+                << RECEIVED_FACIAL_RECOGNITION_FILE_NAME 
                 << " has invalid fileLength of" << fileLength
                 << endl;
         return false;
@@ -341,7 +349,7 @@ bool testOtherWayCorruption() {
     // Simulate reception of encrypted facial recognition params
     simulateThirdMessage();
     // Corrupt the third message reply!!!!
-    corruptThirdMessageReply();
+    corruptThirdMessage();
     // Decrypt and verify the third message
     if (!replyToThirdMessage()) {
         cout << endl << "Other Way Corruption Test Passed!" << endl << endl;
