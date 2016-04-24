@@ -524,7 +524,7 @@ if __name__ == '__main__':
 
             aoa_experiment_comparison_data.append(aoa_matches)
 
-    distances = [1, 2]
+    distances = [1, 2, 3]
     num_samples_list = None
     if directory_name == 'lgtm-distance-angle-experiments-sampling-output-data':
         num_samples_list = [None, 750, 500, 250, 100, 50, 25, 10]
