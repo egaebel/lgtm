@@ -221,7 +221,7 @@ def compare_true_and_measured_angles(distance, true_angle, top_aoas):
 # If the angle parameter is given only the entries under ANGLE_KEY which match
 #       the given angle will be considered. 
 #       The angle argument to this function should be an integer.
-def error_rate(data_list, distance=None, angle=None, laptop_id=None, num_samples=None):
+def error_rate(data_list, distance=None, angle=None, laptop_id=None, num_samples=None, suppress_output=False):
     total_entries_considered = 0
     complete_top_3_error_count = 0
     complete_top_5_error_count = 0
@@ -271,22 +271,28 @@ def error_rate(data_list, distance=None, angle=None, laptop_id=None, num_samples
         total_entries_considered += 1
 
     # Convert counts for each position to percent correct and report
+    top_percent_correct = []
     for i in range(len(top_correct_count)):
         num_in_top_i = top_correct_count[i]
         percent_correct = num_in_top_i / total_entries_considered * 100
         # Add one to convert from zero-indexing
-        print("Percent correct in top %d: %g" % ((i + 1), percent_correct))
+        if not suppress_output:
+            print("Percent correct in top %d: %g" % ((i + 1), percent_correct))
+        top_percent_correct.append(percent_correct)
 
-    # Report top level statistics
-    print("Total number of samples: %d" % total_entries_considered)
-    print("Total number of errors for top 3 (No elements in top 3): %d" % complete_top_3_error_count)
-    print("Total number of errors for top 5 (No elements in top 5): %d" % complete_top_5_error_count)
+    if not suppress_output:
+        # Report top level statistics
+        print("Total number of samples: %d" % total_entries_considered)
+        print("Total number of errors for top 3 (No elements in top 3): %d" % complete_top_3_error_count)
+        print("Total number of errors for top 5 (No elements in top 5): %d" % complete_top_5_error_count)
+
+    return top_percent_correct
 
 # Compute the mean error in data_list
 # If distance and/or angle are passed then only entries matching distance and/or angle
 #       will be considered
 # Returns the mean error
-def mean_error(data_list, distance=None, angle=None, laptop_id=None, num_samples=None):
+def mean_error(data_list, distance=None, angle=None, laptop_id=None, num_samples=None, suppress_output=False):
     total_entries_considered = 0
     error_sum = 0
     for entry in data_list:
@@ -325,17 +331,19 @@ def mean_error(data_list, distance=None, angle=None, laptop_id=None, num_samples
         error_sum += error
         total_entries_considered += 1
 
-    print("error_sum: " + str(error_sum))
-    print("total entries considered: " + str(total_entries_considered))
+    if not suppress_output:
+        print("error_sum: " + str(error_sum))
+        print("total entries considered: " + str(total_entries_considered))
     mean_error = error_sum / total_entries_considered
-    print("Mean Error: %g" % mean_error)
+    if not suppress_output:
+        print("Mean Error: %g" % mean_error)
     return mean_error
 
 # Computes the median error in data_list
 # If distance and/or angle are passed then only entries matching distance and/or angle
 #       will be considered
 # Returns the median error
-def median_error(data_list, distance=None, angle=None, laptop_id=None, num_samples=None):
+def median_error(data_list, distance=None, angle=None, laptop_id=None, num_samples=None, suppress_output=False):
     errors = list()
     for entry in data_list:
         # Skip this entry if we care about the angle and it doesn't match up
@@ -373,14 +381,15 @@ def median_error(data_list, distance=None, angle=None, laptop_id=None, num_sampl
 
     errors.sort()
     median_error = errors[math.floor(len(errors) / 2)]
-    print("Median Error: %g" % median_error)
+    if not suppress_output:
+        print("Median Error: %g" % median_error)
     return median_error
 
 # Finds the min and max errors in data_list
 # If distance and/or angle are passed then only entries matching distance and/or angle
 #       will be considered
 # Returns the min and max errors, in that order
-def min_max_error(data_list, distance=None, angle=None, laptop_id=None, num_samples=None):
+def min_max_error(data_list, distance=None, angle=None, laptop_id=None, num_samples=None, suppress_output=False):
     errors = list()
     for entry in data_list:
         # Skip this entry if we care about the angle and it doesn't match up
@@ -420,8 +429,12 @@ def min_max_error(data_list, distance=None, angle=None, laptop_id=None, num_samp
     errors.sort()
     min_error = errors[0]
     max_error = errors[len(errors) - 1]
-    print("Min Error: %g\nMax Error: %g" % (min_error, max_error))
+    if not suppress_output:
+        print("Min Error: %g\nMax Error: %g" % (min_error, max_error))
     return min_error, max_error
+
+def get_num_packets_with_parameters():
+    pass
 
 # Run all of the statistics
 # Top level, laptop 1 vs laptop 2, 1 m, 2 m
@@ -488,6 +501,175 @@ def run_statistics(aoa_experiment_comparison_data, distances=None, num_samples=N
         error_rate(aoa_experiment_comparison_data, angle=angle, num_samples=num_samples)
     """
 
+# Run the distance-based statistics of the statistics and output the results in a LaTeX table
+# Top level, laptop 1 vs laptop 2, 1 m, 2 m
+# But constrain it with the number of samples used
+def run_latex_statistics(aoa_experiment_comparison_data, distances=[1, 2, 3], 
+        num_samples=None, separate_laptops=False):
+
+    header_row = "Distances: & "
+    top_rows = ["Correct in Top %d: & " % (i + 1) for i in range(5)]
+    mean_row = "Mean Error: & " # "Mean Error (m): & "
+    median_row = "Median Error: & " # "Median Error (m): & "
+    # Create header row for sampling
+    if num_samples is not None:
+        num_samples_header_row = "Number of Packets Used in SpotFi: & "
+        print(num_samples)
+        # Loop over distances (top level header)
+        for j in range(len(distances)):
+            # Loop over num samples (secondary header)
+            for i in range(len(num_samples)):
+                if num_samples[i] is None:
+                    num_samples_header_row += "1025"
+                else:
+                    num_samples_header_row += str(num_samples[i])
+                if i < len(num_samples) - 1 or j < len(distances) - 1:
+                    num_samples_header_row += ' & '
+                else:
+                    num_samples_header_row += ' \\\\'
+
+    # Create table with samples
+    if num_samples is not None:
+        # Separate distances statistics
+        for i in range(len(distances)):
+            
+            # Header row
+            for k in range(len(num_samples)):
+                if k == len(num_samples) // 2:
+                    header_row += str(distances[i]) 
+                    header_row += ' m '
+                header_row += ' & '
+            if i == (len(distances) - 1):
+                header_row += ' \\\\'
+
+            # Separate sampling statistics
+            for k in range(len(num_samples)):
+
+                # Compute error statistics
+                top_error_rates = error_rate(aoa_experiment_comparison_data, 
+                        distance=distances[i], 
+                        num_samples=num_samples[k], 
+                        suppress_output=True)
+                mean_error_distance = mean_error(aoa_experiment_comparison_data, 
+                        distance=distances[i], 
+                        num_samples=num_samples[k], 
+                        suppress_output=True)
+                median_error_distance = median_error(aoa_experiment_comparison_data, 
+                        distance=distances[i], 
+                        num_samples=num_samples[k], 
+                        suppress_output=True)
+
+                # Top
+                for j in range(len(top_error_rates)):
+                    top_rows[j] += "%.1f \\%%" % top_error_rates[j]
+                    if i < (len(distances) - 1) or k < (len(num_samples) - 1):
+                        top_rows[j] += ' & '
+                    else:
+                        top_rows[j] += ' \\\\'
+
+                # Mean
+                mean_row += "%.3f m" % mean_error_distance
+                if i < (len(distances) - 1) or k < (len(num_samples) - 1):
+                    mean_row += ' & '
+                else:
+                    mean_row += ' \\\\'
+
+                # Median
+                median_row += "%.3f m" % median_error_distance
+                if i < (len(distances) - 1) or k < (len(num_samples) - 1):
+                    median_row += ' & '
+                else:
+                    median_row += ' \\\\'
+
+    # Create table with default packet counts, no sampling
+    else:
+        # Separate distances statistics switch
+        for i in range(len(distances)):
+
+            # Header row
+            header_row += str(distances[i]) 
+            header_row += ' m '
+            if i < len(distances) - 1:
+                header_row += ' & '
+            else:
+                header_row += ' \\\\'
+
+            # Compute error statistics
+            top_error_rates = error_rate(aoa_experiment_comparison_data, 
+                    distance=distances[i], 
+                    num_samples=num_samples, 
+                    suppress_output=True)
+            mean_error_distance = mean_error(aoa_experiment_comparison_data, 
+                    distance=distances[i], 
+                    num_samples=num_samples, 
+                    suppress_output=True)
+            median_error_distance = median_error(aoa_experiment_comparison_data, 
+                    distance=distances[i], 
+                    num_samples=num_samples, 
+                    suppress_output=True)
+
+            # Top
+            for j in range(len(top_error_rates)):
+                top_rows[j] += "%.1f \\%%" % top_error_rates[j]
+                if i < len(distances) - 1:
+                    top_rows[j] += ' & '
+                else:
+                    top_rows[j] += ' \\\\'
+
+            # Mean
+            mean_row += "%.3f m" % mean_error_distance
+            if i < len(distances) - 1:
+                mean_row += ' & '
+            else:
+                mean_row += ' \\\\'
+
+            # Median
+            median_row += "%.3f m" % median_error_distance
+            if i < len(distances) - 1:
+                median_row += ' & '
+            else:
+                median_row += ' \\\\'
+        
+    # Print full latex table
+    # Print beginning line (variable number of slots for num_samples case)
+    if num_samples is None:
+        print("\\begin{tabular}{| c || c | c | c |}")
+    else:
+        begin_table_string = '\\begin{tabular}{'
+        begin_table_string += '|'
+        for i in range((len(num_samples) * len(distances)) + 1):
+            begin_table_string += ' c |'
+            # If we are on the first element (the header) or the final element of a sample chunk, but not the final element
+            if (i == 0 or (i % len(num_samples)) == 0) and i != (len(num_samples) * len(distances)):
+                begin_table_string += '|'
+        begin_table_string += '}'
+        print(begin_table_string)
+    print(header_row)
+    print('\\hline')
+
+    # Print sampling header row
+    if num_samples is not None:
+        print(num_samples_header_row)
+        print('\\hline')
+    print('\\hline')
+
+
+    # Print top count rows
+    for row in top_rows:
+        print(row)
+        print('\\hline')
+    print('\\hline')
+
+    # Print mean row
+    print(mean_row)
+    print('\\hline')
+    # Print median row
+    print(median_row)
+    print('\\hline')
+
+    # End table
+    print("\\end{tabular}")
+
 # Main method---------------------------------------------------------------------------------------
 if __name__ == '__main__':
     if len(sys.argv) > 1:
@@ -524,9 +706,9 @@ if __name__ == '__main__':
 
             aoa_experiment_comparison_data.append(aoa_matches)
 
-    distances = [1, 2]
+    distances = [1, 2, 3]
     num_samples_list = None
-    if directory_name == 'lgtm-distance-angle-experiments-sampling-output-data':
+    if directory_name == 'lgtm-distance-angle-experiments-sampling-output-data' or directory_name == 'lgtm-distance-angle-experiments-sampling-output-data/':
         num_samples_list = [None, 750, 500, 250, 100, 50, 25, 10]
         for num_samples in num_samples_list:
             if num_samples is None:
@@ -537,9 +719,19 @@ if __name__ == '__main__':
                     distances=distances, 
                     num_samples=num_samples, 
                     separate_laptops=False)
+
+        run_latex_statistics(aoa_experiment_comparison_data, 
+                distances=distances, 
+                num_samples=num_samples_list, 
+                separate_laptops=False)
     else:
         run_statistics(aoa_experiment_comparison_data, 
                 distances=distances, 
                 num_samples=None,
+                separate_laptops=False)
+
+        run_latex_statistics(aoa_experiment_comparison_data, 
+                distances=distances, 
+                num_samples=None, 
                 separate_laptops=False)
         

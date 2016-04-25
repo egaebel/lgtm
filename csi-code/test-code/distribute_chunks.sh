@@ -65,3 +65,20 @@ if [[ $chunk_of_cluster_number == 4 ]]; then
     echo "Chunk 4 jobs submitted to pawpaw, pine, sassafras, spruce, and sumac"
 fi
 
+if [[ $chunk_of_cluster_number == 5 ]]; then
+    ssh pawpaw -t "pkill MATLAB; $my_dir/run_matlab_data_proc.sh 21"
+    ssh pine -t "pkill MATLAB; $my_dir/run_matlab_data_proc.sh 22"
+    ssh sassafras -t "pkill MATLAB; $my_dir/run_matlab_data_proc.sh 23"
+    ssh spruce -t "pkill MATLAB; $my_dir/run_matlab_data_proc.sh 24"
+    ssh sumac -t "pkill MATLAB; $my_dir/run_matlab_data_proc.sh 25"
+    echo "Chunk 5 jobs submitted to pawpaw, pine, sassafras, spruce, and sumac"
+fi
+
+if [[ $chunk_of_cluster_number == 6 ]]; then
+    ssh hornbeam -t "pkill MATLAB; $my_dir/run_matlab_data_proc.sh 26"
+    ssh linden -t "pkill MATLAB; $my_dir/run_matlab_data_proc.sh 27"
+    ssh locust -t "pkill MATLAB; $my_dir/run_matlab_data_proc.sh 28"
+    ssh maple -t "pkill MATLAB; $my_dir/run_matlab_data_proc.sh 29"
+    ssh mulberry -t "pkill MATLAB; $my_dir/run_matlab_data_proc.sh 30"
+    echo "Chunk 6 jobs submitted to hornbeam, linden, locust, maple, and mulberry"
+fi
