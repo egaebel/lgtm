@@ -644,6 +644,8 @@ def run_latex_statistics(aoa_experiment_comparison_data, distances=[1, 2, 3],
                 begin_table_string += '|'
         begin_table_string += '}'
         print(begin_table_string)
+    print('\\hline')
+
     print(header_row)
     print('\\hline')
 
@@ -721,7 +723,15 @@ if __name__ == '__main__':
                     separate_laptops=False)
 
         run_latex_statistics(aoa_experiment_comparison_data, 
-                distances=distances, 
+                distances=[1], 
+                num_samples=num_samples_list, 
+                separate_laptops=False)
+        run_latex_statistics(aoa_experiment_comparison_data, 
+                distances=[2], 
+                num_samples=num_samples_list, 
+                separate_laptops=False)
+        run_latex_statistics(aoa_experiment_comparison_data, 
+                distances=[3], 
                 num_samples=num_samples_list, 
                 separate_laptops=False)
     else:
