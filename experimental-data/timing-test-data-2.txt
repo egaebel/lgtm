@@ -1,0 +1,428 @@
+Running on data file: lgtm-monitor.dat--1m-0-degrees--laptop-1--test-1
+Have CSI for 1025 packets
+Sampling results: 
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 1: Time to run when using: 1025 packets: 745.830171
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 2: Time to run when using: 1025 packets: 771.132277
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 3: Time to run when using: 1025 packets: 910.231635
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 4: Time to run when using: 1025 packets: 1018.655922
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 5: Time to run when using: 1025 packets: 1020.093346
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 6: Time to run when using: 1025 packets: 1015.809578
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 7: Time to run when using: 1025 packets: 1019.081856
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 8: Time to run when using: 1025 packets: 1013.274515
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 9: Time to run when using: 1025 packets: 1017.026375
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 10: Time to run when using: 1025 packets: 898.357218
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 11: Time to run when using: 1025 packets: 781.791227
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 12: Time to run when using: 1025 packets: 790.914002
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 13: Time to run when using: 1025 packets: 782.532202
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 14: Time to run when using: 1025 packets: 789.209481
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 15: Time to run when using: 1025 packets: 795.115773
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 16: Time to run when using: 1025 packets: 785.601667
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 17: Time to run when using: 1025 packets: 792.755421
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 18: Time to run when using: 1025 packets: 788.306467
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 19: Time to run when using: 1025 packets: 858.722398
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 1025
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 20: Time to run when using: 1025 packets: 852.251663
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 750
+begin index = 1
+end_index = 1025
+

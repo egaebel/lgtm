@@ -1,0 +1,134 @@
+Running on data file: lgtm-monitor.dat--1m-0-degrees--laptop-1--test-1
+Have CSI for 1025 packets
+Sampling results: 
+Sampling with:
+number of packets = 750
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 1: Time to run when using: 750 packets: 805.461977
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 750
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 2: Time to run when using: 750 packets: 1015.169776
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 750
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 3: Time to run when using: 750 packets: 793.490675
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 750
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 4: Time to run when using: 750 packets: 781.824206
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 750
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 5: Time to run when using: 750 packets: 787.950721
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 750
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 6: Time to run when using: 750 packets: 784.610839
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9676
+   27.3765
+  -41.8971
+   27.3854
+  -41.8847
+
+
+
+Sampling with:
+number of packets = 750
+begin index = 1
+end_index = 1025
+

@@ -1,0 +1,555 @@
+Running on data file: lgtm-monitor.dat--1m-0-degrees--laptop-1--test-1
+Have CSI for 1025 packets
+Sampling results: 
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 1: Time to run when using: 500 packets: 391.819741
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9452
+   27.3875
+  -41.8767
+   27.3929
+  -41.8688
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 2: Time to run when using: 500 packets: 391.265034
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9452
+   27.3875
+  -41.8767
+   27.3929
+  -41.8688
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 3: Time to run when using: 500 packets: 388.500781
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9452
+   27.3875
+  -41.8767
+   27.3929
+  -41.8688
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 4: Time to run when using: 500 packets: 390.806808
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9452
+   27.3875
+  -41.8767
+   27.3929
+  -41.8688
+
+
+
+Sampling with:
+number of packets = 500
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 5: Time to run when using: 500 packets: 392.755762
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9452
+   27.3875
+  -41.8767
+   27.3929
+  -41.8688
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 1025
+Trial 1: Time to run when using: 250 packets: 195.304671
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9569
+   27.3804
+  -41.8510
+   27.3849
+   -5.9520
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 1025
+Trial 2: Time to run when using: 250 packets: 196.716212
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9569
+   27.3804
+  -41.8510
+   27.3849
+   -5.9520
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 1025
+Trial 3: Time to run when using: 250 packets: 195.549312
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9569
+   27.3804
+  -41.8510
+   27.3849
+   -5.9520
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 1025
+Trial 4: Time to run when using: 250 packets: 195.485286
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9569
+   27.3804
+  -41.8510
+   27.3849
+   -5.9520
+
+
+
+Sampling with:
+number of packets = 250
+begin index = 1
+end_index = 1025
+Trial 5: Time to run when using: 250 packets: 196.927650
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9569
+   27.3804
+  -41.8510
+   27.3849
+   -5.9520
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 1: Time to run when using: 100 packets: 75.943207
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.8911
+   27.4653
+  -41.7525
+   27.4747
+   -5.8776
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 2: Time to run when using: 100 packets: 80.249246
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.8911
+   27.4653
+  -41.7525
+   27.4747
+   -5.8776
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 3: Time to run when using: 100 packets: 76.969232
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.8911
+   27.4653
+  -41.7525
+   27.4747
+   -5.8776
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 4: Time to run when using: 100 packets: 78.905109
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.8911
+   27.4653
+  -41.7525
+   27.4747
+   -5.8776
+
+
+
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+Warning: Non-monotonic cluster tree -- the ward's linkage is probably not appropriate. 
+> In linkage at 280
+  In spotfi at 146
+  In sampling_value_timing_tests at 92 
+Trial 5: Time to run when using: 100 packets: 78.807673
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.8911
+   27.4653
+  -41.7525
+   27.4747
+   -5.8776
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+Trial 1: Time to run when using: 50 packets: 39.070596
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9400
+   27.4000
+  -41.7600
+   -5.9388
+   27.4082
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+Trial 2: Time to run when using: 50 packets: 40.512730
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9400
+   27.4000
+  -41.7600
+   -5.9388
+   27.4082
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+Trial 3: Time to run when using: 50 packets: 40.486752
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9400
+   27.4000
+  -41.7600
+   -5.9388
+   27.4082
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+Trial 4: Time to run when using: 50 packets: 40.444746
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9400
+   27.4000
+  -41.7600
+   -5.9388
+   27.4082
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+Trial 5: Time to run when using: 50 packets: 37.884971
+Top AoAs: 
+
+output_top_aoas =
+
+   -5.9400
+   27.4000
+  -41.7600
+   -5.9388
+   27.4082
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+Trial 1: Time to run when using: 25 packets: 19.191161
+Top AoAs: 
+
+output_top_aoas =
+
+   27.2083
+   -5.9583
+  -41.9583
+   -5.9130
+   27.2174
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+Trial 2: Time to run when using: 25 packets: 19.489801
+Top AoAs: 
+
+output_top_aoas =
+
+   27.2083
+   -5.9583
+  -41.9583
+   -5.9130
+   27.2174
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+Trial 3: Time to run when using: 25 packets: 19.438118
+Top AoAs: 
+
+output_top_aoas =
+
+   27.2083
+   -5.9583
+  -41.9583
+   -5.9130
+   27.2174
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+Trial 4: Time to run when using: 25 packets: 19.656689
+Top AoAs: 
+
+output_top_aoas =
+
+   27.2083
+   -5.9583
+  -41.9583
+   -5.9130
+   27.2174
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+Trial 5: Time to run when using: 25 packets: 20.531698
+Top AoAs: 
+
+output_top_aoas =
+
+   27.2083
+   -5.9583
+  -41.9583
+   -5.9130
+   27.2174
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+Trial 1: Time to run when using: 10 packets: 8.582391
+Top AoAs: 
+
+output_top_aoas =
+
+   -6.2000
+   27.4000
+  -42.0000
+   -6.2000
+   27.4000
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+Trial 2: Time to run when using: 10 packets: 8.553766
+Top AoAs: 
+
+output_top_aoas =
+
+   -6.2000
+   27.4000
+  -42.0000
+   -6.2000
+   27.4000
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+Trial 3: Time to run when using: 10 packets: 8.583951
+Top AoAs: 
+
+output_top_aoas =
+
+   -6.2000
+   27.4000
+  -42.0000
+   -6.2000
+   27.4000
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+Trial 4: Time to run when using: 10 packets: 8.577187
+Top AoAs: 
+
+output_top_aoas =
+
+   -6.2000
+   27.4000
+  -42.0000
+   -6.2000
+   27.4000
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+Trial 5: Time to run when using: 10 packets: 8.577438
+Top AoAs: 
+
+output_top_aoas =
+
+   -6.2000
+   27.4000
+  -42.0000
+   -6.2000
+   27.4000
+
+
+
+COMPLETE!
+>> 
