@@ -434,6 +434,7 @@ function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_
                 data_name, max_likelihood_average_aoa)
     end
     % Profit
+    top_likelihood_indices
     output_top_aoas = cluster_aoa(top_likelihood_indices);
 end
 
