@@ -341,6 +341,10 @@ function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_
                     && jj == size(top_likelihood_indices, 1)
                 top_likelihood_indices(jj + 1, 1) = ii;
                 break;
+            % TODO: Make sure I want to keep this
+            else 
+                top_likelihood_indices(jj + 1, 1) = ii;
+                break;
             end
         end
     end
@@ -505,8 +509,8 @@ function globals_init
     OUTPUT_TOF_MUSIC_PEAK_GRAPH = false;
     OUTPUT_AOA_TOF_MUSIC_PEAK_GRAPH = false;
     OUTPUT_SELECTIVE_AOA_TOF_MUSIC_PEAK_GRAPH = false;
-    OUTPUT_AOA_VS_TOF_PLOT = false;
-    OUTPUT_SUPPRESSED = true;
+    OUTPUT_AOA_VS_TOF_PLOT = true;
+    OUTPUT_SUPPRESSED = false;
     OUTPUT_PACKET_PROGRESS = false;
     OUTPUT_FIGURES_SUPPRESSED = false; % Set to true when running in deployment from command line
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
