@@ -3,30 +3,34 @@
 chunk_of_cluster_number=$1
 my_dir=/home/ugrads/ugrads1/e/egaebel/thesis-project/lgtm/csi-code/test-code
 
+kill_all () {
+    ssh ash -o ConnectTimeout=10 -t "pkill MATLAB"
+	ssh beech -o ConnectTimeout=10 -t "pkill MATLAB"
+    ssh birch -o ConnectTimeout=10 -t "pkill MATLAB"
+    ssh boxelder -o ConnectTimeout=10 -t "pkill MATLAB"
+    ssh cedar -o ConnectTimeout=10 -t "pkill MATLAB"
+
+    ssh chinkapin -o ConnectTimeout=10 -t "pkill MATLAB"
+    ssh dogwood -o ConnectTimeout=10 -t "pkill MATLAB"
+    ssh gum -o ConnectTimeout=10 -t "pkill MATLAB"
+    ssh hackberry -o ConnectTimeout=10 -t "pkill MATLAB"
+    ssh hickory -o ConnectTimeout=10 -t "pkill MATLAB"
+
+    ssh hornbeam -o ConnectTimeout=10 -t "pkill MATLAB"
+    ssh linden -o ConnectTimeout=10 -t "pkill MATLAB"
+    ssh locust -o ConnectTimeout=10 -t "pkill MATLAB"
+    ssh maple -o ConnectTimeout=10 -t "pkill MATLAB"
+    ssh mulberry -o ConnectTimeout=10 -t "pkill MATLAB"
+
+    ssh pawpaw -o ConnectTimeout=10 -t "pkill MATLAB"
+    ssh pine -o ConnectTimeout=10 -t "pkill MATLAB"
+    ssh sassafras -o ConnectTimeout=10 -t "pkill MATLAB"
+    ssh spruce -o ConnectTimeout=10 -t "pkill MATLAB"
+    ssh sumac -o ConnectTimeout=10 -t "pkill MATLAB"
+}
+
 if [[ $chunk_of_cluster_number == 0 ]]; then
-    ssh ash -t "pkill MATLAB"
-    ssh beech -t "pkill MATLAB"
-    ssh birch -t "pkill MATLAB"
-    ssh boxelder -t "pkill MATLAB"
-    ssh cedar -t "pkill MATLAB"
-
-    ssh chinkapin -t "pkill MATLAB"
-    ssh dogwood -t "pkill MATLAB"
-    ssh gum -t "pkill MATLAB"
-    ssh hackberry -t "pkill MATLAB"
-    ssh hickory -t "pkill MATLAB"
-
-    ssh hornbeam -t "pkill MATLAB"
-    ssh linden -t "pkill MATLAB"
-    ssh locust -t "pkill MATLAB"
-    ssh maple -t "pkill MATLAB"
-    ssh mulberry -t "pkill MATLAB"
-
-    ssh pawpaw -t "pkill MATLAB"
-    ssh pine -t "pkill MATLAB"
-    ssh sassafras -t "pkill MATLAB"
-    ssh spruce -t "pkill MATLAB"
-    ssh sumac -t "pkill MATLAB"
+    kill_all
 fi
 
 if [[ $chunk_of_cluster_number == 1 ]]; then

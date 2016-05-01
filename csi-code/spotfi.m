@@ -342,7 +342,7 @@ function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_
                 top_likelihood_indices(jj + 1, 1) = ii;
                 break;
             % TODO: Make sure I want to keep this
-            else 
+            elseif jj == size(top_likelihood_indices, 1)
                 top_likelihood_indices(jj + 1, 1) = ii;
                 break;
             end
