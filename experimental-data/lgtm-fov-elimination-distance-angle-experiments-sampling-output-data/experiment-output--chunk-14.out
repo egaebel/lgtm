@@ -1,0 +1,1310 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2014 The MathWorks, Inc.
+                    R2014a (8.3.0.532) 64-bit (glnxa64)
+                             February 11, 2014
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+file_chunk 14
+lgtm-monitor.dat--2m-20-degrees--laptop-2--test-1
+lgtm-monitor.dat--2m-20-degrees--laptop-2--test-10
+lgtm-monitor.dat--2m-20-degrees--laptop-2--test-2
+lgtm-monitor.dat--2m-20-degrees--laptop-2--test-3
+lgtm-monitor.dat--2m-20-degrees--laptop-2--test-4
+lgtm-monitor.dat--2m-20-degrees--laptop-2--test-5
+lgtm-monitor.dat--2m-20-degrees--laptop-2--test-6
+lgtm-monitor.dat--2m-20-degrees--laptop-2--test-7
+lgtm-monitor.dat--2m-20-degrees--laptop-2--test-8
+lgtm-monitor.dat--2m-20-degrees--laptop-2--test-9
+Running on data file: lgtm-monitor.dat--2m-20-degrees--laptop-2--test-1
+Have CSI for 1025 packets
+Sampling results: 
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     2
+     7
+     9
+     1
+     3
+    11
+    12
+
+Top AoAs: 
+
+output_top_aoas =
+
+   -6.0000
+  -42.0000
+   27.0000
+  -42.0000
+   27.0000
+   -6.0000
+   27.0000
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     2
+     7
+     9
+     1
+     3
+    11
+    12
+
+Top AoAs: 
+
+output_top_aoas =
+
+   -6.0000
+  -42.0000
+   27.0000
+  -42.0000
+   27.0000
+   -6.0000
+   27.0000
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     5
+     6
+     7
+     1
+    11
+    12
+     2
+
+Top AoAs: 
+
+output_top_aoas =
+
+   27.0000
+   -6.0000
+  -42.0000
+  -42.0000
+   27.0000
+   -6.0000
+  -42.0000
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     1
+     2
+     3
+     4
+     5
+     6
+
+Top AoAs: 
+
+output_top_aoas =
+
+  -42.0000
+   -6.0000
+   27.0000
+  -42.0000
+   -6.0000
+   27.0000
+
+
+
+Running on data file: lgtm-monitor.dat--2m-20-degrees--laptop-2--test-10
+Have CSI for 1025 packets
+Sampling results: 
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+[Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate.] 
+[> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 426] 
+
+top_likelihood_indices =
+
+    10
+     9
+     8
+    11
+    15
+     4
+     1
+     2
+    16
+
+Top AoAs: 
+
+output_top_aoas =
+
+   51.0000
+  -66.2255
+   12.0000
+  -21.0000
+  -66.2255
+   51.0000
+   12.0000
+  -21.0000
+   51.0000
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+[Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate.] 
+[> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 426] 
+
+top_likelihood_indices =
+
+    11
+    16
+     5
+     9
+    14
+     1
+     2
+     4
+    12
+
+Top AoAs: 
+
+output_top_aoas =
+
+   51.0000
+   12.0000
+  -66.1765
+  -21.0000
+  -66.1765
+   12.0000
+  -21.0000
+   51.0000
+   12.0000
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     9
+    11
+    16
+    10
+     3
+    13
+     4
+    14
+
+Top AoAs: 
+
+output_top_aoas =
+
+   12.0000
+   51.0000
+  -21.0000
+  -66.2083
+   12.0000
+  -21.0000
+   51.0000
+   12.0000
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     5
+     7
+    12
+     6
+     9
+    10
+
+Top AoAs: 
+
+output_top_aoas =
+
+    12
+    51
+   -21
+   -66
+   -21
+    12
+
+
+
+Running on data file: lgtm-monitor.dat--2m-20-degrees--laptop-2--test-2
+Have CSI for 1025 packets
+Sampling results: 
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+[Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate.] 
+[> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 426] 
+
+top_likelihood_indices =
+
+     9
+    11
+     6
+     3
+     5
+    12
+     2
+
+Top AoAs: 
+
+output_top_aoas =
+
+    2.8641
+   37.7476
+  -31.0000
+    2.8641
+   37.7476
+  -31.0000
+    2.8641
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+[Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate.] 
+[> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 426] 
+
+top_likelihood_indices =
+
+     5
+     6
+     4
+    11
+    12
+    10
+     2
+
+Top AoAs: 
+
+output_top_aoas =
+
+    2.8462
+   37.7308
+  -31.0000
+    2.8462
+   37.7308
+  -31.0000
+    2.8462
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+    10
+     5
+     6
+     4
+    11
+    12
+     1
+
+Top AoAs: 
+
+output_top_aoas =
+
+  -31.0000
+    2.8000
+   37.7200
+  -31.0000
+    2.8000
+   37.7200
+  -31.0000
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     4
+     5
+     6
+     1
+     2
+
+Top AoAs: 
+
+output_top_aoas =
+
+  -31.1818
+    2.6364
+   37.5455
+  -31.1818
+    2.6364
+
+
+
+Running on data file: lgtm-monitor.dat--2m-20-degrees--laptop-2--test-3
+Have CSI for 1025 packets
+Sampling results: 
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     6
+     7
+    10
+     5
+    12
+    13
+    15
+    14
+    16
+
+Top AoAs: 
+
+output_top_aoas =
+
+    19
+    63
+   -14
+   -53
+    19
+   -14
+    63
+   -53
+    63
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+[Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate.] 
+[> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 426] 
+
+top_likelihood_indices =
+
+     7
+     9
+    11
+    16
+    12
+    13
+    14
+    15
+
+Top AoAs: 
+
+output_top_aoas =
+
+    19
+   -53
+    63
+   -14
+    19
+   -14
+   -53
+    63
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     5
+     6
+     9
+    15
+     3
+     4
+    12
+    11
+    13
+    16
+
+Top AoAs: 
+
+output_top_aoas =
+
+    19
+    63
+   -14
+   -53
+    19
+    63
+   -14
+   -53
+    19
+    19
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     1
+     2
+     3
+     6
+     8
+     9
+    10
+    11
+    12
+
+Top AoAs: 
+
+output_top_aoas =
+
+   -53
+    19
+    63
+   -14
+   -53
+    19
+    63
+   -14
+    19
+
+
+
+Running on data file: lgtm-monitor.dat--2m-20-degrees--laptop-2--test-4
+Have CSI for 1025 packets
+Sampling results: 
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+[Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate.] 
+[> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 426] 
+
+top_likelihood_indices =
+
+     5
+     6
+     8
+     7
+     1
+     9
+    10
+    12
+
+Top AoAs: 
+
+output_top_aoas =
+
+  -66.0000
+   51.0000
+   12.0000
+  -20.6373
+  -66.0000
+  -66.0000
+   51.0000
+   12.0000
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     5
+     6
+     8
+     7
+     1
+     9
+    10
+    12
+
+Top AoAs: 
+
+output_top_aoas =
+
+  -66.0000
+   51.0000
+   12.0000
+  -20.6275
+  -66.0000
+  -66.0000
+   51.0000
+   12.0000
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     5
+     6
+     8
+     7
+     1
+     9
+    10
+    12
+
+Top AoAs: 
+
+output_top_aoas =
+
+  -66.0000
+   51.0000
+   12.0000
+  -20.6667
+  -66.0000
+  -66.0000
+   51.0000
+   12.0000
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     4
+     3
+     5
+     6
+     7
+     8
+
+Top AoAs: 
+
+output_top_aoas =
+
+   12.0000
+  -20.7000
+  -66.0000
+   51.0000
+  -19.5652
+   13.1739
+
+
+
+Running on data file: lgtm-monitor.dat--2m-20-degrees--laptop-2--test-5
+Have CSI for 1025 packets
+Sampling results: 
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+[Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate.] 
+[> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 426] 
+
+top_likelihood_indices =
+
+     6
+     9
+    11
+     5
+    14
+     1
+     3
+    13
+    16
+     2
+
+Top AoAs: 
+
+output_top_aoas =
+
+   12.0000
+  -66.3529
+   51.0000
+  -21.0000
+   12.0000
+  -66.3529
+   51.0000
+  -21.0000
+   12.0000
+  -66.3529
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+[Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate.] 
+[> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 426] 
+
+top_likelihood_indices =
+
+     6
+     1
+    11
+     5
+    14
+     9
+     3
+    13
+    16
+
+Top AoAs: 
+
+output_top_aoas =
+
+   12.0000
+  -66.3725
+   51.0000
+  -21.0000
+   12.0000
+  -66.3725
+   51.0000
+  -21.0000
+   12.0000
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     5
+     6
+     9
+     3
+    13
+    14
+     1
+    11
+    15
+    16
+
+Top AoAs: 
+
+output_top_aoas =
+
+  -21.0000
+   12.0000
+  -66.6250
+   51.0000
+  -21.0000
+   12.0000
+  -66.6250
+   51.0000
+  -21.0000
+   12.0000
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     5
+     4
+     3
+     1
+     6
+     8
+
+Top AoAs: 
+
+output_top_aoas =
+
+   12.0000
+   50.8000
+  -66.5000
+  -21.0000
+   12.0000
+   50.8000
+
+
+
+Running on data file: lgtm-monitor.dat--2m-20-degrees--laptop-2--test-6
+Have CSI for 1025 packets
+Sampling results: 
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     5
+     6
+    10
+     1
+     3
+     8
+
+Top AoAs: 
+
+output_top_aoas =
+
+    -3
+   -38
+    31
+   -38
+    -3
+    31
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     5
+     6
+    10
+     7
+     1
+     3
+     8
+
+Top AoAs: 
+
+output_top_aoas =
+
+    -3
+   -38
+    31
+   -73
+   -38
+    -3
+    31
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     5
+     6
+    10
+     7
+     1
+     2
+     8
+
+Top AoAs: 
+
+output_top_aoas =
+
+    -3
+   -38
+    31
+   -73
+   -38
+    -3
+    -3
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     5
+     6
+    10
+     4
+     1
+     2
+     7
+     8
+
+Top AoAs: 
+
+output_top_aoas =
+
+    -3
+   -38
+    31
+   -73
+   -38
+    -3
+   -38
+    -3
+
+
+
+Running on data file: lgtm-monitor.dat--2m-20-degrees--laptop-2--test-7
+Have CSI for 1025 packets
+Sampling results: 
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+[Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate.] 
+[> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 426] 
+
+top_likelihood_indices =
+
+    14
+    15
+    16
+    10
+     6
+     7
+     8
+     2
+
+Top AoAs: 
+
+output_top_aoas =
+
+    49
+   -22
+    11
+   -70
+    49
+   -22
+    11
+   -70
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+    14
+    15
+    16
+    10
+     6
+     7
+     8
+     2
+
+Top AoAs: 
+
+output_top_aoas =
+
+   -22
+    11
+    49
+   -70
+   -22
+    11
+    49
+   -70
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+    14
+    15
+    16
+     9
+     6
+     7
+     8
+     1
+
+Top AoAs: 
+
+output_top_aoas =
+
+  -22.0000
+   11.0000
+   49.0000
+  -69.8750
+  -22.0000
+   11.0000
+   49.0000
+  -69.8750
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     1
+     5
+     7
+     8
+     2
+     3
+
+Top AoAs: 
+
+output_top_aoas =
+
+   -22
+    11
+   -70
+    49
+   -22
+   -70
+
+
+
+Running on data file: lgtm-monitor.dat--2m-20-degrees--laptop-2--test-8
+Have CSI for 1025 packets
+Sampling results: 
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+[Warning: Non-monotonic cluster tree -- the ward's linkage is probably not
+appropriate.] 
+[> In linkage at 280
+  In spotfi at 146
+  In sampling_value_tests at 426] 
+
+top_likelihood_indices =
+
+     9
+     8
+     4
+     1
+     2
+     3
+    10
+    11
+    12
+
+Top AoAs: 
+
+output_top_aoas =
+
+    -4
+    29
+   -40
+    -4
+    29
+   -40
+    -4
+    29
+   -40
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     9
+     8
+     7
+     1
+     3
+    10
+    12
+
+Top AoAs: 
+
+output_top_aoas =
+
+    -4
+    29
+   -40
+    -4
+    29
+    -4
+    29
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     6
+     4
+     7
+     1
+     2
+    10
+    11
+    12
+
+Top AoAs: 
+
+output_top_aoas =
+
+   -4.0000
+  -39.8750
+   29.0000
+   -4.0000
+  -39.8750
+   -4.0000
+  -39.8750
+   29.0000
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     6
+     4
+     5
+     9
+     7
+
+Top AoAs: 
+
+output_top_aoas =
+
+   -4.0000
+  -39.7778
+   29.0000
+   -4.0000
+  -39.8000
+
+
+
+Running on data file: lgtm-monitor.dat--2m-20-degrees--laptop-2--test-9
+Have CSI for 1025 packets
+Sampling results: 
+Sampling with:
+number of packets = 100
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     6
+    12
+     8
+     7
+    14
+    16
+    15
+
+Top AoAs: 
+
+output_top_aoas =
+
+   14.8611
+  -17.7153
+   55.1458
+  -60.8472
+   15.4969
+  -59.2577
+   56.6795
+
+
+
+Sampling with:
+number of packets = 50
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     6
+     1
+     8
+     7
+    15
+    16
+    14
+    12
+
+Top AoAs: 
+
+output_top_aoas =
+
+   15.0145
+  -17.4928
+   55.5217
+  -60.4638
+   15.6047
+  -58.9884
+   56.9383
+  -16.8125
+
+
+
+Sampling with:
+number of packets = 25
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     6
+     2
+     8
+     7
+    14
+    13
+    16
+
+Top AoAs: 
+
+output_top_aoas =
+
+   14.8571
+  -17.7429
+   55.1143
+  -60.8571
+   15.4872
+  -17.0000
+   56.6923
+
+
+
+Sampling with:
+number of packets = 10
+begin index = 1
+end_index = 1025
+
+top_likelihood_indices =
+
+     4
+     7
+     6
+     5
+    12
+    13
+    11
+    14
+    15
+
+Top AoAs: 
+
+output_top_aoas =
+
+   15.3846
+  -17.0000
+   56.3846
+  -59.5385
+   16.0000
+  -58.0000
+   58.0000
+  -16.7143
+   16.0000
+
+
+
+COMPLETE!
