@@ -31,7 +31,7 @@ function spotfi_test
     % pwd to the folder this file is contained in...
     [current_directory, ~, ~] = fileparts(mfilename('fullpath'));
     cd(current_directory);
-    pwd
+    %pwd
     % Path to data used in this test
     path('..', path);
     path('../../csi-code/test-data/localization-tests--in-room', path);
@@ -67,42 +67,6 @@ function spotfi_test
     };
     run(data_files)
     fprintf('Done Running!\n')
-end
-
-function globals_init
-    %% DEBUG AND OUTPUT VARIABLES-----------------------------------------------------------------%%
-    % Debug Controls
-    global DEBUG_PATHS
-    global DEBUG_PATHS_LIGHT
-    global NUMBER_OF_PACKETS_TO_CONSIDER
-    global DEBUG_BRIDGE_CODE_CALLING
-    DEBUG_PATHS = false;
-    DEBUG_PATHS_LIGHT = false;
-    NUMBER_OF_PACKETS_TO_CONSIDER = 10; % Set to -1 to ignore this variable's value
-    DEBUG_BRIDGE_CODE_CALLING = false;
-    
-    % Output controls
-    global OUTPUT_AOAS
-    global OUTPUT_TOFS
-    global OUTPUT_AOA_MUSIC_PEAK_GRAPH
-    global OUTPUT_TOF_MUSIC_PEAK_GRAPH
-    global OUTPUT_AOA_TOF_MUSIC_PEAK_GRAPH
-    global OUTPUT_SELECTIVE_AOA_TOF_MUSIC_PEAK_GRAPH
-    global OUTPUT_AOA_VS_TOF_PLOT
-    global OUTPUT_SUPPRESSED
-    global OUTPUT_PACKET_PROGRESS
-    global OUTPUT_FIGURES_SUPPRESSED
-    OUTPUT_AOAS = false;
-    OUTPUT_TOFS = false;
-    OUTPUT_AOA_MUSIC_PEAK_GRAPH = true;
-    OUTPUT_TOF_MUSIC_PEAK_GRAPH = false;
-    OUTPUT_AOA_TOF_MUSIC_PEAK_GRAPH = false;
-    OUTPUT_SELECTIVE_AOA_TOF_MUSIC_PEAK_GRAPH = false;
-    OUTPUT_AOA_VS_TOF_PLOT = false;
-    OUTPUT_SUPPRESSED = false;
-    OUTPUT_PACKET_PROGRESS = false;
-    OUTPUT_FIGURES_SUPPRESSED = false; % Set to true when running in deployment from command line
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end
 
 %% Runs the SpotFi test over the passed in data files which each contain CSI data for many packets
