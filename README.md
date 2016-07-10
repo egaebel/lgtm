@@ -8,11 +8,17 @@ E. G. Gaebel, "Looks Good to Me (LGTM): Authentication for Augmented Reality", M
 
 BibTeX:
 @MASTERSTHESIS {LgtmGaebel2016,
+
     author  = "Ethan Daniel Gaebel",
+    
     title   = "Looks Good to Me (LGTM): Authentication for Augmented Reality",
+    
     school  = "Virginia Tech",
+    
     year    = "2016",
+    
     address = "Falls Church, VA"
+    
 }
 
 
