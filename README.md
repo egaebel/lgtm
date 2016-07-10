@@ -7,6 +7,7 @@ IEEE Format:
 E. G. Gaebel, "Looks Good to Me (LGTM): Authentication for Augmented Reality", M.S. thesis, Dept. Computer Science, Virginia Tech, Falls Church, VA, 2016
 
 BibTeX:
+```
 @MASTERSTHESIS {LgtmGaebel2016,
     author  = "Ethan Daniel Gaebel",  
     title   = "Looks Good to Me (LGTM): Authentication for Augmented Reality",  
@@ -14,6 +15,7 @@ BibTeX:
     year    = "2016",  
     address = "Falls Church, VA",  
 }
+```
 
 
 The MIT License (MIT)
