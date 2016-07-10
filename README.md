@@ -1,7 +1,7 @@
 Looks Good To Me (LGTM): Authentication for Augmented Reality
 -------------------------------------------------------------
 
-I would greatly appreciate it if any researchers using this work for a publication cite my thesis, found here: [https://vtechworks.lib.vt.edu/handle/10919/71638]
+I would greatly appreciate it if any researchers using this work for a publication cite my thesis, found here: https://vtechworks.lib.vt.edu/handle/10919/71638
 
 IEEE Format:  
 E. G. Gaebel, "Looks Good to Me (LGTM): Authentication for Augmented Reality", M.S. thesis, Dept. Computer Science, Virginia Tech, Falls Church, VA, 2016
