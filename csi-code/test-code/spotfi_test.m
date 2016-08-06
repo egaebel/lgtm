@@ -26,7 +26,6 @@ function spotfi_test
     % Debug Controls
     global DEBUG_BRIDGE_CODE_CALLING
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    globals_init();
     % Get the full path to the currently executing file and change the
     % pwd to the folder this file is contained in...
     [current_directory, ~, ~] = fileparts(mfilename('fullpath'));
@@ -40,6 +39,8 @@ function spotfi_test
     path('../../../linux-80211n-csitool-supplementary/matlab', path);
 	path('../../../linux-80211n-csitool-supplementary/matlab/sample_data', path);
 
+    globals_init();
+    
     if DEBUG_BRIDGE_CODE_CALLING
         fprintf('The path: %s\n', path)
     end

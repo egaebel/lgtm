@@ -235,15 +235,21 @@ function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_
                         'c.', 'm.', 'y.', ... 
     };
 
-    %% TODO: Tune parameters
-    %% TODO: Tuning parameters using SVM results
-    % Good base: 5, 10000, 75000, 0 (in order)
-    % Likelihood parameters
+
+    % Old Likelihood parameters (before algorithm 1 update)
+    weight_num_cluster_points = 0.0;
+    weight_aoa_variance = -0.0010;
+    weight_tof_variance = -0.0079;
+    weight_tof_mean = -0.0003;
+    constant_offset = -0.9997;
+    %{
     weight_num_cluster_points = 0.0001 * 10^-3;
     weight_aoa_variance = -0.7498 * 10^-3;
     weight_tof_variance = 0.0441 * 10^-3;
     weight_tof_mean = -0.0474 * 10^-3;
     constant_offset = -1;
+    %}
+    % Good base: 5, 10000, 75000, 0 (in order)
     %{
     weight_num_cluster_points = 5;
     weight_aoa_variance = 50000; % prev = 10000; prev = 100000;
