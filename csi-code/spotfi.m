@@ -450,8 +450,8 @@ function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_
         fprintf('The Estimated Angle of Arrival for data set %s is %f\n', ...
                 data_name, max_likelihood_average_aoa)
     end
-    % Profit
-    top_likelihood_indices
+    
+    % Trim remaining -1 indices from the end
     ii = size(top_likelihood_indices, 1);
     while ii > 0
         if top_likelihood_indices(ii, 1) == -1
@@ -461,6 +461,8 @@ function output_top_aoas = spotfi(csi_trace, frequency, sub_freq_delta, antenna_
             break;
         end
     end
+    
+    % Profit
     top_likelihood_indices
     output_top_aoas = cluster_aoa(top_likelihood_indices);
 end
@@ -637,8 +639,7 @@ function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
     for jj = 1:size(Pmusic, 2)
         % AoA loop
         for ii = 1:size(Pmusic, 1)
-            Pmusic(ii, jj) = 10 * log10(Pmusic(ii, jj));% / max(Pmusic(:, jj))); 
-            %Pmusic(ii, jj) = abs(Pmusic(ii, jj));
+            Pmusic(ii, jj) = 10 * log10(Pmusic(ii, jj));
         end
     end
 
@@ -686,7 +687,6 @@ function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
     for ii = 1:length(aoa_peak_indices)
         aoa_index = aoa_peak_indices(ii);
         binary_tof_peaks_vector = binary_peaks_pmusic(aoa_index, :);
-        binary_tof_peaks_vector
         matching_tofs = tau(binary_tof_peaks_vector);
         
         % Pad ToF rows with -1s to have non-jagged matrix
@@ -704,18 +704,6 @@ function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
         title('AoA and ToF Estimation from Modified MUSIC Algorithm')
         grid on
     end
-
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %% TODO: DELETE AFTER TEST VERIFICATION
-    
-    % Find AoA peaks
-    [~, old_aoa_peak_indices] = findpeaks(Pmusic(:, 1));
-    old_estimated_aoas = theta(old_aoa_peak_indices);
-    if OUTPUT_AOAS && ~OUTPUT_SUPPRESSED
-        fprintf('OLD Estimated AoAs\n')
-        old_estimated_aoas
-    end
-    %}
 
     if OUTPUT_SELECTIVE_AOA_TOF_MUSIC_PEAK_GRAPH && ~OUTPUT_SUPPRESSED && ~OUTPUT_FIGURES_SUPPRESSED
         % Theta (AoA) & Tau (ToF) 3D Plot
@@ -742,58 +730,11 @@ function [estimated_aoas, estimated_tofs] = aoa_tof_music(x, ...
         end
     end
     
-    %% TODO: Delete after testing
-    
-    % Find ToF peaks
-    old_time_peak_indices = zeros(length(old_aoa_peak_indices), length(tau));
-    % AoA loop (only looping over peaks in AoA found above)
-    for ii = 1:length(old_aoa_peak_indices)
-        old_aoa_index = old_aoa_peak_indices(ii);
-        % For each AoA, find ToF peaks
-        [old_peak_values, old_tof_peak_indices] = findpeaks(Pmusic(old_aoa_index, :));
-        if isempty(old_tof_peak_indices)
-            if ~OUTPUT_SUPPRESSED
-                fprintf('\n\nNO PEAKS FOR TIME OF FLIGHT. SELECTING THE FIRST TOF. \n\n')
-            end
-            old_tof_peak_indices = 1;
-        end
-        if OUTPUT_TOFS && ~OUTPUT_SUPPRESSED
-            fprintf('Time of Flight Peaks along Angle of Arrival %f\n', theta(old_aoa_index))
-            fprintf('Found %d peaks\n', length(old_peak_values))
-            %tau(old_tof_peak_indices)
-        end
-        % Pad result with -1 so we don't have a jagged matrix (and so we can do < 0 testing)
-        old_negative_ones_for_padding = -1 * ones(1, length(tau) - length(old_tof_peak_indices));
-        old_time_peak_indices(ii, :) = horzcat(tau(old_tof_peak_indices), old_negative_ones_for_padding);
-    end
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %}
-    
-    %fprintf('NEW estimated_aoas dims: \n')
-    %size(estimated_aoas)
-    %fprintf('OLD estimated_aoas dims: \n')
-    %size(old_estimated_aoas)
-    
-    fprintf('NEW time_peak_indices: \n')
-    time_peak_indices
-    fprintf('OLD time_peak_indices dims: \n')
-    old_time_peak_indices
-
     % Set return values
     % AoA is now a column vector
     estimated_aoas = transpose(estimated_aoas);
     % ToF is now a length(estimated_aoas) x length(tau) matrix, with -1 padding for unused cells
     estimated_tofs = time_peak_indices;
-    
-    %% TODO: REMOVE AFTER TESTING
-    %estimated_aoas = transpose(old_estimated_aoas);
-    %estimated_tofs = old_time_peak_indices;
-    
-    %fprintf('estimated_aoas: \n')
-    %estimated_aoas
-    
-    %fprintf('estimated_tofs: \n')
-    %estimated_tofs
 end
 
 %% Computes the steering vector for SpotFi. 
